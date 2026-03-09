@@ -1,0 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'Songti TC'; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'Songti TC'; -webkit-text-stroke: #000000; min-height: 17.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="zh-TW"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;TBA 後台管理系統 | Ant Design&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* =========================================</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>Ant Design v5 Design Tokens</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>========================================= */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>:root {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-primary: #1677ff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-primary-hover: #4096ff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-primary-bg: #e6f4ff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-success: #52c41a;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-success-bg: #f6ffed;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-success-border: #b7eb8f;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-warning: #faad14;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-warning-bg: #fffbe6;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-warning-border: #ffe58f;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-error: #ff4d4f;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-text-primary: rgba(0, 0, 0, 0.88);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-text-secondary: rgba(0, 0, 0, 0.45);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-bg-layout: #f5f5f5;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-bg-container: #ffffff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-border-color: #f0f0f0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-table-header-bg: #fafafa;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--sidebar-width: 250px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--header-height: 64px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--transition: all 0.2s ease-in-out;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--ant-font); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>body { background-color: var(--ant-bg-layout); color: var(--ant-text-primary); display: flex; min-height: 100vh; overflow-x: hidden; font-size: 14px; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 左側導覽列 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.sidebar { width: var(--sidebar-width); background-color: var(--ant-bg-container); border-right: 1px solid var(--ant-border-color); position: fixed; height: 100vh; display: flex; flex-direction: column; z-index: 100; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.sidebar-header { height: var(--header-height); display: flex; align-items: center; padding: 0 24px; border-bottom: 1px solid var(--ant-border-color); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.sidebar-header .logo { font-size: 18px; font-weight: 700; color: var(--ant-primary); text-decoration: none; display: flex; align-items: center; gap: 8px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-menu { padding: 16px 0; overflow-y: auto; flex: 1; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-section { font-size: 12px; color: var(--ant-text-secondary); margin: 16px 24px 8px; font-weight: 500; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-item { display: flex; align-items: center; padding: 10px 24px; margin: 4px 8px; border-radius: 8px; color: var(--ant-text-primary); cursor: pointer; transition: var(--transition); gap: 12px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-item:hover { color: var(--ant-primary); background-color: rgba(0, 0, 0, 0.02); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-item.active { background-color: var(--ant-primary-bg); color: var(--ant-primary); font-weight: 600; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-item svg { width: 16px; height: 16px; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 主內容區塊 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.main-content { flex: 1; margin-left: var(--sidebar-width); display: flex; flex-direction: column; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.top-header { height: var(--header-height); background-color: var(--ant-bg-container); box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 90; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.breadcrumb { font-size: 14px; color: var(--ant-text-secondary); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.breadcrumb span { color: var(--ant-text-primary); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.breadcrumb .separator { margin: 0 8px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.user-profile { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 0 12px; height: 100%; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.avatar { width: 32px; height: 32px; border-radius: 50%; background-color: var(--ant-primary); color: white; display: flex; align-items: center; justify-content: center; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* SPA 頁面 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.page-view { display: none; padding: 24px; flex: 1; animation: fadeIn 0.3s ease; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.page-view.active { display: block; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.page-title { font-size: 20px; font-weight: 600; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* KPI 卡片 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 24px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.kpi-card { background: var(--ant-bg-container); padding: 24px; border-radius: 8px; border: 1px solid var(--ant-border-color); display: flex; flex-direction: column; transition: box-shadow 0.3s; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.kpi-card:hover { box-shadow: 0 1px 2px -2px rgba(0,0,0,0.16), 0 3px 6px 0 rgba(0,0,0,0.12), 0 5px 12px 4px rgba(0,0,0,0.09); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.kpi-title { font-size: 14px; color: var(--ant-text-secondary); margin-bottom: 12px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.kpi-value { font-size: 24px; font-weight: 600; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.kpi-trend { font-size: 14px; margin-top: 12px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.trend-up { color: var(--ant-success); } .trend-down { color: var(--ant-error); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 表格區塊 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.table-container { background: var(--ant-bg-container); border-radius: 8px; border: 1px solid var(--ant-border-color); overflow: auto; margin-bottom: 24px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.table-header { padding: 16px 24px; border-bottom: 1px solid var(--ant-border-color); display: flex; justify-content: space-between; align-items: center; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.table-header h3 { font-size: 16px; font-weight: 600; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>table { width: 100%; border-collapse: collapse; text-align: left; min-width: 800px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>th, td { padding: 16px; border-bottom: 1px solid var(--ant-border-color); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>th { font-weight: 600; background-color: var(--ant-table-header-bg); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>tr:last-child td { border-bottom: none; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>tr:hover td { background-color: var(--ant-table-header-bg); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 標籤 (Tags) */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.status-badge { padding: 2px 7px; border-radius: 4px; font-size: 12px; border: 1px solid transparent; display: inline-block; white-space: nowrap; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.status-pending { background: var(--ant-warning-bg); color: var(--ant-warning); border-color: var(--ant-warning-border); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.status-approved { background: var(--ant-success-bg); color: var(--ant-success); border-color: var(--ant-success-border); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.status-processing { background: var(--ant-primary-bg); color: var(--ant-primary); border-color: #91caff; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.status-default { background: #fafafa; border-color: #d9d9d9; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 按鈕 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn { height: 32px; padding: 4px 15px; font-size: 14px; border-radius: 6px; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; background: #fff; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-primary { background-color: var(--ant-primary); color: #fff; border-color: var(--ant-primary); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-primary:hover { background-color: var(--ant-primary-hover); border-color: var(--ant-primary-hover); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-default { border-color: #d9d9d9; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-default:hover { color: var(--ant-primary); border-color: var(--ant-primary); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-danger { color: var(--ant-error); border-color: #d9d9d9; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-sm { height: 24px; padding: 0 7px; font-size: 12px; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-input { padding: 4px 11px; border: 1px solid #d9d9d9; border-radius: 6px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.thumb-img { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; border: 1px solid var(--ant-border-color); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Tabs */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-tabs { display: flex; border-bottom: 1px solid var(--ant-border-color); margin-bottom: 24px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-tab-btn { padding: 12px 0; margin-right: 32px; background: transparent; border: none; font-size: 14px; cursor: pointer; position: relative; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-tab-btn.active { color: var(--ant-primary); font-weight: 600; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-tab-btn.active::after { content: ''; position: absolute; bottom: -1px; width: 100%; height: 2px; background: var(--ant-primary); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.tab-content { display: none; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.tab-content.active { display: block; animation: fadeIn 0.3s; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 系統提示 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-150%); background: #fff; padding: 9px 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); z-index: 2000; opacity: 0; transition: all 0.3s; display: flex; align-items: center; border-radius: 8px; gap: 8px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* AI 彈窗 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 3000; opacity: 0; pointer-events: none; transition: var(--transition); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.modal-overlay.show { opacity: 1; pointer-events: auto; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ai-modal { background: #fff; width: 520px; border-radius: 8px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); transform: scale(0.9); transition: transform 0.2s; display: flex; flex-direction: column; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.modal-overlay.show .ai-modal { transform: scale(1); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.modal-header { padding: 16px 24px; border-bottom: 1px solid var(--ant-border-color); display: flex; justify-content: space-between; align-items: center; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.modal-body { padding: 24px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.modal-footer { padding: 12px 24px; border-top: 1px solid var(--ant-border-color); display: flex; justify-content: flex-end; gap: 8px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ai-result-box { background: var(--ant-bg-layout); border-radius: 8px; padding: 16px; min-height: 150px; margin-top: 16px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--ant-primary-bg); border-radius: 50%; border-top-color: var(--ant-primary); animation: spin 1s linear infinite; margin-right: 8px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@keyframes spin { to { transform: rotate(360deg); } }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;aside class="sidebar"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="sidebar-header"&gt;&lt;a href="#" class="logo"&gt;&lt;svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"&gt;&lt;path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13.5h-13L12 6.5z"/&gt;&lt;/svg&gt; TBA Admin&lt;/a&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;nav class="nav-menu"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="nav-section"&gt;系統概覽&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="nav-item active" data-target="view-dashboard"&gt;&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;rect x="3" y="3" width="7" height="7"&gt;&lt;/rect&gt;&lt;rect x="14" y="3" width="7" height="7"&gt;&lt;/rect&gt;&lt;rect x="14" y="14" width="7" height="7"&gt;&lt;/rect&gt;&lt;rect x="3" y="14" width="7" height="7"&gt;&lt;/rect&gt;&lt;/svg&gt; 儀表板&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="nav-section"&gt;營運管理&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="nav-item" data-target="view-members"&gt;&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"&gt;&lt;/path&gt;&lt;circle cx="12" cy="7" r="4"&gt;&lt;/circle&gt;&lt;/svg&gt; 會員與權限管理&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="nav-item" data-target="view-products"&gt;&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"&gt;&lt;/path&gt;&lt;line x1="3" y1="6" x2="21" y2="6"&gt;&lt;/line&gt;&lt;path d="M16 10a4 4 0 0 1-8 0"&gt;&lt;/path&gt;&lt;/svg&gt; 商品市集管理&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="nav-item" data-target="view-orders"&gt;&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"&gt;&lt;/path&gt;&lt;polyline points="14 2 14 8 20 8"&gt;&lt;/polyline&gt;&lt;line x1="16" y1="13" x2="8" y2="13"&gt;&lt;/line&gt;&lt;line x1="16" y1="17" x2="8" y2="17"&gt;&lt;/line&gt;&lt;polyline points="10 9 9 9 8 9"&gt;&lt;/polyline&gt;&lt;/svg&gt; 訂單管理&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="nav-section"&gt;共創與行銷&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="nav-item" data-target="view-data"&gt;&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"&gt;&lt;/path&gt;&lt;/svg&gt; 分潤與數據中心&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="nav-item" data-target="view-incubation"&gt;&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"&gt;&lt;/path&gt;&lt;/svg&gt; 孵化室 ╳ 許願池&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/nav&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/aside&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;main class="main-content"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;header class="top-header"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="breadcrumb"&gt;首頁 &lt;span class="separator"&gt;/&lt;/span&gt; &lt;span id="breadcrumb-current"&gt;儀表板&lt;/span&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="user-profile"&gt;&lt;div class="avatar"&gt;A&lt;/div&gt;&lt;span&gt;Platform Admin&lt;/span&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/header&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="view-dashboard" class="page-view active"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="page-title"&gt;營運數據總覽 &lt;button class="btn btn-default" onclick="showToast('匯出 CSV 報表下載中...')"&gt;匯出本月報表&lt;/button&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="kpi-grid"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="kpi-card"&gt;&lt;div class="kpi-title"&gt;本月總營業額&lt;/div&gt;&lt;div class="kpi-value"&gt;1,245,800&lt;/div&gt;&lt;div class="kpi-trend trend-up"&gt;↑ 12.5%&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="kpi-card"&gt;&lt;div class="kpi-title"&gt;待處理訂單&lt;/div&gt;&lt;div class="kpi-value"&gt;42&lt;/div&gt;&lt;div class="kpi-trend trend-down"&gt;需盡快出貨&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="kpi-card"&gt;&lt;div class="kpi-title"&gt;許願池待審核&lt;/div&gt;&lt;div class="kpi-value"&gt;8&lt;/div&gt;&lt;div class="kpi-trend trend-up"&gt;2 項達標&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="view-members" class="page-view"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="page-title"&gt;會員與權限管理 &lt;button class="btn btn-primary"&gt;邀請供應端&lt;/button&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="table-container"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="table-header"&gt;&lt;h3&gt;平台使用者列表&lt;/h3&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;角色&lt;/th&gt;&lt;th&gt;名稱&lt;/th&gt;&lt;th&gt;狀態&lt;/th&gt;&lt;th&gt;操作&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tr&gt;&lt;td&gt;&lt;span class="status-badge status-default"&gt;消費者&lt;/span&gt;&lt;/td&gt;&lt;td&gt;Consumer_001&lt;/td&gt;&lt;td&gt;&lt;span class="status-badge status-approved"&gt;啟用中&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="#"&gt;檢視&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tr&gt;&lt;td&gt;&lt;span class="status-badge status-processing"&gt;藝術家&lt;/span&gt;&lt;/td&gt;&lt;td&gt;陳奕仁&lt;/td&gt;&lt;td&gt;&lt;span class="status-badge status-approved"&gt;啟用中&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="#"&gt;權限設定&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="view-products" class="page-view"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="page-title"&gt;商品市集管理 &lt;button class="btn btn-primary"&gt;新增商品&lt;/button&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="table-container"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="table-header"&gt;&lt;h3&gt;所有商品列表&lt;/h3&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;商品名稱 (SKU)&lt;/th&gt;&lt;th&gt;分類&lt;/th&gt;&lt;th&gt;價格&lt;/th&gt;&lt;th&gt;狀態&lt;/th&gt;&lt;th&gt;操作&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tr&gt;&lt;td&gt;「解構主義」帆布袋 (BAG-001)&lt;/td&gt;&lt;td&gt;藝術周邊&lt;/td&gt;&lt;td&gt;NT$ 1,280&lt;/td&gt;&lt;td&gt;&lt;span class="status-badge status-approved"&gt;已上架&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;button class="btn btn-default btn-sm"&gt;編輯&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="view-orders" class="page-view"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="page-title"&gt;訂單管理&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="table-container"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="table-header"&gt;&lt;h3&gt;訂單總表&lt;/h3&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;訂單編號&lt;/th&gt;&lt;th&gt;總金額&lt;/th&gt;&lt;th&gt;付款狀態&lt;/th&gt;&lt;th&gt;出貨狀態&lt;/th&gt;&lt;th&gt;操作&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tr&gt;&lt;td&gt;#ORD-20260307-01&lt;/td&gt;&lt;td&gt;NT$ 2,560&lt;/td&gt;&lt;td&gt;&lt;span class="status-badge status-approved"&gt;已付款&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span class="status-badge status-pending"&gt;待出貨&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="#"&gt;處理訂單&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="view-incubation" class="page-view"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="page-title"&gt;孵化室 ╳ 許願池管理&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="table-container"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="table-header"&gt;&lt;h3&gt;心願小卡列表與審查&lt;/h3&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;概念圖&lt;/th&gt;&lt;th&gt;商品企劃名稱&lt;/th&gt;&lt;th&gt;累積票數&lt;/th&gt;&lt;th&gt;狀態&lt;/th&gt;&lt;th&gt;審查操作&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tr id="row-wish-1"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;td&gt;&lt;img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&amp;fit=crop&amp;q=80&amp;w=150" class="thumb-img" alt="概念"&gt;&lt;/td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;td&gt;AI 概念：星空渲染藍牙音響&lt;br&gt;&lt;span style="font-size:12px;color:var(--ant-text-secondary)"&gt;科技周邊&lt;/span&gt;&lt;/td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;td&gt;&lt;strong style="color:var(--ant-warning)"&gt;512 / 500&lt;/strong&gt;&lt;/td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;td&gt;&lt;span class="status-badge status-pending"&gt;待平台審查&lt;/span&gt;&lt;/td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;td style="display:flex;gap:8px;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;button class="btn btn-default btn-sm" onclick="openAIEvaluation('星空渲染藍牙音響', '科技周邊')"&gt;&lt;span style="color:var(--ant-warning)"&gt;✨ AI 評估&lt;/span&gt;&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;button class="btn btn-primary btn-sm" onclick="approveWish('row-wish-1')"&gt;審查通過&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/tr&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="view-data" class="page-view"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="page-title"&gt;分潤與數據中心&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="ant-tabs"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button class="ant-tab-btn active" onclick="switchTab('tab-sales', this)"&gt;銷售明細表&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button class="ant-tab-btn" onclick="switchTab('tab-profit', this)"&gt;分潤明細表&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div id="tab-sales" class="tab-content active"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="table-header"&gt;&lt;h3&gt;平台銷售明細&lt;/h3&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;訂單編號&lt;/th&gt;&lt;th&gt;商品名稱&lt;/th&gt;&lt;th&gt;總金額&lt;/th&gt;&lt;th&gt;狀態&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;#ORD-20260307-01&lt;/td&gt;&lt;td&gt;厚磅帆布袋&lt;/td&gt;&lt;td&gt;NT$ 2,560&lt;/td&gt;&lt;td&gt;&lt;span class="status-badge status-approved"&gt;已付款&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div id="tab-profit" class="tab-content"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="table-header"&gt;&lt;h3&gt;平台分潤結算明細&lt;/h3&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;關聯訂單&lt;/th&gt;&lt;th&gt;藝術家&lt;/th&gt;&lt;th&gt;分潤比例&lt;/th&gt;&lt;th&gt;應分潤金額&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;#ORD-20260307-01&lt;/td&gt;&lt;td&gt;陳奕仁&lt;/td&gt;&lt;td&gt;20%&lt;/td&gt;&lt;td&gt;&lt;strong style="color:var(--ant-success)"&gt;NT$ 512&lt;/strong&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="modal-overlay" id="ai-modal"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="ai-modal"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="modal-header"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2&gt;&lt;span style="color:var(--ant-warning);"&gt;✨&lt;/span&gt; AI 提案智能評估&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button class="close-modal-btn" onclick="closeAIEvaluation()"&gt;×&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="modal-body"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p&gt;正在為您分析商品提案：&lt;strong id="ai-target-item"&gt;&lt;/strong&gt;&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ai-result-box" id="ai-result-container"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div style="text-align:center; color:var(--ant-text-secondary); margin-top:30px;" id="ai-loading"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span class="spinner"&gt;&lt;/span&gt; 正在呼叫 Gemini 分析市場潛力...</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div id="ai-content" style="display:none;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div style="font-weight:600; margin-top:16px;"&gt;📊 可行性評分 (1-10)&lt;/div&gt;&lt;div id="ai-score"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div style="font-weight:600; margin-top:16px;"&gt;🎯 目標客群分析&lt;/div&gt;&lt;div id="ai-audience" style="color:var(--ant-text-secondary)"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div style="font-weight:600; margin-top:16px;"&gt;🏭 製造工法建議&lt;/div&gt;&lt;div id="ai-manufacturing" style="color:var(--ant-text-secondary)"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div style="font-weight:600; margin-top:16px;"&gt;💡 營銷切入點&lt;/div&gt;&lt;div id="ai-marketing" style="color:var(--ant-text-secondary)"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="modal-footer"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button class="btn btn-default" onclick="closeAIEvaluation()"&gt;取消&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button class="btn btn-primary" onclick="showToast('已轉存備註！'); closeAIEvaluation();"&gt;儲存結果&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="toast" class="toast"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;svg viewBox="0 0 24 24" fill="var(--ant-primary)" width="16" height="16"&gt;&lt;path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/&gt;&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;span id="toast-message"&gt;訊息內容&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// SPA 視圖切換</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.querySelectorAll('.nav-item').forEach(item =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>item.addEventListener('click', function(e) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>e.preventDefault();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.querySelectorAll('.nav-item').forEach(n =&gt; n.classList.remove('active'));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.querySelectorAll('.page-view').forEach(v =&gt; v.classList.remove('active'));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>this.classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(this.dataset.target).classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('breadcrumb-current').innerText = this.innerText.trim();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function switchTab(tabId, btn) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.ant-tab-btn').forEach(b =&gt; b.classList.remove('active'));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.tab-content').forEach(c =&gt; c.classList.remove('active'));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(tabId).classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let toastTimer;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function showToast(msg) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const toast = document.getElementById('toast');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('toast-message').innerText = msg;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>toast.classList.add('show');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>clearTimeout(toastTimer);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>toastTimer = setTimeout(() =&gt; toast.classList.remove('show'), 3000);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function approveWish(rowId) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.querySelector(`#${rowId} td:nth-child(4)`).innerHTML = '&lt;span class="status-badge status-approved"&gt;已轉入市集&lt;/span&gt;';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.querySelector(`#${rowId} td:nth-child(5)`).innerHTML = '&lt;button class="btn btn-default btn-sm"&gt;編輯商品&lt;/button&gt;';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>showToast("審查通過！已建立草稿。");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* =========================================</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>✨ Gemini API 整合 (後台評估助手)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>========================================= */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const apiKey = "";<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function fetchWithRetry(url, options, maxRetries = 5) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const delays = [1000, 2000, 4000, 8000, 16000];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt; maxRetries; i++) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>const res = await fetch(url, options);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>return await res.json();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>} catch (e) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (i === maxRetries - 1) throw e;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>await new Promise(r =&gt; setTimeout(r, delays[i]));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function openAIEvaluation(itemName, category) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('ai-modal').classList.add('show');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('ai-target-item').innerText = itemName;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('ai-loading').style.display = 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('ai-content').style.display = 'none';</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!apiKey) return document.getElementById('ai-loading').innerHTML = '&lt;span style="color:var(--ant-error)"&gt;⚠️ 未設定 API Key。&lt;/span&gt;';</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const sysPrompt = `你是一位專業的藝術電商產品經理。請以 JSON 格式繁體中文評估提案可行性。`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const userQuery = `商品名稱：${itemName}\n種類：${category}\n請提供 1. feasibilityScore (1-10) 2. targetAudience (30字) 3. manufacturingAdvice (40字) 4. marketingTagline (一句話)`;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const res = await fetchWithRetry(apiUrl, {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>method: 'POST', headers: { 'Content-Type': 'application/json' },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>body: JSON.stringify({</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>contents: [{ parts: [{ text: userQuery }] }],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>systemInstruction: { parts: [{ text: sysPrompt }] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>generationConfig: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>responseMimeType: "application/json",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>responseSchema: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>type: "OBJECT",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>properties: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>feasibilityScore: { type: "INTEGER" }, targetAudience: { type: "STRING" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>manufacturingAdvice: { type: "STRING" }, marketingTagline: { type: "STRING" }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>required: ["feasibilityScore", "targetAudience", "manufacturingAdvice", "marketingTagline"]</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>})</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>let text = res.candidates?.[0]?.content?.parts?.[0]?.text;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (!text) throw new Error("API 回應無效");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>text = text.trim().replace(/^`{3}(json)?\n?/i, '').replace(/\n?`{3}$/i, '');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const data = JSON.parse(text);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('ai-score').innerHTML = `&lt;span style="font-size:18px;font-weight:600;color:${data.feasibilityScore &gt;= 7 ? 'var(--ant-success)' : 'var(--ant-warning)'}"&gt;${data.feasibilityScore} / 10 分&lt;/span&gt;`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('ai-audience').innerText = data.targetAudience;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('ai-manufacturing').innerText = data.manufacturingAdvice;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('ai-marketing').innerText = `「${data.marketingTagline}」`;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('ai-loading').style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('ai-content').style.display = 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} catch (err) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>console.error(err);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('ai-loading').innerHTML = '&lt;span style="color:var(--ant-error)"&gt;⚠️ 分析失敗。&lt;/span&gt;';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function closeAIEvaluation() { document.getElementById('ai-modal').classList.remove('show'); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>

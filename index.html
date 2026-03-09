@@ -1,0 +1,690 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'Songti TC'; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'Songti TC'; -webkit-text-stroke: #000000; min-height: 17.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="zh-TW"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;TBA 藝術周邊平台 | 讓藝術走入生活&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* =========================================</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>Ant Design v5 Design Tokens (設計變數)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>========================================= */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>:root {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-primary: #1677ff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-primary-hover: #4096ff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-primary-bg: #e6f4ff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-success: #52c41a;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-success-bg: #f6ffed;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-warning: #faad14;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-warning-bg: #fffbe6;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-error: #ff4d4f;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-error-bg: #fff2f0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-text-primary: rgba(0, 0, 0, 0.88);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-text-secondary: rgba(0, 0, 0, 0.45);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-bg-layout: #f5f5f5;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-bg-container: #ffffff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-border-color: #f0f0f0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--ant-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>* {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-family: var(--ant-font);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>body {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: var(--ant-bg-layout);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>line-height: 1.5715;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow-x: hidden;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>scroll-behavior: smooth;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 頂部雙層導覽列 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.top-bar {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: fixed;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>top: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: var(--ant-bg-layout);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid var(--ant-border-color);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 4px 5%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>justify-content: flex-end;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>z-index: 1001;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 12px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.top-bar a {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-secondary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-decoration: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: var(--transition);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.top-bar a:hover {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 主導覽列 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>header {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: fixed;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>top: 26px;<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>height: 64px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 0 5%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>justify-content: space-between;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: var(--ant-bg-container);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>z-index: 1000;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.logo {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-weight: 700;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>letter-spacing: 1px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-decoration: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 8px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-links {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>height: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-links a {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-decoration: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 14px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 0 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: var(--transition);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: relative;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-links a::after {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>content: '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: absolute;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>bottom: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>left: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>right: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>height: 2px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: transparent;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: var(--transition);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-links a:hover { color: var(--ant-primary); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-links a:hover::after { background-color: var(--ant-primary); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.auth-group {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 12px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 按鈕樣式 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>height: 32px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 4px 15px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 14px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 6px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cursor: pointer;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: var(--transition);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: inline-flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>justify-content: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 8px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: 1px solid transparent;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-decoration: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-lg {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>height: 40px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 6.4px 15px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 16px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 8px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-primary {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: var(--ant-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: #fff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-primary:hover { background-color: var(--ant-primary-hover); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-primary:disabled {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #d9d9d9;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: rgba(0,0,0,0.25);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cursor: not-allowed;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-default {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #fff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-color: #d9d9d9;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-default:hover {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-color: var(--ant-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-text {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: transparent;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-text:hover { background: rgba(0, 0, 0, 0.04); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 英雄區塊 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.hero {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: relative;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 120px 5% 60px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: var(--ant-bg-container);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow: hidden;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid var(--ant-border-color);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.hero-layout {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>max-width: 1200px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0 auto;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 60px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.hero-text { flex: 1; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.hero-text h1 {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: clamp(2rem, 4vw, 3.5rem);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-weight: 700;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>line-height: 1.2;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin-bottom: 24px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.hero-text p {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 16px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-secondary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin-bottom: 32px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>max-width: 500px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.hero-image { flex: 1; height: 400px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.hero-image img {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%; height: 100%; object-fit: cover;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 12px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 共用區塊設定 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.section-container {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 80px 5%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>max-width: 1200px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0 auto;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.section-header {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>justify-content: space-between;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: flex-end;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin-bottom: 32px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.section-title {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 24px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-weight: 600;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.section-title span {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: block;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-text-secondary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 14px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin-top: 4px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-weight: 400;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.view-all {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--ant-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-decoration: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 14px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 4px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: var(--transition);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.view-all:hover { color: var(--ant-primary-hover); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.grid {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: grid;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 24px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 卡片樣式 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-card {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: var(--ant-bg-container);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: 1px solid var(--ant-border-color);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 8px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: var(--transition);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: relative;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow: hidden;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>flex-direction: column;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-card:hover {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-card-cover {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%; height: 280px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow: hidden; position: relative;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: var(--ant-bg-layout);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-card-cover img {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%; height: 100%; object-fit: cover;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: transform 0.5s ease;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-card:hover .ant-card-cover img { transform: scale(1.03); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-tag {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: absolute; top: 12px; left: 12px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 0 7px; font-size: 12px; line-height: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #fafafa; border: 1px solid #d9d9d9;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 4px; color: var(--ant-text-primary); z-index: 2;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-tag-error { color: #cf1322; background: #fff1f0; border-color: #ffa39e; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-tag-warning { color: #d46b08; background: #fff7e6; border-color: #ffd591; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-tag-processing { color: #096dd9; background: #e6f7ff; border-color: #91d5ff; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-card-body { padding: 20px; display: flex; flex-direction: column; flex: 1; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-card-meta-description { font-size: 12px; color: var(--ant-text-secondary); margin-bottom: 8px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-card-meta-title {<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 16px; font-weight: 600; color: var(--ant-text-primary);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin-bottom: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; margin-bottom: 16px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.card-price { font-size: 18px; font-weight: 600; color: var(--ant-primary); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.action-btn-block { width: 100%; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.bg-white { background-color: var(--ant-bg-container); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 創作中心 AI 區塊 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.creation-cta {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #ffffff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: 1px solid var(--ant-border-color);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 48px; margin: 60px auto; max-width: 1200px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 8px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex; flex-direction: column; gap: 32px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.creation-header { text-align: center; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.creation-header h2 { color: var(--ant-text-primary); margin-bottom: 16px; font-size: 24px; font-weight: 600; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.creation-header p { color: var(--ant-text-secondary); font-size: 14px; max-width: 600px; margin: 0 auto; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ai-planner-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ai-form-box { background: var(--ant-bg-layout); padding: 24px; border-radius: 8px; border: 1px solid var(--ant-border-color); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-form-item { margin-bottom: 24px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-form-item-label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--ant-text-primary); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-input, .ant-select {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%; padding: 7px 11px; font-size: 14px; line-height: 1.5715;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #fff; border: 1px solid #d9d9d9; border-radius: 6px; transition: all 0.2s;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-input:focus, .ant-select:focus { border-color: var(--ant-primary); box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1); outline: 0; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ai-result-box {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #ffffff; padding: 24px; border-radius: 8px; border: 1px solid var(--ant-border-color);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex; flex-direction: column; justify-content: center; position: relative; min-height: 350px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ai-result-empty { text-align: center; color: var(--ant-text-secondary); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ai-result-empty svg { margin-bottom: 16px; color: #d9d9d9; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ai-result-content { display: none; animation: fadeIn 0.5s ease; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ai-result-title { font-size: 20px; font-weight: 600; color: var(--ant-primary); margin-bottom: 16px; text-align: center; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-spin {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: inline-block; width: 16px; height: 16px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: 2px solid var(--ant-primary-bg); border-radius: 50%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-top-color: var(--ant-primary); animation: antSpin 1s linear infinite; vertical-align: middle; margin-right: 8px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@keyframes antSpin { to { transform: rotate(360deg); } }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 訊息提示 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-message {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-150%);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #ffffff; color: var(--ant-text-primary); padding: 9px 16px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>z-index: 2000; opacity: 0; transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex; align-items: center; font-size: 14px; border-radius: 8px; gap: 8px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.ant-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>footer { background: var(--ant-bg-container); padding: 48px 5%; text-align: center; border-top: 1px solid var(--ant-border-color); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.footer-links { margin-bottom: 16px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.footer-links a { color: var(--ant-text-secondary); text-decoration: none; margin: 0 12px; font-size: 14px; transition: var(--transition); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.footer-links a:hover { color: var(--ant-primary); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@media (max-width: 900px) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.hero-layout { flex-direction: column; text-align: center; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.hero-text p { margin-inline: auto; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.nav-links, .auth-group .btn-text { display: none; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.hero-image { height: 300px; width: 100%; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.ai-planner-layout { grid-template-columns: 1fr; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="top-bar"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;a href="#" onclick="showMessage('導向關於 TBA')"&gt;關於 TBA&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;a href="#" onclick="showMessage('切換語言')"&gt;繁體中文 / EN&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;a href="#" style="font-weight: 600; color: var(--ant-text-primary);" onclick="showMessage('導向廠商/藝術家專屬入口')"&gt;供應端登入 (廠商/藝術家)&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;header&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;a href="#" class="logo"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"&gt;&lt;path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13.5h-13L12 6.5z"/&gt;&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>TBA.</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;nav class="nav-links"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="#market"&gt;週邊市集&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="#market"&gt;美術市集&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="#incubation"&gt;孵化室 ╳ 許願池&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="#creation"&gt;創作中心&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="#" onclick="showMessage('導向合作藝術家列表')"&gt;合作藝術家&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/nav&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="auth-group"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn btn-text" onclick="showMessage('開啟全站搜尋')"&gt;🔍 搜尋&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn btn-default" onclick="showMessage('導向 TBA 原站會員登入 (SSO)')"&gt;👤 會員中心&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn btn-primary" onclick="openCart()"&gt;🛒 Cart (&lt;span id="cart-count"&gt;0&lt;/span&gt;)&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;section class="hero"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="hero-layout"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="hero-text"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Art Connects All.&lt;br&gt;藝術，連結生活。&lt;/h1&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p&gt;從靈感探索、AI 孵化到實體量產。TBA 提供藝術家、品牌商與消費者一站式的藝術周邊共創生態系。&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button class="btn btn-primary btn-lg" onclick="document.getElementById('market').scrollIntoView({behavior: 'smooth'})"&gt;探索周邊市集&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="hero-image"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&amp;fit=crop&amp;q=80&amp;w=1200" alt="TBA Art Merchandise"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;section class="section-container" id="market"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="section-header"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="section-title"&gt;週邊市集 &lt;span&gt;Art &amp; Brand Merchandise&lt;/span&gt;&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="#" class="view-all" onclick="showMessage('進入商品列表頁')"&gt;查看全部商品 →&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="grid"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="ant-card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-tag ant-tag-error"&gt;僅剩 3 件&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-card-cover"&gt;&lt;img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="商品"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-card-body"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-meta-description"&gt;Artist: 陳奕仁 ╳ TBA Brand&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-meta-title"&gt;「解構主義」厚磅帆布袋&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="price-row"&gt;&lt;span class="card-price"&gt;NT$ 1,280&lt;/span&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button class="btn btn-default action-btn-block" onclick="addToCart(this)"&gt;加入購物車&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="ant-card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-tag ant-tag-warning"&gt;企業客製 MOQ: 50&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-card-cover"&gt;&lt;img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="商品"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-card-body"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-meta-description"&gt;Supplier: 質感生活製造所&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-meta-title"&gt;「虛無」霧面黑陶瓷馬克杯禮盒&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="price-row"&gt;&lt;span class="card-price"&gt;NT$ 850&lt;/span&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button class="btn btn-default action-btn-block" onclick="addToCart(this)"&gt;加入購物車&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="ant-card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-tag"&gt;美術用品&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-card-cover"&gt;&lt;img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="商品"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-card-body"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-meta-description"&gt;Supplier: 專業美術用具行&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-meta-title"&gt;大師級純手工油畫顏料套組&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="price-row"&gt;&lt;span class="card-price"&gt;NT$ 3,200&lt;/span&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button class="btn btn-default action-btn-block" onclick="addToCart(this)"&gt;加入購物車&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="bg-white"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;section class="section-container" id="incubation"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="section-header"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h2 class="section-title"&gt;孵化室 ╳ 許願池 &lt;span&gt;Incubation &amp; Wishing Well&lt;/span&gt;&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;a href="#creation" class="view-all"&gt;體驗 AI 生成 →&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p style="color: var(--ant-text-secondary); margin-top: -16px; margin-bottom: 32px; max-width: 800px;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>探索由 AI 生成的藝術周邊概念（Mockup）。登入會員參與投票，達標後將交由平台與供應商審查，實體化上架！</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="grid"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-tag ant-tag-processing"&gt;審核中 85%&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-cover"&gt;&lt;img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="AI概念圖"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-body"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="ant-card-meta-description"&gt;發起人: Consumer_001 / 原作: 李明&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="ant-card-meta-title"&gt;AI 概念：星空渲染藍牙音響&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="price-row"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;span style="font-size: 12px; color: var(--ant-text-secondary);"&gt;目前票數：&lt;strong style="color:var(--ant-text-primary);" class="vote-count"&gt;425&lt;/strong&gt; / 500&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button class="btn btn-primary action-btn-block" onclick="voteUp(this)"&gt;投票 +1&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-tag"&gt;剛發布&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-cover"&gt;&lt;img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="AI概念圖"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ant-card-body"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="ant-card-meta-description"&gt;發起人: Art_Lover / 原作: 幾何光影&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="ant-card-meta-title"&gt;AI 概念：光影漸層壓克力立牌&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="price-row"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;span style="font-size: 12px; color: var(--ant-text-secondary);"&gt;目前票數：&lt;strong style="color:var(--ant-text-primary);" class="vote-count"&gt;12&lt;/strong&gt; / 100&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button class="btn btn-primary action-btn-block" onclick="voteUp(this)"&gt;投票 +1&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;section class="creation-cta" id="creation"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="creation-header"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h2&gt;✨ AI 藝術周邊企劃助手&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p&gt;輸入您喜愛的藝術品名稱與載體，我們的 AI 將為您直接繪製高畫質的周邊視覺稿。優質概念可發布至「許願池」測試市場潛力！&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="ai-planner-layout"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="ai-form-box"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-form-item"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;label class="ant-form-item-label" for="ai-theme"&gt;選擇藝術品&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="ai-theme" class="ant-input" placeholder="例如：蒙娜麗莎的微笑、星夜..." value="蒙娜麗莎的微笑"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ant-form-item"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;label class="ant-form-item-label" for="ai-item"&gt;選擇周邊載體&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;select id="ai-item" class="ant-select"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;option value="厚磅帆布袋"&gt;厚磅帆布袋&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;option value="陶瓷馬克杯"&gt;陶瓷馬克杯&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;option value="Oversize純棉T恤"&gt;Oversize 純棉 T 恤&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;option value="壓克力立牌"&gt;壓克力立牌&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;option value="超大電競滑鼠墊"&gt;超大電競滑鼠墊&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;option value="藝術裝飾掛畫"&gt;藝術裝飾掛畫&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/select&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button id="generate-btn" class="btn btn-primary btn-lg action-btn-block" onclick="generateAIConcept()"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>✨ 繪製周邊視覺稿</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="ai-result-box" id="result-box"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ai-result-empty" id="result-empty"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;svg viewBox="0 0 24 24" fill="none" width="48" height="48" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"&gt;&lt;path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/&gt;&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p&gt;等待 AI 靈感碰撞中...&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="ai-result-content" id="result-content"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h3 class="ai-result-title" id="res-title"&gt;商品名稱載入中...&lt;/h3&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="ai-result-section" style="text-align: center;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;img id="res-image" src="" alt="AI 視覺稿" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); max-height: 320px; object-fit: contain; background: var(--ant-bg-layout);"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div style="margin-top: 24px; display: flex; gap: 12px;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button class="btn btn-primary" style="flex: 1;" onclick="publishToWishlist()"&gt;發布至許願池&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button class="btn btn-default" style="flex: 1;" onclick="generateAIConcept()"&gt;重新生成&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;footer&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="footer-links"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="#" onclick="showMessage('開啟使用者條款')"&gt;使用者條款&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="#" onclick="showMessage('開啟隱私權政策')"&gt;隱私權政策&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="#" onclick="showMessage('開啟常見問題列表')"&gt;常見問題&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;p style="color: var(--ant-text-secondary); font-size: 14px;"&gt;TBA Platform &amp;copy; 2026. All rights reserved.&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/footer&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="ant-message" class="ant-message"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;svg viewBox="0 0 24 24" fill="var(--ant-primary)" width="16" height="16"&gt;&lt;path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/&gt;&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;span id="ant-message-text"&gt;訊息內容&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let messageTimeout;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function showMessage(text) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const msgBox = document.getElementById('ant-message');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('ant-message-text').innerText = text;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>msgBox.classList.add('show');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>clearTimeout(messageTimeout);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>messageTimeout = setTimeout(() =&gt; msgBox.classList.remove('show'), 3000);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let cartTotal = 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function addToCart(btn) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cartTotal++;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('cart-count').innerText = cartTotal;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const originalText = btn.innerText;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.innerText = "已加入 ✓";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.classList.replace('btn-default', 'btn-primary');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>showMessage("商品已成功加入購物車");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btn.innerText = originalText;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btn.classList.replace('btn-primary', 'btn-default');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}, 2000);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function openCart() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cartTotal &gt; 0 ? showMessage(`購物車內有 ${cartTotal} 件商品，準備導向結帳...`) : showMessage("購物車目前是空的。");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function voteUp(btn) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>let countSpan = btn.parentElement.querySelector('.vote-count');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>countSpan.innerText = parseInt(countSpan.innerText) + 1;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.innerHTML = "已投票 ✓";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.classList.replace('btn-primary', 'btn-default');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.disabled = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>showMessage("投票成功！達標後系統將發送信件通知您。");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* =========================================</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>✨ Imagen API 整合 (視覺稿生成)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>========================================= */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const apiKey = ""; // 請在執行環境自動帶入 API Key</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function fetchWithRetry(url, options, maxRetries = 5) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const delays = [1000, 2000, 4000, 8000, 16000];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt; maxRetries; i++) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>const response = await fetch(url, options);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (!response.ok) throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>return await response.json();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>} catch (error) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (i === maxRetries - 1) throw error;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>await new Promise(resolve =&gt; setTimeout(resolve, delays[i]));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function generateAIConcept() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const theme = document.getElementById('ai-theme').value.trim();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const itemType = document.getElementById('ai-item').value;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const btn = document.getElementById('generate-btn');</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!theme) return showMessage('請輸入藝術品名稱！');</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.disabled = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.innerHTML = '&lt;span class="ant-spin"&gt;&lt;/span&gt; 正在繪製視覺稿...';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('result-empty').style.display = 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('result-content').style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.querySelector('#result-empty p').innerText = "AI 正在為您生成高畫質視覺稿，請稍候 (約 10-15 秒)...";</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const itemMap = {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>"厚磅帆布袋": "canvas tote bag", "陶瓷馬克杯": "ceramic coffee mug",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>"Oversize純棉T恤": "oversized white cotton t-shirt", "壓克力立牌": "acrylic standee display",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>"超大電競滑鼠墊": "large desk mat mouse pad", "藝術裝飾掛畫": "framed art print on a wall"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const promptText = `A high-end, photorealistic product photography mockup of a ${itemMap[itemType] || itemType} featuring the famous artwork "${theme}". Professional studio lighting, clean neutral background, highly detailed, 8k resolution, elegant composition, commercial product shot.`;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const payload = { instances: [{ prompt: promptText }], parameters: { sampleCount: 1 } };</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const result = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (!result.predictions?.[0]?.bytesBase64Encoded) throw new Error("無效的圖片回應");</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('res-title').innerText = `「${theme}」${itemType}`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('res-image').src = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('result-empty').style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('result-content').style.display = 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>showMessage("✨ AI 視覺稿生成完畢！");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} catch (error) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>console.error(error);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.querySelector('#result-empty p').innerText = "生成失敗，請稍後再試。";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>showMessage("連線或生圖失敗，請確認網路狀態。");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} finally {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btn.disabled = false;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btn.innerHTML = '✨ 繪製周邊視覺稿';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function publishToWishlist() { showMessage("發布成功！此概念已成功提交至「孵化室 ╳ 許願池」。"); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
