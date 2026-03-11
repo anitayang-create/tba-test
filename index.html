@@ -4,52 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TBA 藝術周邊平台 | 讓藝術走入生活</title>
-    <!-- 引入 Google Fonts: 優先使用 Helvetica, 備用 Noto Sans TC -->
+    <!-- 引入 Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
         /* =========================================
-           🎨 全站共用 UI 設計規範 (依據 MVP 規格)
+           🎨 全站共用 UI 設計規範 (Ant Design V5)
            ========================================= */
         :root {
-            /* 顏色規範 */
-            --tba-blue: #2563eb; 
-            --tba-blue-hover: #1d4ed8;
-            --tba-black: #000000;
-            --tba-dark-gray: #333333;
-            --tba-gray: #888888;
-            --tba-border: #e5e7eb; 
-            --tba-white: #ffffff;
-            --tba-light-bg: #f9fafb;
-            
-            --card-title-color: #111827;
-            --card-artist-color: #4b5563;
-            --card-price-color: #2563eb;
+            /* Ant Design Colors */
+            --ant-primary: #1677ff; 
+            --ant-primary-hover: #4096ff;
+            --ant-primary-active: #0958d9;
+            --ant-primary-bg: #e6f4ff;
+            --ant-text: rgba(0, 0, 0, 0.88);
+            --ant-text-secondary: rgba(0, 0, 0, 0.65);
+            --ant-text-tertiary: rgba(0, 0, 0, 0.45);
+            --ant-border: #d9d9d9; 
+            --ant-border-secondary: #f0f0f0;
+            --ant-bg-container: #ffffff;
+            --ant-bg-layout: #f5f5f5;
             
             --ant-error: #ff4d4f; 
+            --ant-error-bg: #fff2f0;
+            --ant-success: #52c41a;
 
             /* 字體規範 */
-            --font-primary: 'Helvetica', 'Noto Sans TC', sans-serif;
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans TC', sans-serif;
             
             /* 互動規範 */
-            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --shadow-light: 0 1px 3px rgba(0,0,0,0.05);
-            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition-base: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: var(--font-primary);
+            font-family: var(--font-family);
         }
 
         body {
-            background-color: var(--tba-white);
-            color: var(--tba-dark-gray);
-            line-height: 1.6;
+            background-color: var(--ant-bg-layout);
+            color: var(--ant-text);
+            line-height: 1.5715;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
@@ -58,8 +60,8 @@
         .view-section {
             display: none;
             opacity: 0;
-            transition: opacity 0.4s ease;
-            padding-top: 110px; /* 閃避 fixed header */
+            transition: opacity 0.3s ease;
+            padding-top: 100px; /* 閃避 fixed header */
             min-height: 80vh;
         }
         .view-section.active {
@@ -67,261 +69,288 @@
             opacity: 1;
         }
 
-        /* --- 共用按鈕樣式 --- */
+        /* --- 共用按鈕樣式 (Ant Design Button) --- */
         .btn {
-            height: 40px; padding: 0 20px; font-size: 14px; font-weight: 500; letter-spacing: 1px;
-            border-radius: 6px; cursor: pointer; transition: var(--transition-smooth);
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: none; outline: none;
+            height: 32px; padding: 4px 15px; font-size: 14px; font-weight: 400;
+            border-radius: 6px; cursor: pointer; transition: var(--transition-base);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid transparent; outline: none;
         }
-        .btn-lg { height: 48px; padding: 0 32px; font-size: 16px; }
+        .btn-lg { height: 40px; padding: 6.4px 15px; font-size: 16px; border-radius: var(--border-radius); }
         .btn-block { width: 100%; }
         
-        .btn-primary { background-color: var(--tba-blue); color: var(--tba-white); }
-        .btn-primary:hover { background-color: var(--tba-blue-hover); }
+        .btn-primary { background-color: var(--ant-primary); color: #fff; box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1); }
+        .btn-primary:hover { background-color: var(--ant-primary-hover); }
+        .btn-primary:active { background-color: var(--ant-primary-active); }
         
-        .btn-outline { background-color: transparent; color: var(--tba-blue); border: 1px solid var(--tba-blue); }
-        .btn-outline:hover { background-color: var(--tba-blue-hover); color: var(--tba-white); border-color: var(--tba-blue-hover); }
+        .btn-default { background-color: #fff; color: var(--ant-text); border-color: var(--ant-border); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02); }
+        .btn-default:hover { color: var(--ant-primary-hover); border-color: var(--ant-primary-hover); }
+        .btn-default:active { color: var(--ant-primary-active); border-color: var(--ant-primary-active); }
         
-        .btn-text { background: transparent; color: var(--tba-dark-gray); }
-        .btn-text:hover { color: var(--tba-blue); }
+        .btn-text { background: transparent; color: var(--ant-text); border-color: transparent; }
+        .btn-text:hover { background: rgba(0, 0, 0, 0.04); }
 
-        .btn-danger-text { color: var(--ant-error); background: transparent; }
-        .btn-danger-text:hover { opacity: 0.7; }
+        .btn-danger-text { color: var(--ant-error); background: transparent; border-color: transparent; }
+        .btn-danger-text:hover { color: #ff7875; background: var(--ant-error-bg); }
 
-        /* --- 共用表單元件 --- */
+        /* --- 共用表單元件 (Ant Design Input) --- */
         .form-input {
-            width: 100%; padding: 10px 12px; font-size: 14px; border: 1px solid var(--tba-border); 
-            border-radius: 6px; transition: var(--transition-smooth); background: var(--tba-white); outline: none;
+            width: 100%; padding: 4px 11px; font-size: 14px; border: 1px solid var(--ant-border); 
+            border-radius: 6px; transition: var(--transition-base); background: #fff; outline: none; line-height: 1.5715; height: 32px;
         }
-        .form-input:focus { border-color: var(--tba-blue); }
+        .form-input:focus, .form-input:hover { border-color: var(--ant-primary); }
+        .form-input:focus { box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1); }
 
         /* =========================================
            1. 首頁模組 (Home Page) & 全域 Header
            ========================================= */
         /* Top Bar */
         .top-bar {
-            position: fixed; top: 0; width: 100%; background-color: var(--tba-black);
-            padding: 8px 5%; display: flex; justify-content: flex-end; align-items: center; 
-            z-index: 1001; font-size: 12px; border-bottom: 1px solid #222;
+            position: fixed; top: 0; width: 100%; background-color: #fafafa;
+            padding: 4px 5%; display: flex; justify-content: flex-end; align-items: center; 
+            z-index: 1001; font-size: 12px; border-bottom: 1px solid var(--ant-border-secondary);
         }
-        .top-bar a { color: #aaa; text-decoration: none; transition: var(--transition-smooth); letter-spacing: 1px; }
-        .top-bar a:hover { color: var(--tba-white); }
+        .top-bar a { color: var(--ant-text-secondary); text-decoration: none; transition: var(--transition-base); }
+        .top-bar a:hover { color: var(--ant-primary); }
 
         /* Header */
         header {
-            position: fixed; top: 26px; width: 100%; height: 64px; padding: 0 5%; 
+            position: fixed; top: 30px; width: 100%; height: 64px; padding: 0 5%; 
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(8px); z-index: 1000; border-bottom: 1px solid #222;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 1000; border-bottom: 1px solid var(--ant-border-secondary);
         }
-        .logo { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: var(--tba-white); cursor: pointer; }
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: var(--ant-text); cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; }
         
         .nav-links { display: flex; height: 100%; }
         .nav-links a {
-            color: #ddd; font-size: 14px; font-weight: 500; letter-spacing: 1px; padding: 0 24px; 
-            display: flex; align-items: center; cursor: pointer; transition: var(--transition-smooth); position: relative;
+            color: var(--ant-text); font-size: 14px; padding: 0 20px; 
+            display: flex; align-items: center; cursor: pointer; transition: var(--transition-base); position: relative;
         }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 24px; right: 24px; height: 2px; background-color: transparent; transition: var(--transition-smooth); }
-        .nav-links a:hover { color: var(--tba-white); }
-        .nav-links a:hover::after { background-color: var(--tba-white); }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 20px; right: 20px; height: 2px; background-color: transparent; transition: var(--transition-base); }
+        .nav-links a:hover { color: var(--ant-primary); }
+        .nav-links a:hover::after { background-color: var(--ant-primary); }
 
-        .header-actions { display: flex; gap: 16px; align-items: center; position: relative; }
-        .header-actions .btn-text { color: #ddd; }
-        .header-actions .btn-text:hover { color: var(--tba-white); }
-        .header-actions .btn-outline { color: #ddd; border-color: #555; }
-        .header-actions .btn-outline:hover { color: var(--tba-black); background-color: var(--tba-white); border-color: var(--tba-white); }
-        .header-actions .btn-primary { background-color: var(--tba-white); color: var(--tba-black); }
-        .header-actions .btn-primary:hover { background-color: #ddd; }
+        .header-actions { display: flex; gap: 12px; align-items: center; position: relative; }
 
-        .cart-badge { background: var(--ant-error); color: var(--tba-white); border-radius: 10px; padding: 0 6px; font-size: 11px; line-height: 18px; font-weight: bold; margin-left: 6px; }
+        .cart-badge { background: var(--ant-error); color: #fff; border-radius: 10px; padding: 0 6px; font-size: 12px; line-height: 18px; font-weight: bold; margin-left: 4px; border: 1px solid #fff; }
 
         /* 搜尋框展開 */
         .search-dropdown {
-            display: none; position: absolute; top: 100%; right: 0; margin-top: 16px;
-            background: var(--tba-white); padding: 16px; border: 1px solid var(--tba-border);
-            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 320px;
+            display: none; position: absolute; top: 100%; right: 0; margin-top: 12px;
+            background: #fff; padding: 16px; border: 1px solid var(--ant-border-secondary);
+            border-radius: var(--border-radius); box-shadow: var(--shadow-md); width: 320px;
         }
         .search-dropdown.active { display: block; }
         .search-dropdown-inner { display: flex; gap: 8px; }
 
-        /* Hero Section */
+        /* Hero Section (Carousel) */
         .hero {
-            position: relative; min-height: 80vh; display: flex; align-items: center; justify-content: center;
-            background-color: var(--tba-black); padding-top: 0; /* 覆蓋 view-section 的 padding */
-            margin-top: -110px; /* 向上推底以達成滿版 */
+            position: relative; 
+            height: 100vh; 
+            min-height: 700px; 
+            display: flex; align-items: center; justify-content: center;
+            background-color: var(--ant-bg-container); padding-top: 0;
+            margin-top: -100px;
+            overflow: hidden;
         }
-        .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-        .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: 1; }
-        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--tba-white); max-width: 800px; padding: 0 5%; }
-        .hero-content h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 24px; letter-spacing: 2px; }
-        .hero-content p { font-size: 16px; color: #ddd; margin-bottom: 40px; line-height: 1.8; letter-spacing: 1px; }
+        .hero-carousel {
+            position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
+            display: flex; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .hero-slide {
+            min-width: 100%; height: 100%; background-size: cover; background-position: center;
+        }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%); z-index: 1; }
+        
+        .hero-content { position: relative; z-index: 2; text-align: left; color: #fff; max-width: 1200px; width: 100%; padding: 0 5%; }
+        .hero-content h1 { font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 16px; letter-spacing: 1px; color: #ffffff; }
+        .hero-content p { font-size: 16px; color: rgba(255,255,255,0.85); margin-bottom: 32px; max-width: 550px; line-height: 1.6; }
+
+        /* Carousel Navigation */
+        .carousel-btn {
+            position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+            background: rgba(255, 255, 255, 0.15); color: white; border: none; padding: 16px; cursor: pointer;
+            border-radius: 50%; transition: background 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .carousel-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        .carousel-btn.prev { left: 30px; }
+        .carousel-btn.next { right: 30px; }
+        
+        .carousel-dots {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 3;
+            display: flex; gap: 12px;
+        }
+        .dot {
+            width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.4);
+            cursor: pointer; transition: all 0.3s;
+        }
+        .dot.active { background: white; transform: scale(1.3); }
 
         /* 區塊共用佈局 */
-        .section-wrap { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; border-bottom: 2px solid var(--tba-black); padding-bottom: 16px; }
-        .section-title { font-size: 28px; font-weight: 700; color: var(--tba-black); letter-spacing: 2px; }
-        .view-more { color: var(--tba-gray); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; transition: var(--transition-smooth); }
-        .view-more:hover { color: var(--tba-blue); }
+        .section-wrap { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; border-bottom: 1px solid var(--ant-border-secondary); padding-bottom: 16px; }
+        .section-title { font-size: 24px; font-weight: 600; color: var(--ant-text); }
+        .view-more { color: var(--ant-primary); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; transition: var(--transition-base); }
+        .view-more:hover { color: var(--ant-primary-hover); }
 
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 32px; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; }
 
         /* =========================================
-           共通卡片樣式 (商品/藝術家)
+           共通卡片樣式 (Ant Design Card)
            ========================================= */
         .tba-card {
-            background: var(--tba-white); border: 1px solid var(--tba-border); border-radius: 8px;
-            box-shadow: var(--shadow-light); transition: var(--transition-smooth); cursor: pointer;
+            background: #fff; border: 1px solid var(--ant-border-secondary); border-radius: var(--border-radius);
+            transition: var(--transition-base); cursor: pointer;
             display: flex; flex-direction: column; overflow: hidden;
         }
-        .tba-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .tba-card:hover { border-color: transparent; box-shadow: var(--shadow-md); transform: translateY(-2px); }
         
-        .tba-card-cover { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: var(--tba-light-bg); }
-        .tba-card-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; mix-blend-mode: multiply; }
+        .tba-card-cover { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: var(--ant-bg-layout); position: relative; }
+        .tba-card-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
         .tba-card:hover .tba-card-cover img { transform: scale(1.05); }
 
-        .tba-card-body { padding: 20px; display: flex; flex-direction: column; flex: 1; text-align: left; }
+        .tba-card-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
         
         /* 藝術家卡片文字 */
-        .artist-card-name { font-size: 1.125rem; font-weight: 700; color: var(--card-title-color); margin-bottom: 8px; }
-        .artist-card-desc { font-size: 0.875rem; color: var(--card-artist-color); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .artist-card-name { font-size: 16px; font-weight: 500; color: var(--ant-text); margin-bottom: 8px; }
+        .artist-card-desc { font-size: 14px; color: var(--ant-text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
         /* 商品卡片文字 */
-        .prod-card-artist { font-size: 0.875rem; color: var(--card-artist-color); margin-bottom: 6px; }
-        .prod-card-title { font-size: 1.125rem; color: var(--card-title-color); margin-bottom: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .prod-card-price { font-size: 1.25rem; font-weight: 700; color: var(--card-price-color); margin-top: auto; margin-bottom: 20px; }
+        .prod-card-artist { font-size: 12px; color: var(--ant-text-secondary); margin-bottom: 4px; }
+        .prod-card-title { font-size: 16px; color: var(--ant-text); margin-bottom: 16px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .prod-card-price { font-size: 18px; font-weight: 600; color: var(--ant-text); margin-top: auto; margin-bottom: 24px; }
 
-        /* 加入購物車常駐按鈕 */
-        .btn-add-cart {
-            width: 100%; height: 40px; background-color: var(--tba-blue); color: var(--tba-white);
-            border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition-smooth);
-            display: flex; justify-content: center; align-items: center; gap: 6px;
-        }
-        .btn-add-cart:hover { background-color: var(--tba-blue-hover); }
-
-        /* 關於我們區塊 & 過渡色塊 */
-        .about-section { background: var(--tba-light-bg); padding: 80px 5%; text-align: center; }
-        .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; max-width: 1200px; margin: 40px auto 0; }
-        .about-item { background: var(--tba-white); padding: 40px; border-radius: 8px; box-shadow: var(--shadow-light); }
-        .about-item h3 { font-size: 18px; color: var(--tba-black); margin-bottom: 12px; }
-        .about-item p { font-size: 14px; color: var(--tba-gray); }
-
-        .transition-block { background: var(--tba-black); color: var(--tba-white); text-align: center; padding: 100px 5%; position: relative; overflow: hidden; }
-        .transition-decor { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-        .transition-block h2 { font-size: 32px; margin-bottom: 16px; position: relative; z-index: 1; letter-spacing: 2px; }
-        .transition-block p { font-size: 16px; color: #aaa; position: relative; z-index: 1; }
+        /* 關於我們區塊 */
+        .about-section { background: #fff; padding: 60px 5%; text-align: center; }
+        .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1200px; margin: 40px auto 0; }
+        .about-item { background: var(--ant-bg-layout); padding: 32px 24px; border-radius: var(--border-radius); transition: var(--transition-base); border: 1px solid transparent; }
+        .about-item:hover { border-color: var(--ant-border-secondary); background: #fff; box-shadow: var(--shadow-sm); }
+        .about-item h3 { font-size: 16px; font-weight: 600; color: var(--ant-text); margin-bottom: 12px; }
+        .about-item p { font-size: 14px; color: var(--ant-text-secondary); }
 
         /* =========================================
            2-1. 商品列表頁 (Product List)
            ========================================= */
-        .list-layout { display: flex; gap: 40px; align-items: flex-start; }
-        .sidebar { width: 240px; flex-shrink: 0; }
+        .list-layout { display: flex; gap: 32px; align-items: flex-start; }
+        .sidebar { width: 250px; flex-shrink: 0; background: #fff; padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); }
         .main-content { flex: 1; }
         
-        .filter-box { margin-bottom: 32px; }
-        .filter-title { font-size: 14px; font-weight: 700; color: var(--tba-black); margin-bottom: 16px; }
-        .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--card-artist-color); margin-bottom: 12px; cursor: pointer; }
-        .checkbox-label input { accent-color: var(--tba-blue); width: 16px; height: 16px; cursor: pointer; }
+        .filter-box { margin-bottom: 24px; }
+        .filter-box:last-child { margin-bottom: 0; }
+        .filter-title { font-size: 14px; font-weight: 500; color: var(--ant-text); margin-bottom: 12px; }
+        .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ant-text-secondary); margin-bottom: 8px; cursor: pointer; transition: color 0.2s; }
+        .checkbox-label:hover { color: var(--ant-primary); }
+        .checkbox-label input { accent-color: var(--ant-primary); cursor: pointer; }
         
-        .price-range { width: 100%; accent-color: var(--tba-blue); margin-bottom: 8px; }
-        .price-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--tba-gray); }
+        .price-range { width: 100%; accent-color: var(--ant-primary); margin-bottom: 8px; }
+        .price-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--ant-text-tertiary); }
 
-        .list-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--tba-border); }
+        .list-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         
-        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 48px; }
-        .page-btn { width: 36px; height: 36px; border: 1px solid var(--tba-border); background: var(--tba-white); border-radius: 6px; cursor: pointer; color: var(--card-artist-color); transition: var(--transition-smooth); }
-        .page-btn:hover { border-color: var(--tba-blue); color: var(--tba-blue); }
-        .page-btn.active { background: var(--tba-blue); color: var(--tba-white); border-color: var(--tba-blue); }
+        /* Pagination (Ant Design) */
+        .pagination { display: flex; justify-content: flex-end; gap: 8px; margin-top: 32px; }
+        .page-btn { min-width: 32px; height: 32px; padding: 0 8px; border: 1px solid var(--ant-border); background: #fff; border-radius: 6px; cursor: pointer; color: var(--ant-text); transition: var(--transition-base); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .page-btn:hover { border-color: var(--ant-primary); color: var(--ant-primary); }
+        .page-btn.active { border-color: var(--ant-primary); color: var(--ant-primary); font-weight: 600; }
 
         /* =========================================
            2-2. 商品詳細頁 (Product Detail)
            ========================================= */
-        .detail-layout { display: flex; gap: 60px; }
-        .detail-gallery { width: 50%; }
-        .main-img-box { width: 100%; aspect-ratio: 1/1; background: var(--tba-light-bg); border-radius: 8px; overflow: hidden; margin-bottom: 16px; border: 1px solid var(--tba-border); }
+        .detail-layout { display: flex; gap: 48px; background: #fff; padding: 32px; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); }
+        .detail-gallery { width: 40%; }
+        .main-img-box { width: 100%; aspect-ratio: 1/1; background: var(--ant-bg-layout); border-radius: var(--border-radius); overflow: hidden; margin-bottom: 16px; border: 1px solid var(--ant-border-secondary); }
         .main-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .thumb-list { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
-        .thumb-item { width: 80px; height: 80px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; opacity: 0.6; transition: var(--transition-smooth); }
-        .thumb-item.active, .thumb-item:hover { opacity: 1; border-color: var(--tba-blue); }
-        .thumb-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+        .thumb-list { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
+        .thumb-item { width: 64px; height: 64px; border-radius: 6px; border: 2px solid transparent; cursor: pointer; opacity: 0.6; transition: var(--transition-base); }
+        .thumb-item.active, .thumb-item:hover { opacity: 1; border-color: var(--ant-primary); }
+        .thumb-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
 
-        .detail-info { width: 50%; }
-        .breadcrumb { font-size: 13px; color: var(--tba-gray); margin-bottom: 24px; }
-        .breadcrumb a { color: var(--tba-gray); text-decoration: none; cursor: pointer; }
-        .breadcrumb a:hover { color: var(--tba-blue); }
+        .detail-info { width: 60%; }
+        .breadcrumb { font-size: 14px; color: var(--ant-text-tertiary); margin-bottom: 16px; }
+        .breadcrumb a { color: var(--ant-text-secondary); text-decoration: none; cursor: pointer; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--ant-primary); }
         
-        .d-title { font-size: 32px; font-weight: 700; color: var(--card-title-color); margin-bottom: 16px; line-height: 1.3; }
-        .d-price { font-size: 28px; font-weight: 700; color: var(--card-price-color); margin-bottom: 32px; }
+        .d-title { font-size: 24px; font-weight: 600; color: var(--ant-text); margin-bottom: 12px; line-height: 1.3; }
+        .d-price { font-size: 24px; font-weight: 600; color: var(--ant-text); margin-bottom: 24px; }
 
-        .artist-credit { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--tba-light-bg); border-radius: 8px; border: 1px solid var(--tba-border); margin-bottom: 32px; }
-        .artist-credit img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+        .artist-credit { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #fafafa; border-radius: var(--border-radius); margin-bottom: 24px; border: 1px solid var(--ant-border-secondary); }
+        .artist-credit img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
         
-        .spec-box { margin-bottom: 24px; }
-        .spec-label { font-size: 14px; font-weight: 600; color: var(--tba-dark-gray); margin-bottom: 8px; display: block; }
+        .spec-box { margin-bottom: 20px; }
+        .spec-label { font-size: 14px; color: var(--ant-text); margin-bottom: 8px; display: block; }
         
         .qty-wrapper { display: flex; align-items: center; }
-        .qty-btn { width: 40px; height: 40px; background: var(--tba-white); border: 1px solid var(--tba-border); cursor: pointer; transition: var(--transition-smooth); }
-        .qty-btn:hover { border-color: var(--tba-blue); color: var(--tba-blue); }
-        .qty-input { width: 60px; height: 40px; text-align: center; border-top: 1px solid var(--tba-border); border-bottom: 1px solid var(--tba-border); border-left: none; border-right: none; outline: none; }
+        .qty-btn { width: 32px; height: 32px; background: #fff; border: 1px solid var(--ant-border); cursor: pointer; transition: var(--transition-base); display: flex; align-items: center; justify-content: center; }
+        .qty-btn:first-child { border-radius: 6px 0 0 6px; }
+        .qty-btn:last-child { border-radius: 0 6px 6px 0; }
+        .qty-btn:hover { color: var(--ant-primary); border-color: var(--ant-primary); z-index: 1; }
+        .qty-input { width: 48px; height: 32px; text-align: center; border-top: 1px solid var(--ant-border); border-bottom: 1px solid var(--ant-border); border-left: none; border-right: none; outline: none; transition: var(--transition-base); }
+        .qty-input:focus { border-color: var(--ant-primary); z-index: 1; box-shadow: 0 0 0 2px rgba(5,145,255,0.1); }
 
         /* =========================================
            6. 購物車模組 (Cart)
            ========================================= */
-        .cart-layout { display: flex; gap: 40px; align-items: flex-start; }
-        .cart-list { flex: 1; }
-        .cart-item-row { display: flex; gap: 20px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--tba-border); }
-        .cart-item-img { width: 100px; height: 100px; border-radius: 8px; border: 1px solid var(--tba-border); object-fit: cover; }
+        .cart-layout { display: flex; gap: 24px; align-items: flex-start; }
+        .cart-list { flex: 1; background: #fff; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); padding: 24px; }
+        .cart-item-row { display: flex; gap: 16px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--ant-border-secondary); }
+        .cart-item-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+        .cart-item-img { width: 80px; height: 80px; border-radius: 6px; border: 1px solid var(--ant-border-secondary); object-fit: cover; }
         .cart-item-details { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         
-        .cart-summary { width: 320px; background: var(--tba-light-bg); padding: 24px; border-radius: 8px; border: 1px solid var(--tba-border); }
-        .summary-line { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: var(--card-artist-color); }
-        .summary-total { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--tba-border); font-size: 18px; font-weight: 700; color: var(--tba-black); }
+        .cart-summary { width: 300px; background: #fff; padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); flex-shrink: 0; }
+        .summary-line { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: var(--ant-text-secondary); }
+        .summary-total { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--ant-border-secondary); font-size: 16px; font-weight: 600; color: var(--ant-text); }
 
         /* =========================================
            FAQ & 條款模組 (Static Pages)
            ========================================= */
-        .doc-wrap { max-width: 800px; margin: 0 auto; }
-        .faq-item { border-bottom: 1px solid var(--tba-border); }
-        .faq-q { padding: 20px 0; font-size: 16px; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; color: var(--tba-black); }
-        .faq-q:hover { color: var(--tba-blue); }
-        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; color: var(--card-artist-color); font-size: 14px; }
-        .faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
+        .doc-wrap { max-width: 800px; margin: 0 auto; background: #fff; padding: 40px; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); }
+        .faq-item { border-bottom: 1px solid var(--ant-border-secondary); }
+        .faq-q { padding: 16px 0; font-size: 15px; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; color: var(--ant-text); align-items: center; transition: color 0.3s; }
+        .faq-q:hover { color: var(--ant-primary); }
+        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.645, 0.045, 0.355, 1); color: var(--ant-text-secondary); font-size: 14px; line-height: 1.6; }
+        .faq-item.open .faq-a { max-height: 300px; padding-bottom: 16px; }
+        .faq-icon { transition: transform 0.3s ease; color: var(--ant-text-tertiary); }
+        .faq-item.open .faq-icon { transform: rotate(180deg); }
 
-        .terms-content h2 { font-size: 20px; margin: 32px 0 16px; border-bottom: 1px solid var(--tba-border); padding-bottom: 8px; }
-        .terms-content p, .terms-content li { font-size: 15px; color: var(--card-artist-color); margin-bottom: 16px; }
-        .terms-content ul { padding-left: 24px; }
+        .terms-content h2 { font-size: 18px; margin: 24px 0 12px; border-bottom: 1px solid var(--ant-border-secondary); padding-bottom: 8px; font-weight: 500; }
+        .terms-content p, .terms-content li { font-size: 14px; color: var(--ant-text-secondary); margin-bottom: 12px; }
+        .terms-content ul { padding-left: 20px; }
 
         /* =========================================
            全域元件 (Footer, Toast, FAB)
            ========================================= */
-        footer { background: var(--tba-black); color: #888; padding: 60px 5% 30px; text-align: center; margin-top: 60px; }
+        footer { background: var(--ant-bg-container); border-top: 1px solid var(--ant-border-secondary); padding: 48px 5% 24px; text-align: center; margin-top: 48px; }
         .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
-        .footer-links a { color: #aaa; text-decoration: none; font-size: 13px; transition: var(--transition-smooth); cursor: pointer; }
-        .footer-links a:hover { color: var(--tba-white); }
+        .footer-links a { color: var(--ant-text-secondary); text-decoration: none; font-size: 14px; transition: var(--transition-base); cursor: pointer; }
+        .footer-links a:hover { color: var(--ant-primary); }
         .social-icons { margin-bottom: 24px; display: flex; justify-content: center; gap: 16px; }
-        .social-icons a { color: #aaa; transition: var(--transition-smooth); }
-        .social-icons a:hover { color: var(--tba-white); }
+        .social-icons a { color: var(--ant-text-tertiary); transition: var(--transition-base); }
+        .social-icons a:hover { color: var(--ant-primary); }
 
         .toast-msg {
             position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-100px);
-            background: var(--tba-blue); color: var(--tba-white); padding: 12px 24px; border-radius: 6px;
-            box-shadow: var(--shadow-hover); z-index: 9999; opacity: 0; transition: var(--transition-smooth);
-            font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px;
+            background: #fff; color: var(--ant-text); padding: 10px 16px; border-radius: 8px;
+            box-shadow: var(--shadow-md); z-index: 9999; opacity: 0; transition: var(--transition-base);
+            font-size: 14px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--ant-border-secondary);
         }
         .toast-msg.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast-icon { color: var(--ant-success); }
 
         .fab-top {
-            position: fixed; bottom: 30px; right: 30px; width: 44px; height: 44px;
-            background: var(--tba-black); color: var(--tba-white); border-radius: 50%;
+            position: fixed; bottom: 32px; right: 32px; width: 40px; height: 40px;
+            background: #fff; color: var(--ant-text-secondary); border-radius: 50%;
             display: flex; justify-content: center; align-items: center; cursor: pointer;
-            box-shadow: var(--shadow-hover); opacity: 0; visibility: hidden; transition: var(--transition-smooth); z-index: 990;
+            box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transition: var(--transition-base); z-index: 990; border: 1px solid var(--ant-border-secondary);
         }
         .fab-top.show { opacity: 1; visibility: visible; }
-        .fab-top:hover { background: var(--tba-blue); }
+        .fab-top:hover { color: var(--ant-primary); border-color: var(--ant-primary); }
 
         @media (max-width: 768px) {
-            header { padding: 0 16px; height: 60px; top: 32px; }
+            header { padding: 0 16px; height: 56px; top: 28px; }
             .nav-links { display: none; }
             .hero-content h1 { font-size: 2rem; }
-            .list-layout, .detail-layout, .cart-layout { flex-direction: column; gap: 32px; }
+            .list-layout, .detail-layout, .cart-layout { flex-direction: column; gap: 24px; }
             .sidebar, .detail-gallery, .detail-info, .cart-summary { width: 100%; }
         }
     </style>
@@ -331,35 +360,37 @@
     <!-- Top Bar -->
     <div class="top-bar">
         <a href="#" onclick="showToast('導向廠商登入頁面')">
-            <svg viewBox="0 0 24 24" fill="none" width="14" height="14" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            供應端登入 
+            供應端登入 (廠商/藝術家)
         </a>
     </div>
 
     <!-- Header -->
     <header>
-        <a onclick="switchView('view-home')" class="logo">TBA.</a>
+        <a onclick="switchView('view-home')" class="logo">
+            <!-- 使用 Ant Design 藍色強調 TBA -->
+            <span style="color: var(--ant-primary);">TBA</span> 周邊市集
+        </a>
         <nav class="nav-links">
             <a onclick="switchView('view-home')">首頁</a>
             <a onclick="switchView('view-home'); setTimeout(()=>document.getElementById('sec-artists').scrollIntoView(), 100);">合作藝術家</a>
-            <a onclick="switchView('view-list')">週邊市集</a>
+            <a onclick="switchView('view-list')">商品市集</a>
         </nav>
         <div class="header-actions">
             <!-- 搜尋功能 -->
-            <button class="btn btn-text" onclick="toggleSearch()" style="padding:0 8px;">
-                <svg viewBox="0 0 24 24" fill="none" width="20" height="20" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <button class="btn btn-text" onclick="toggleSearch()" style="padding: 0 8px;">
+                <svg viewBox="0 0 24 24" fill="none" width="18" height="18" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             </button>
             <div id="searchBox" class="search-dropdown">
                 <div class="search-dropdown-inner">
-                    <input type="text" id="searchInput" class="form-input" placeholder="搜尋商品名稱、藝術家..." onkeypress="if(event.key==='Enter') executeSearch()">
+                    <input type="text" id="searchInput" class="form-input" placeholder="搜尋商品或藝術家" onkeypress="if(event.key==='Enter') executeSearch()">
                     <button class="btn btn-primary" onclick="executeSearch()">搜尋</button>
                 </div>
             </div>
             
-            <a href="https://tba.tw/login" target="_blank" class="btn btn-outline">會員登入</a>
-            <button class="btn btn-primary" onclick="switchView('view-cart')">
+            <a href="https://tba.tw/login" target="_blank" class="btn btn-default">會員登入</a>
+            <button class="btn btn-default" onclick="switchView('view-cart')" style="border-color: transparent;">
                 <svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                購物車 <span class="cart-badge" id="cartBadge">0</span>
+                <span class="cart-badge" id="cartBadge">0</span>
             </button>
         </div>
     </header>
@@ -369,15 +400,33 @@
          ========================================= -->
     <div id="view-home" class="view-section active" style="padding-top: 0;">
         <section class="hero">
-            <img src="http://googleusercontent.com/image_generation_content/0" class="hero-bg" alt="Hero Background">
+            <div class="hero-carousel" id="heroCarousel">
+                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1920&q=80');"></div>
+                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1920&q=80');"></div>
+                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1536924940846-227afb31e2a5?auto=format&fit=crop&w=1920&q=80');"></div>
+            </div>
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <h1>Art Connects All.<br>Art Connects All.<br>藝術，連結生活。</h1>
-                <p>從靈感探索、AI 孵化到實體量產。TBA 提供藝術家、品牌商與消費者一站式的藝術周邊共創生態系。</p>
-                <div style="display: flex; gap: 16px; justify-content: center;">
+                <h1 style="color: #fff;">Art Connects All.<br>讓無價靈感走入日常</h1>
+                <p style="color: #fff;">嚴選 TBA 站內潛力藝術家授權，結合頂尖製造商工藝。從空間版畫、居家好物到質感配件，提供您一站式的藝術周邊體驗。</p>
+                <div style="display: flex; gap: 16px;">
                     <button class="btn btn-primary btn-lg" onclick="switchView('view-list')">探索周邊市集</button>
-                    <button class="btn btn-outline btn-lg" style="color:white; border-color:white;" onclick="document.getElementById('sec-artists').scrollIntoView()">認識合作藝術家</button>
+                    <!-- 保留認識合作藝術家，以備不時之需，若不需要可隱藏 -->
+                    <button class="btn btn-default btn-lg" style="background: transparent; color: #fff; border-color: #fff;" onclick="document.getElementById('sec-artists').scrollIntoView()">認識合作藝術家</button>
                 </div>
+            </div>
+            <!-- 輪播控制按鈕 -->
+            <button class="carousel-btn prev" onclick="moveSlide(-1)">
+                <svg viewBox="0 0 24 24" fill="none" width="24" height="24" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button class="carousel-btn next" onclick="moveSlide(1)">
+                <svg viewBox="0 0 24 24" fill="none" width="24" height="24" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <!-- 輪播指示點 -->
+            <div class="carousel-dots">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
             </div>
         </section>
 
@@ -430,7 +479,7 @@
                         <div class="prod-card-artist">陳奕安 ╳ 質感製造所</div>
                         <div class="prod-card-title">「色彩絮語」聯名重磅帆布袋</div>
                         <div class="prod-card-price">NT$ 890</div>
-                        <button class="btn-add-cart" onclick="addCart(event)"><svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>加入購物車</button>
+                        <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
                     </div>
                 </div>
                 <div class="tba-card" onclick="switchView('view-detail')">
@@ -439,7 +488,7 @@
                         <div class="prod-card-artist">林森 ╳ 陶瓷工坊</div>
                         <div class="prod-card-title">「虛無空間」霧面陶瓷馬克杯</div>
                         <div class="prod-card-price">NT$ 650</div>
-                        <button class="btn-add-cart" onclick="addCart(event)"><svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>加入購物車</button>
+                        <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
                     </div>
                 </div>
                 <div class="tba-card" onclick="switchView('view-detail')">
@@ -448,7 +497,7 @@
                         <div class="prod-card-artist">Studio K ╳ 3C配件</div>
                         <div class="prod-card-title">極簡線條防摔手機殼</div>
                         <div class="prod-card-price">NT$ 980</div>
-                        <button class="btn-add-cart" onclick="addCart(event)"><svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>加入購物車</button>
+                        <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
                     </div>
                 </div>
             </div>
@@ -456,7 +505,7 @@
 
         <section class="about-section">
             <h2 class="section-title" style="margin-bottom: 16px;">關於我們</h2>
-            <p style="color: var(--card-artist-color); max-width: 600px; margin: 0 auto;">協助藝術家增長能見度，擁抱自己專屬的藝術舞台，推動普羅大眾藝術、商業藝術合作、傳統藝術藝廊。</p>
+            <p style="color: var(--ant-text-secondary); max-width: 600px; margin: 0 auto;">協助藝術家增長能見度，擁抱自己專屬的藝術舞台，推動普羅大眾藝術、商業藝術合作、傳統藝術藝廊。</p>
             <div class="about-grid">
                 <div class="about-item">
                     <h3>媒合藝術家</h3>
@@ -475,16 +524,6 @@
                     <p>透過創意策劃與展示，促進互動交流，啟發大眾視野與創造力。</p>
                 </div>
             </div>
-            <div class="about-item" style="max-width: 600px; margin: 32px auto 0;">
-                <h3>尋找聯名企業</h3>
-                <p>聯名企業媒合平台是一個橋接品牌與藝術家、設計師的渠道。</p>
-            </div>
-        </section>
-
-        <section class="transition-block">
-            <div class="transition-decor"></div>
-            <h2>Empowering Art & Creativity</h2>
-            <p>我們致力於打造一個透明、高效的藝術媒合生態系。<br>讓每一次的點擊與交流，都成為推動創作前進的動力。</p>
         </section>
     </div>
 
@@ -493,7 +532,7 @@
          ========================================= -->
     <div id="view-list" class="view-section section-wrap">
         <div class="breadcrumb">
-            <a onclick="switchView('view-home')">首頁</a> / <span>週邊市集</span>
+            <a onclick="switchView('view-home')">首頁</a> / <span>商品市集</span>
         </div>
         <div class="list-layout">
             <aside class="sidebar">
@@ -513,17 +552,17 @@
                 </div>
                 <div class="filter-box">
                     <div class="filter-title">價格區間</div>
-                    <input type="range" class="price-range" min="0" max="500000" value="500000" oninput="document.getElementById('prLabel').innerText = 'NT$ ' + Number(this.value).toLocaleString()">
+                    <input type="range" class="price-range" min="0" max="50000" value="50000" oninput="document.getElementById('prLabel').innerText = 'NT$ ' + Number(this.value).toLocaleString()">
                     <div class="price-labels">
                         <span>$0</span>
-                        <span id="prLabel">NT$ 500,000</span>
+                        <span id="prLabel">NT$ 50,000</span>
                     </div>
                 </div>
             </aside>
             <main class="main-content">
                 <div class="list-toolbar">
-                    <span style="font-size: 14px; color: var(--card-artist-color);">共找到 124 件商品</span>
-                    <select class="form-input" style="width: auto;">
+                    <span style="font-size: 14px; color: var(--ant-text-secondary);">共找到 124 件商品</span>
+                    <select class="form-input" style="width: 140px; height: 32px;">
                         <option>最新上架</option>
                         <option>最舊上架</option>
                         <option>價格由高至低</option>
@@ -537,7 +576,7 @@
                             <div class="prod-card-artist">陳奕安</div>
                             <div class="prod-card-title">「色彩絮語」聯名帆布袋</div>
                             <div class="prod-card-price">NT$ 890</div>
-                            <button class="btn-add-cart" onclick="addCart(event)">加入購物車</button>
+                            <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
                         </div>
                     </div>
                     <div class="tba-card" onclick="switchView('view-detail')">
@@ -546,7 +585,7 @@
                             <div class="prod-card-artist">林森</div>
                             <div class="prod-card-title">霧面陶瓷馬克杯</div>
                             <div class="prod-card-price">NT$ 650</div>
-                            <button class="btn-add-cart" onclick="addCart(event)">加入購物車</button>
+                            <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
                         </div>
                     </div>
                     <div class="tba-card" onclick="switchView('view-detail')">
@@ -555,7 +594,7 @@
                             <div class="prod-card-artist">Studio K</div>
                             <div class="prod-card-title">線條防摔手機殼</div>
                             <div class="prod-card-price">NT$ 980</div>
-                            <button class="btn-add-cart" onclick="addCart(event)">加入購物車</button>
+                            <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
                         </div>
                     </div>
                 </div>
@@ -575,7 +614,7 @@
          ========================================= -->
     <div id="view-detail" class="view-section section-wrap">
         <div class="breadcrumb">
-            <a onclick="switchView('view-home')">首頁</a> / <a onclick="switchView('view-list')">週邊市集</a> / <span>「色彩絮語」聯名重磅帆布袋</span>
+            <a onclick="switchView('view-home')">首頁</a> / <a onclick="switchView('view-list')">商品市集</a> / <span>「色彩絮語」聯名重磅帆布袋</span>
         </div>
         <div class="detail-layout">
             <div class="detail-gallery">
@@ -594,21 +633,21 @@
                 <div class="artist-credit">
                     <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=200&q=80" alt="Artist">
                     <div style="flex:1;">
-                        <div style="font-weight:700; font-size:15px; color:var(--card-title-color);">陳奕安</div>
-                        <div style="font-size:13px; color:var(--card-artist-color);">專注於色彩心理學與抽象幾何的當代藝術家。</div>
+                        <div style="font-weight:500; font-size:14px; color:var(--ant-text);">陳奕安</div>
+                        <div style="font-size:13px; color:var(--ant-text-secondary);">專注於色彩心理學與抽象幾何的當代藝術家。</div>
                     </div>
-                    <a href="https://tba.tw/artists" target="_blank" class="btn btn-outline" style="height:32px; font-size:12px;">了解更多</a>
+                    <a href="https://tba.tw/artists" target="_blank" class="btn btn-default" style="height:28px; font-size:12px; padding: 0 10px;">了解更多</a>
                 </div>
 
                 <div class="spec-box">
                     <span class="spec-label">顏色</span>
-                    <select class="form-input"><option>原色白</option><option>深邃黑</option></select>
+                    <select class="form-input" style="width: 200px;"><option>原色白</option><option>深邃黑</option></select>
                 </div>
                 <div class="spec-box">
                     <span class="spec-label">尺寸</span>
-                    <select class="form-input"><option>F (單一尺寸)</option></select>
+                    <select class="form-input" style="width: 200px;"><option>F (單一尺寸)</option></select>
                 </div>
-                <div class="spec-box" style="margin-bottom: 40px;">
+                <div class="spec-box" style="margin-bottom: 32px;">
                     <span class="spec-label">數量</span>
                     <div class="qty-wrapper">
                         <button class="qty-btn" onclick="modQty(-1)">-</button>
@@ -617,7 +656,7 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary btn-lg btn-block" onclick="addCartDetail()">加入購物車 (庫存即時扣除)</button>
+                <button class="btn btn-primary btn-lg btn-block" onclick="addCartDetail()">加入購物車</button>
             </div>
         </div>
     </div>
@@ -626,29 +665,36 @@
          視圖 4: 購物車頁面 (Cart View)
          ========================================= -->
     <div id="view-cart" class="view-section section-wrap">
-        <h2 class="section-title" style="margin-bottom: 32px;">購物車</h2>
+        <h2 class="section-title" style="margin-bottom: 24px;">購物車</h2>
         <div class="cart-layout">
             <div class="cart-list">
                 <div class="cart-item-row">
                     <img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=200&q=80" class="cart-item-img">
                     <div class="cart-item-details">
                         <div>
-                            <div class="prod-card-title">「色彩絮語」聯名重磅帆布袋</div>
+                            <div class="prod-card-title" style="margin-bottom: 4px;">「色彩絮語」聯名重磅帆布袋</div>
                             <div class="prod-card-artist">顏色: 原色白 / 尺寸: F</div>
                         </div>
                         <div style="display:flex; justify-content:space-between; align-items:flex-end;">
                             <div class="prod-card-price" style="margin:0;">NT$ 890</div>
-                            <button class="btn btn-danger-text" onclick="showToast('商品已移除')">移除</button>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <div class="qty-wrapper">
+                                    <button class="qty-btn" style="width: 28px; height: 28px;">-</button>
+                                    <input type="number" class="qty-input" value="1" readonly style="width: 40px; height: 28px;">
+                                    <button class="qty-btn" style="width: 28px; height: 28px;">+</button>
+                                </div>
+                                <button class="btn btn-danger-text" style="padding: 0;" onclick="showToast('商品已移除')">移除</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="cart-summary">
-                <div style="font-weight:700; font-size:16px; margin-bottom:16px;">訂單摘要</div>
+                <div style="font-weight:600; font-size:16px; margin-bottom:16px; color: var(--ant-text);">訂單摘要</div>
                 <div class="summary-line"><span>小計</span><span>NT$ 890</span></div>
                 <div class="summary-line"><span>運費</span><span>NT$ 60</span></div>
-                <div class="summary-total"><span>總計</span><span style="color:var(--tba-blue);">NT$ 950</span></div>
-                <button class="btn btn-primary btn-lg btn-block" style="margin-top:24px;" onclick="showToast('保留庫存15分鐘，導向結帳...')">前往結帳</button>
+                <div class="summary-total"><span>總計</span><span style="color:var(--ant-primary);">NT$ 950</span></div>
+                <button class="btn btn-primary btn-lg btn-block" style="margin-top:24px;" onclick="showToast('導向結帳...')">前往結帳</button>
             </div>
         </div>
     </div>
@@ -657,8 +703,8 @@
          視圖 5: 搜尋結果 (Search Results)
          ========================================= -->
     <div id="view-search" class="view-section section-wrap">
-        <h2 class="section-title" style="font-size:24px; margin-bottom:16px;">搜尋結果：<span id="searchKw" style="color:var(--tba-blue);"></span></h2>
-        <p style="color:var(--card-artist-color); margin-bottom:32px;">共找到 1 件符合的商品</p>
+        <h2 class="section-title" style="font-size:20px; margin-bottom:8px;">搜尋結果：<span id="searchKw" style="color:var(--ant-primary);"></span></h2>
+        <p style="color:var(--ant-text-secondary); margin-bottom:24px; font-size: 14px;">共找到 1 件符合的商品</p>
         <div class="card-grid">
             <div class="tba-card" onclick="switchView('view-detail')">
                 <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
@@ -666,7 +712,7 @@
                     <div class="prod-card-artist">陳奕安</div>
                     <div class="prod-card-title">「色彩絮語」聯名帆布袋</div>
                     <div class="prod-card-price">NT$ 890</div>
-                    <button class="btn-add-cart" onclick="addCart(event)">加入購物車</button>
+                    <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
                 </div>
             </div>
         </div>
@@ -676,19 +722,19 @@
          視圖 6: FAQ & 條款 (Static Pages)
          ========================================= -->
     <div id="view-faq" class="view-section section-wrap doc-wrap">
-        <h2 class="section-title" style="margin-bottom: 32px; text-align: center;">常見問題 (FAQ)</h2>
+        <h2 class="section-title" style="margin-bottom: 24px;">常見問題 (FAQ)</h2>
         <div>
             <div class="faq-item">
                 <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
                     [購物常見問題] 支援哪些付款方式？
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
                 </div>
                 <div class="faq-a">目前支援信用卡一次付清、ATM 轉帳及超商代碼繳費。</div>
             </div>
             <div class="faq-item">
                 <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
                     [退換貨說明] 如何辦理退換貨？
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
                 </div>
                 <div class="faq-a">請保持商品全新且包裝完整，並透過客服信箱與我們聯繫。</div>
             </div>
@@ -696,13 +742,15 @@
     </div>
 
     <!-- 浮動按鈕 FAB -->
-    <div id="fabTop" class="fab-top" onclick="window.scrollTo(0,0)">↑</div>
+    <div id="fabTop" class="fab-top" onclick="window.scrollTo(0,0)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
+    </div>
 
     <!-- Footer -->
     <footer>
         <div class="social-icons">
-            <a href="https://www.instagram.com/thebridgeart/" target="_blank"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
-            <a href="https://www.facebook.com/tba.art17" target="_blank"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="https://www.instagram.com/thebridgeart/" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
+            <a href="https://www.facebook.com/tba.art17" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
         </div>
         <div class="footer-links">
             <a href="https://tba.tw/terms" target="_blank">使用者條款</a>
@@ -710,11 +758,14 @@
             <a onclick="switchView('view-faq')">常見問題</a>
             <a href="mailto:service@tba.tw">聯絡我們</a>
         </div>
-        <p>&copy; 藝橋藝術股份有限公司 &copy; Copyright reserved by TBA 2025</p>
+        <p style="font-size: 13px;">&copy; 藝橋藝術股份有限公司 &copy; Copyright reserved by TBA 2025</p>
     </footer>
 
-    <!-- Toast 提示 -->
-    <div id="toastBox" class="toast-msg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span id="toastText"></span></div>
+    <!-- Toast 提示 (Ant Message 風格) -->
+    <div id="toastBox" class="toast-msg">
+        <svg class="toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+        <span id="toastText"></span>
+    </div>
 
     <script>
         // --- 視圖切換 ---
@@ -725,7 +776,7 @@
             document.getElementById('searchBox').classList.remove('active');
         }
 
-        // --- Toast 提示 ---
+        // --- Toast 提示 (模擬 Ant Message) ---
         let tTimer;
         function showToast(msg) {
             const box = document.getElementById('toastBox');
@@ -733,6 +784,47 @@
             box.classList.add('show');
             clearTimeout(tTimer);
             tTimer = setTimeout(() => box.classList.remove('show'), 2500);
+        }
+
+        // --- Hero Carousel 輪播圖邏輯 ---
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.dot');
+        const carousel = document.getElementById('heroCarousel');
+        let slideInterval;
+
+        function showSlide(index) {
+            if (index >= slides.length) currentSlideIndex = 0;
+            if (index < 0) currentSlideIndex = slides.length - 1;
+            
+            // 由於設定了 transform transition，可以直接移動 X 軸
+            carousel.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+            
+            dots.forEach(dot => dot.classList.remove('active'));
+            if(dots.length > 0) dots[currentSlideIndex].classList.add('active');
+        }
+
+        function moveSlide(n) {
+            currentSlideIndex += n;
+            showSlide(currentSlideIndex);
+            resetInterval();
+        }
+
+        function currentSlide(n) {
+            currentSlideIndex = n;
+            showSlide(currentSlideIndex);
+            resetInterval();
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => { moveSlide(1); }, 5000);
+        }
+        
+        // 初始化輪播
+        if(slides.length > 0) {
+            showSlide(0);
+            resetInterval();
         }
 
         // --- 購物車 ---
