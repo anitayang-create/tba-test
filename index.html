@@ -4,413 +4,784 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TBA 藝術周邊平台 | 讓藝術走入生活</title>
+    <!-- 引入 Google Fonts: 優先使用 Helvetica, 備用 Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
     <style>
         /* =========================================
-           Ant Design v5 Design Tokens (設計變數)
+           🎨 全站共用 UI 設計規範 (依據 MVP 規格)
            ========================================= */
         :root {
-            --ant-primary: #1677ff;
-            --ant-primary-hover: #4096ff;
-            --ant-primary-bg: #e6f4ff;
-            --ant-success: #52c41a;
-            --ant-warning: #faad14;
-            --ant-error: #ff4d4f;
-            --ant-text-primary: rgba(0, 0, 0, 0.88);
-            --ant-text-secondary: rgba(0, 0, 0, 0.45);
-            --ant-bg-layout: #f5f5f5;
-            --ant-bg-container: #ffffff;
-            --ant-border-color: #f0f0f0;
-            --ant-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            --transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            /* 顏色規範 */
+            --tba-blue: #2563eb; 
+            --tba-blue-hover: #1d4ed8;
+            --tba-black: #000000;
+            --tba-dark-gray: #333333;
+            --tba-gray: #888888;
+            --tba-border: #e5e7eb; 
+            --tba-white: #ffffff;
+            --tba-light-bg: #f9fafb;
+            
+            --card-title-color: #111827;
+            --card-artist-color: #4b5563;
+            --card-price-color: #2563eb;
+            
+            --ant-error: #ff4d4f; 
+
+            /* 字體規範 */
+            --font-primary: 'Helvetica', 'Noto Sans TC', sans-serif;
+            
+            /* 互動規範 */
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --shadow-light: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--ant-font); }
-        body { background-color: var(--ant-bg-layout); color: var(--ant-text-primary); line-height: 1.5715; overflow-x: hidden; scroll-behavior: smooth; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-primary);
+        }
 
-        /* 頂部雙層導覽列 */
-        .top-bar { position: fixed; top: 0; width: 100%; background-color: var(--ant-bg-layout); border-bottom: 1px solid var(--ant-border-color); padding: 4px 5%; display: flex; justify-content: flex-end; align-items: center; gap: 20px; z-index: 1001; font-size: 12px; }
-        .top-bar a { color: var(--ant-text-secondary); text-decoration: none; transition: var(--transition); }
-        .top-bar a:hover { color: var(--ant-primary); }
+        body {
+            background-color: var(--tba-white);
+            color: var(--tba-dark-gray);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-        /* 主導覽列 */
-        header { position: fixed; top: 26px; width: 100%; height: 64px; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; background: var(--ant-bg-container); box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08); z-index: 1000; }
-        .logo { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: var(--ant-text-primary); text-decoration: none; display: flex; align-items: center; gap: 8px; }
-        .nav-links { display: flex; height: 100%; }
-        .nav-links a { color: var(--ant-text-primary); text-decoration: none; font-size: 14px; padding: 0 20px; display: flex; align-items: center; transition: var(--transition); position: relative; }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 20px; right: 20px; height: 2px; background-color: transparent; transition: var(--transition); }
-        .nav-links a:hover { color: var(--ant-primary); }
-        .nav-links a:hover::after { background-color: var(--ant-primary); }
-        .auth-group { display: flex; gap: 12px; align-items: center; }
+        /* --- SPA 視圖切換 --- */
+        .view-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            padding-top: 110px; /* 閃避 fixed header */
+            min-height: 80vh;
+        }
+        .view-section.active {
+            display: block;
+            opacity: 1;
+        }
 
-        /* 按鈕樣式 */
-        .btn { height: 32px; padding: 4px 15px; font-size: 14px; border-radius: 6px; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid transparent; text-decoration: none; }
-        .btn-lg { height: 40px; padding: 6.4px 15px; font-size: 16px; border-radius: 8px; }
-        .btn-primary { background-color: var(--ant-primary); color: #fff; box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1); }
-        .btn-primary:hover { background-color: var(--ant-primary-hover); }
-        .btn-primary:disabled { background-color: #d9d9d9; color: rgba(0,0,0,0.25); cursor: not-allowed; box-shadow: none; }
-        .btn-default { background-color: #fff; color: var(--ant-text-primary); border-color: #d9d9d9; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02); }
-        .btn-default:hover { color: var(--ant-primary); border-color: var(--ant-primary); }
-        .btn-text { background: transparent; color: var(--ant-text-primary); }
-        .btn-text:hover { background: rgba(0, 0, 0, 0.04); }
-
-        /* 英雄區塊 */
-        .hero { position: relative; padding: 120px 5% 60px; background-color: var(--ant-bg-container); overflow: hidden; border-bottom: 1px solid var(--ant-border-color); }
-        .hero-layout { display: flex; width: 100%; max-width: 1200px; margin: 0 auto; align-items: center; gap: 60px; }
-        .hero-text { flex: 1; }
-        .hero-text h1 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 24px; color: var(--ant-text-primary); }
-        .hero-text p { font-size: 16px; color: var(--ant-text-secondary); margin-bottom: 32px; max-width: 500px; }
-        .hero-image { flex: 1; height: 400px; }
-        .hero-image img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; box-shadow: 0 6px 16px 0 rgba(0,0,0,0.08); }
-
-        /* 共用區塊設定 */
-        .section-container { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
-        .section-title { font-size: 24px; font-weight: 600; color: var(--ant-text-primary); }
-        .section-title span { display: block; color: var(--ant-text-secondary); font-size: 14px; margin-top: 4px; font-weight: 400; }
-        .view-all { color: var(--ant-primary); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 4px; transition: var(--transition); }
-        .view-all:hover { color: var(--ant-primary-hover); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-
-        /* 卡片樣式 */
-        .ant-card { background: var(--ant-bg-container); border: 1px solid var(--ant-border-color); border-radius: 8px; transition: var(--transition); position: relative; overflow: hidden; display: flex; flex-direction: column; }
-        .ant-card:hover { box-shadow: 0 1px 2px -2px rgba(0,0,0,0.16), 0 3px 6px 0 rgba(0,0,0,0.12), 0 5px 12px 4px rgba(0,0,0,0.09); }
-        .ant-card-cover { width: 100%; height: 280px; overflow: hidden; position: relative; background-color: var(--ant-bg-layout); }
-        .ant-card-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .ant-card:hover .ant-card-cover img { transform: scale(1.03); }
-        .ant-tag { position: absolute; top: 12px; left: 12px; padding: 0 7px; font-size: 12px; line-height: 20px; background: #fafafa; border: 1px solid #d9d9d9; border-radius: 4px; color: var(--ant-text-primary); z-index: 2; }
-        .ant-tag-error { color: #cf1322; background: #fff1f0; border-color: #ffa39e; }
-        .ant-tag-warning { color: #d46b08; background: #fff7e6; border-color: #ffd591; }
-        .ant-tag-processing { color: #096dd9; background: #e6f7ff; border-color: #91d5ff; }
-        .ant-card-body { padding: 20px; display: flex; flex-direction: column; flex: 1; }
-        .ant-card-meta-description { font-size: 12px; color: var(--ant-text-secondary); margin-bottom: 8px; }
-        .ant-card-meta-title { font-size: 16px; font-weight: 600; color: var(--ant-text-primary); margin-bottom: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; margin-bottom: 16px; }
-        .card-price { font-size: 18px; font-weight: 600; color: var(--ant-primary); }
-        .action-btn-block { width: 100%; }
-        .bg-white { background-color: var(--ant-bg-container); }
-
-        /* 創作中心 AI 區塊 */
-        .creation-cta { background: #ffffff; border: 1px solid var(--ant-border-color); padding: 48px; margin: 60px auto; max-width: 1200px; border-radius: 8px; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 32px; }
-        .creation-header { text-align: center; }
-        .creation-header h2 { color: var(--ant-text-primary); margin-bottom: 16px; font-size: 24px; font-weight: 600; }
-        .creation-header p { color: var(--ant-text-secondary); font-size: 14px; max-width: 600px; margin: 0 auto; }
-        .ai-planner-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-        .ai-form-box { background: var(--ant-bg-layout); padding: 24px; border-radius: 8px; border: 1px solid var(--ant-border-color); }
-        .ant-form-item { margin-bottom: 24px; }
-        .ant-form-item-label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--ant-text-primary); }
-        .ant-input, .ant-select { width: 100%; padding: 7px 11px; font-size: 14px; line-height: 1.5715; background-color: #fff; border: 1px solid #d9d9d9; border-radius: 6px; transition: all 0.2s; }
-        .ant-input:focus, .ant-select:focus { border-color: var(--ant-primary); box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1); outline: 0; }
-        .ai-result-box { background: #ffffff; padding: 24px; border-radius: 8px; border: 1px solid var(--ant-border-color); display: flex; flex-direction: column; justify-content: center; position: relative; min-height: 350px; }
-        .ai-result-empty { text-align: center; color: var(--ant-text-secondary); }
-        .ai-result-empty svg { margin-bottom: 16px; color: #d9d9d9; }
-        .ai-result-content { display: none; animation: fadeIn 0.5s ease; }
-        .ai-result-title { font-size: 20px; font-weight: 600; color: var(--ant-primary); margin-bottom: 16px; text-align: center; }
-        .ant-spin { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--ant-primary-bg); border-radius: 50%; border-top-color: var(--ant-primary); animation: antSpin 1s linear infinite; vertical-align: middle; margin-right: 8px; }
+        /* --- 共用按鈕樣式 --- */
+        .btn {
+            height: 40px; padding: 0 20px; font-size: 14px; font-weight: 500; letter-spacing: 1px;
+            border-radius: 6px; cursor: pointer; transition: var(--transition-smooth);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: none; outline: none;
+        }
+        .btn-lg { height: 48px; padding: 0 32px; font-size: 16px; }
+        .btn-block { width: 100%; }
         
-        @keyframes antSpin { to { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .btn-primary { background-color: var(--tba-blue); color: var(--tba-white); }
+        .btn-primary:hover { background-color: var(--tba-blue-hover); }
+        
+        .btn-outline { background-color: transparent; color: var(--tba-blue); border: 1px solid var(--tba-blue); }
+        .btn-outline:hover { background-color: var(--tba-blue-hover); color: var(--tba-white); border-color: var(--tba-blue-hover); }
+        
+        .btn-text { background: transparent; color: var(--tba-dark-gray); }
+        .btn-text:hover { color: var(--tba-blue); }
 
-        /* 訊息提示 */
-        .ant-message { position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-150%); background: #ffffff; color: var(--ant-text-primary); padding: 9px 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); z-index: 2000; opacity: 0; transition: all 0.3s; display: flex; align-items: center; font-size: 14px; border-radius: 8px; gap: 8px; }
-        .ant-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .btn-danger-text { color: var(--ant-error); background: transparent; }
+        .btn-danger-text:hover { opacity: 0.7; }
 
-        footer { background: var(--ant-bg-container); padding: 48px 5%; text-align: center; border-top: 1px solid var(--ant-border-color); }
-        .footer-links { margin-bottom: 16px; }
-        .footer-links a { color: var(--ant-text-secondary); text-decoration: none; margin: 0 12px; font-size: 14px; transition: var(--transition); }
-        .footer-links a:hover { color: var(--ant-primary); }
+        /* --- 共用表單元件 --- */
+        .form-input {
+            width: 100%; padding: 10px 12px; font-size: 14px; border: 1px solid var(--tba-border); 
+            border-radius: 6px; transition: var(--transition-smooth); background: var(--tba-white); outline: none;
+        }
+        .form-input:focus { border-color: var(--tba-blue); }
 
-        @media (max-width: 900px) {
-            .hero-layout { flex-direction: column; text-align: center; }
-            .nav-links, .auth-group .btn-text { display: none; }
-            .ai-planner-layout { grid-template-columns: 1fr; }
+        /* =========================================
+           1. 首頁模組 (Home Page) & 全域 Header
+           ========================================= */
+        /* Top Bar */
+        .top-bar {
+            position: fixed; top: 0; width: 100%; background-color: var(--tba-black);
+            padding: 8px 5%; display: flex; justify-content: flex-end; align-items: center; 
+            z-index: 1001; font-size: 12px; border-bottom: 1px solid #222;
+        }
+        .top-bar a { color: #aaa; text-decoration: none; transition: var(--transition-smooth); letter-spacing: 1px; }
+        .top-bar a:hover { color: var(--tba-white); }
+
+        /* Header */
+        header {
+            position: fixed; top: 26px; width: 100%; height: 64px; padding: 0 5%; 
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(8px); z-index: 1000; border-bottom: 1px solid #222;
+        }
+        .logo { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: var(--tba-white); cursor: pointer; }
+        
+        .nav-links { display: flex; height: 100%; }
+        .nav-links a {
+            color: #ddd; font-size: 14px; font-weight: 500; letter-spacing: 1px; padding: 0 24px; 
+            display: flex; align-items: center; cursor: pointer; transition: var(--transition-smooth); position: relative;
+        }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 24px; right: 24px; height: 2px; background-color: transparent; transition: var(--transition-smooth); }
+        .nav-links a:hover { color: var(--tba-white); }
+        .nav-links a:hover::after { background-color: var(--tba-white); }
+
+        .header-actions { display: flex; gap: 16px; align-items: center; position: relative; }
+        .header-actions .btn-text { color: #ddd; }
+        .header-actions .btn-text:hover { color: var(--tba-white); }
+        .header-actions .btn-outline { color: #ddd; border-color: #555; }
+        .header-actions .btn-outline:hover { color: var(--tba-black); background-color: var(--tba-white); border-color: var(--tba-white); }
+        .header-actions .btn-primary { background-color: var(--tba-white); color: var(--tba-black); }
+        .header-actions .btn-primary:hover { background-color: #ddd; }
+
+        .cart-badge { background: var(--ant-error); color: var(--tba-white); border-radius: 10px; padding: 0 6px; font-size: 11px; line-height: 18px; font-weight: bold; margin-left: 6px; }
+
+        /* 搜尋框展開 */
+        .search-dropdown {
+            display: none; position: absolute; top: 100%; right: 0; margin-top: 16px;
+            background: var(--tba-white); padding: 16px; border: 1px solid var(--tba-border);
+            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 320px;
+        }
+        .search-dropdown.active { display: block; }
+        .search-dropdown-inner { display: flex; gap: 8px; }
+
+        /* Hero Section */
+        .hero {
+            position: relative; min-height: 80vh; display: flex; align-items: center; justify-content: center;
+            background-color: var(--tba-black); padding-top: 0; /* 覆蓋 view-section 的 padding */
+            margin-top: -110px; /* 向上推底以達成滿版 */
+        }
+        .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+        .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: 1; }
+        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--tba-white); max-width: 800px; padding: 0 5%; }
+        .hero-content h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 24px; letter-spacing: 2px; }
+        .hero-content p { font-size: 16px; color: #ddd; margin-bottom: 40px; line-height: 1.8; letter-spacing: 1px; }
+
+        /* 區塊共用佈局 */
+        .section-wrap { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; border-bottom: 2px solid var(--tba-black); padding-bottom: 16px; }
+        .section-title { font-size: 28px; font-weight: 700; color: var(--tba-black); letter-spacing: 2px; }
+        .view-more { color: var(--tba-gray); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; transition: var(--transition-smooth); }
+        .view-more:hover { color: var(--tba-blue); }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 32px; }
+
+        /* =========================================
+           共通卡片樣式 (商品/藝術家)
+           ========================================= */
+        .tba-card {
+            background: var(--tba-white); border: 1px solid var(--tba-border); border-radius: 8px;
+            box-shadow: var(--shadow-light); transition: var(--transition-smooth); cursor: pointer;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .tba-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        
+        .tba-card-cover { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: var(--tba-light-bg); }
+        .tba-card-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; mix-blend-mode: multiply; }
+        .tba-card:hover .tba-card-cover img { transform: scale(1.05); }
+
+        .tba-card-body { padding: 20px; display: flex; flex-direction: column; flex: 1; text-align: left; }
+        
+        /* 藝術家卡片文字 */
+        .artist-card-name { font-size: 1.125rem; font-weight: 700; color: var(--card-title-color); margin-bottom: 8px; }
+        .artist-card-desc { font-size: 0.875rem; color: var(--card-artist-color); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* 商品卡片文字 */
+        .prod-card-artist { font-size: 0.875rem; color: var(--card-artist-color); margin-bottom: 6px; }
+        .prod-card-title { font-size: 1.125rem; color: var(--card-title-color); margin-bottom: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .prod-card-price { font-size: 1.25rem; font-weight: 700; color: var(--card-price-color); margin-top: auto; margin-bottom: 20px; }
+
+        /* 加入購物車常駐按鈕 */
+        .btn-add-cart {
+            width: 100%; height: 40px; background-color: var(--tba-blue); color: var(--tba-white);
+            border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition-smooth);
+            display: flex; justify-content: center; align-items: center; gap: 6px;
+        }
+        .btn-add-cart:hover { background-color: var(--tba-blue-hover); }
+
+        /* 關於我們區塊 & 過渡色塊 */
+        .about-section { background: var(--tba-light-bg); padding: 80px 5%; text-align: center; }
+        .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; max-width: 1200px; margin: 40px auto 0; }
+        .about-item { background: var(--tba-white); padding: 40px; border-radius: 8px; box-shadow: var(--shadow-light); }
+        .about-item h3 { font-size: 18px; color: var(--tba-black); margin-bottom: 12px; }
+        .about-item p { font-size: 14px; color: var(--tba-gray); }
+
+        .transition-block { background: var(--tba-black); color: var(--tba-white); text-align: center; padding: 100px 5%; position: relative; overflow: hidden; }
+        .transition-decor { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+        .transition-block h2 { font-size: 32px; margin-bottom: 16px; position: relative; z-index: 1; letter-spacing: 2px; }
+        .transition-block p { font-size: 16px; color: #aaa; position: relative; z-index: 1; }
+
+        /* =========================================
+           2-1. 商品列表頁 (Product List)
+           ========================================= */
+        .list-layout { display: flex; gap: 40px; align-items: flex-start; }
+        .sidebar { width: 240px; flex-shrink: 0; }
+        .main-content { flex: 1; }
+        
+        .filter-box { margin-bottom: 32px; }
+        .filter-title { font-size: 14px; font-weight: 700; color: var(--tba-black); margin-bottom: 16px; }
+        .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--card-artist-color); margin-bottom: 12px; cursor: pointer; }
+        .checkbox-label input { accent-color: var(--tba-blue); width: 16px; height: 16px; cursor: pointer; }
+        
+        .price-range { width: 100%; accent-color: var(--tba-blue); margin-bottom: 8px; }
+        .price-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--tba-gray); }
+
+        .list-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--tba-border); }
+        
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 48px; }
+        .page-btn { width: 36px; height: 36px; border: 1px solid var(--tba-border); background: var(--tba-white); border-radius: 6px; cursor: pointer; color: var(--card-artist-color); transition: var(--transition-smooth); }
+        .page-btn:hover { border-color: var(--tba-blue); color: var(--tba-blue); }
+        .page-btn.active { background: var(--tba-blue); color: var(--tba-white); border-color: var(--tba-blue); }
+
+        /* =========================================
+           2-2. 商品詳細頁 (Product Detail)
+           ========================================= */
+        .detail-layout { display: flex; gap: 60px; }
+        .detail-gallery { width: 50%; }
+        .main-img-box { width: 100%; aspect-ratio: 1/1; background: var(--tba-light-bg); border-radius: 8px; overflow: hidden; margin-bottom: 16px; border: 1px solid var(--tba-border); }
+        .main-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .thumb-list { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
+        .thumb-item { width: 80px; height: 80px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; opacity: 0.6; transition: var(--transition-smooth); }
+        .thumb-item.active, .thumb-item:hover { opacity: 1; border-color: var(--tba-blue); }
+        .thumb-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+
+        .detail-info { width: 50%; }
+        .breadcrumb { font-size: 13px; color: var(--tba-gray); margin-bottom: 24px; }
+        .breadcrumb a { color: var(--tba-gray); text-decoration: none; cursor: pointer; }
+        .breadcrumb a:hover { color: var(--tba-blue); }
+        
+        .d-title { font-size: 32px; font-weight: 700; color: var(--card-title-color); margin-bottom: 16px; line-height: 1.3; }
+        .d-price { font-size: 28px; font-weight: 700; color: var(--card-price-color); margin-bottom: 32px; }
+
+        .artist-credit { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--tba-light-bg); border-radius: 8px; border: 1px solid var(--tba-border); margin-bottom: 32px; }
+        .artist-credit img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+        
+        .spec-box { margin-bottom: 24px; }
+        .spec-label { font-size: 14px; font-weight: 600; color: var(--tba-dark-gray); margin-bottom: 8px; display: block; }
+        
+        .qty-wrapper { display: flex; align-items: center; }
+        .qty-btn { width: 40px; height: 40px; background: var(--tba-white); border: 1px solid var(--tba-border); cursor: pointer; transition: var(--transition-smooth); }
+        .qty-btn:hover { border-color: var(--tba-blue); color: var(--tba-blue); }
+        .qty-input { width: 60px; height: 40px; text-align: center; border-top: 1px solid var(--tba-border); border-bottom: 1px solid var(--tba-border); border-left: none; border-right: none; outline: none; }
+
+        /* =========================================
+           6. 購物車模組 (Cart)
+           ========================================= */
+        .cart-layout { display: flex; gap: 40px; align-items: flex-start; }
+        .cart-list { flex: 1; }
+        .cart-item-row { display: flex; gap: 20px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--tba-border); }
+        .cart-item-img { width: 100px; height: 100px; border-radius: 8px; border: 1px solid var(--tba-border); object-fit: cover; }
+        .cart-item-details { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        .cart-summary { width: 320px; background: var(--tba-light-bg); padding: 24px; border-radius: 8px; border: 1px solid var(--tba-border); }
+        .summary-line { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: var(--card-artist-color); }
+        .summary-total { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--tba-border); font-size: 18px; font-weight: 700; color: var(--tba-black); }
+
+        /* =========================================
+           FAQ & 條款模組 (Static Pages)
+           ========================================= */
+        .doc-wrap { max-width: 800px; margin: 0 auto; }
+        .faq-item { border-bottom: 1px solid var(--tba-border); }
+        .faq-q { padding: 20px 0; font-size: 16px; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; color: var(--tba-black); }
+        .faq-q:hover { color: var(--tba-blue); }
+        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; color: var(--card-artist-color); font-size: 14px; }
+        .faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
+
+        .terms-content h2 { font-size: 20px; margin: 32px 0 16px; border-bottom: 1px solid var(--tba-border); padding-bottom: 8px; }
+        .terms-content p, .terms-content li { font-size: 15px; color: var(--card-artist-color); margin-bottom: 16px; }
+        .terms-content ul { padding-left: 24px; }
+
+        /* =========================================
+           全域元件 (Footer, Toast, FAB)
+           ========================================= */
+        footer { background: var(--tba-black); color: #888; padding: 60px 5% 30px; text-align: center; margin-top: 60px; }
+        .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+        .footer-links a { color: #aaa; text-decoration: none; font-size: 13px; transition: var(--transition-smooth); cursor: pointer; }
+        .footer-links a:hover { color: var(--tba-white); }
+        .social-icons { margin-bottom: 24px; display: flex; justify-content: center; gap: 16px; }
+        .social-icons a { color: #aaa; transition: var(--transition-smooth); }
+        .social-icons a:hover { color: var(--tba-white); }
+
+        .toast-msg {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            background: var(--tba-blue); color: var(--tba-white); padding: 12px 24px; border-radius: 6px;
+            box-shadow: var(--shadow-hover); z-index: 9999; opacity: 0; transition: var(--transition-smooth);
+            font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px;
+        }
+        .toast-msg.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        .fab-top {
+            position: fixed; bottom: 30px; right: 30px; width: 44px; height: 44px;
+            background: var(--tba-black); color: var(--tba-white); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+            box-shadow: var(--shadow-hover); opacity: 0; visibility: hidden; transition: var(--transition-smooth); z-index: 990;
+        }
+        .fab-top.show { opacity: 1; visibility: visible; }
+        .fab-top:hover { background: var(--tba-blue); }
+
+        @media (max-width: 768px) {
+            header { padding: 0 16px; height: 60px; top: 32px; }
+            .nav-links { display: none; }
+            .hero-content h1 { font-size: 2rem; }
+            .list-layout, .detail-layout, .cart-layout { flex-direction: column; gap: 32px; }
+            .sidebar, .detail-gallery, .detail-info, .cart-summary { width: 100%; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Top Bar -->
     <div class="top-bar">
-        <a href="#" onclick="showMessage('導向關於 TBA')">關於 TBA</a>
-        <a href="#" onclick="showMessage('切換語言')">繁體中文 / EN</a>
-        <a href="admin.html" style="font-weight: 600; color: var(--ant-text-primary);">供應端登入 (廠商/藝術家)</a>
+        <a href="#" onclick="showToast('導向廠商登入頁面')">
+            <svg viewBox="0 0 24 24" fill="none" width="14" height="14" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            供應端登入 
+        </a>
     </div>
 
+    <!-- Header -->
     <header>
-        <a href="#" class="logo">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13.5h-13L12 6.5z"/></svg>
-            TBA.
-        </a>
+        <a onclick="switchView('view-home')" class="logo">TBA.</a>
         <nav class="nav-links">
-            <a href="#market">週邊市集</a>
-            <a href="#market">美術市集</a>
-            <a href="#incubation">孵化室 ╳ 許願池</a>
-            <a href="#creation">創作中心</a>
-            <a href="#" onclick="showMessage('導向合作藝術家列表')">合作藝術家</a>
+            <a onclick="switchView('view-home')">首頁</a>
+            <a onclick="switchView('view-home'); setTimeout(()=>document.getElementById('sec-artists').scrollIntoView(), 100);">合作藝術家</a>
+            <a onclick="switchView('view-list')">週邊市集</a>
         </nav>
-        <div class="auth-group">
-            <button class="btn btn-text" onclick="showMessage('開啟全站搜尋')">🔍 搜尋</button>
-            <button class="btn btn-default" onclick="showMessage('導向 TBA 原站會員登入 (SSO)')">👤 會員中心</button>
-            <button class="btn btn-primary" onclick="openCart()">🛒 Cart (<span id="cart-count">0</span>)</button>
+        <div class="header-actions">
+            <!-- 搜尋功能 -->
+            <button class="btn btn-text" onclick="toggleSearch()" style="padding:0 8px;">
+                <svg viewBox="0 0 24 24" fill="none" width="20" height="20" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+            <div id="searchBox" class="search-dropdown">
+                <div class="search-dropdown-inner">
+                    <input type="text" id="searchInput" class="form-input" placeholder="搜尋商品名稱、藝術家..." onkeypress="if(event.key==='Enter') executeSearch()">
+                    <button class="btn btn-primary" onclick="executeSearch()">搜尋</button>
+                </div>
+            </div>
+            
+            <a href="https://tba.tw/login" target="_blank" class="btn btn-outline">會員登入</a>
+            <button class="btn btn-primary" onclick="switchView('view-cart')">
+                <svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                購物車 <span class="cart-badge" id="cartBadge">0</span>
+            </button>
         </div>
     </header>
 
-    <section class="hero">
-        <div class="hero-layout">
-            <div class="hero-text">
-                <h1>Art Connects All.<br>藝術，連結生活。</h1>
+    <!-- =========================================
+         視圖 1: 首頁 (Home View)
+         ========================================= -->
+    <div id="view-home" class="view-section active" style="padding-top: 0;">
+        <section class="hero">
+            <img src="http://googleusercontent.com/image_generation_content/0" class="hero-bg" alt="Hero Background">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Art Connects All.<br>Art Connects All.<br>藝術，連結生活。</h1>
                 <p>從靈感探索、AI 孵化到實體量產。TBA 提供藝術家、品牌商與消費者一站式的藝術周邊共創生態系。</p>
-                <button class="btn btn-primary btn-lg" onclick="document.getElementById('market').scrollIntoView({behavior: 'smooth'})">探索周邊市集</button>
+                <div style="display: flex; gap: 16px; justify-content: center;">
+                    <button class="btn btn-primary btn-lg" onclick="switchView('view-list')">探索周邊市集</button>
+                    <button class="btn btn-outline btn-lg" style="color:white; border-color:white;" onclick="document.getElementById('sec-artists').scrollIntoView()">認識合作藝術家</button>
+                </div>
             </div>
-            <div class="hero-image">
-                <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=1200" alt="畫廊">
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="section-container" id="market">
-        <div class="section-header">
-            <div>
-                <h2 class="section-title">週邊市集 <span>Art & Brand Merchandise</span></h2>
-            </div>
-            <a href="#" class="view-all" onclick="showMessage('進入商品列表頁')">查看全部商品 →</a>
-        </div>
-        <div class="grid">
-            <div class="ant-card">
-                <div class="ant-tag ant-tag-error">僅剩 3 件</div>
-                <div class="ant-card-cover"><img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=600" alt="帆布袋"></div>
-                <div class="ant-card-body">
-                    <div class="ant-card-meta-description">Artist: 陳奕仁 ╳ TBA Brand</div>
-                    <div class="ant-card-meta-title">「解構主義」厚磅帆布袋</div>
-                    <div class="price-row"><span class="card-price">NT$ 1,280</span></div>
-                    <button class="btn btn-default action-btn-block" onclick="addToCart(this)">加入購物車</button>
-                </div>
-            </div>
-            <div class="ant-card">
-                <div class="ant-tag ant-tag-warning">企業客製 MOQ: 50</div>
-                <div class="ant-card-cover"><img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&q=80&w=600" alt="馬克杯"></div>
-                <div class="ant-card-body">
-                    <div class="ant-card-meta-description">Supplier: 質感生活製造所</div>
-                    <div class="ant-card-meta-title">「虛無」霧面黑陶瓷馬克杯禮盒</div>
-                    <div class="price-row"><span class="card-price">NT$ 850</span></div>
-                    <button class="btn btn-default action-btn-block" onclick="addToCart(this)">加入購物車</button>
-                </div>
-            </div>
-            <div class="ant-card">
-                <div class="ant-tag">美術用品</div>
-                <div class="ant-card-cover"><img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=600" alt="畫具"></div>
-                <div class="ant-card-body">
-                    <div class="ant-card-meta-description">Supplier: 專業美術用具行</div>
-                    <div class="ant-card-meta-title">大師級純手工油畫顏料套組</div>
-                    <div class="price-row"><span class="card-price">NT$ 3,200</span></div>
-                    <button class="btn btn-default action-btn-block" onclick="addToCart(this)">加入購物車</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="bg-white">
-        <section class="section-container" id="incubation">
+        <section id="sec-artists" class="section-wrap">
             <div class="section-header">
-                <div>
-                    <h2 class="section-title">孵化室 ╳ 許願池 <span>Incubation & Wishing Well</span></h2>
-                </div>
-                <a href="#creation" class="view-all">體驗 AI 生成 →</a>
+                <h2 class="section-title">合作藝術家</h2>
+                <a href="https://tba.tw/artists" target="_blank" class="view-more">探索所有創作者 →</a>
             </div>
-            <p style="color: var(--ant-text-secondary); margin-top: -16px; margin-bottom: 32px; max-width: 800px;">
-                探索由 AI 生成的藝術周邊概念（Mockup）。登入會員參與投票，達標後將交由平台與供應商審查，實體化上架！
-            </p>
-            <div class="grid">
-                <div class="ant-card">
-                    <div class="ant-tag ant-tag-processing">審核中 85%</div>
-                    <div class="ant-card-cover"><img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&q=80&w=600" alt="藍牙音響"></div>
-                    <div class="ant-card-body">
-                        <div class="ant-card-meta-description">發起人: Consumer_001 / 原作: 李明</div>
-                        <div class="ant-card-meta-title">AI 概念：星空渲染藍牙音響</div>
-                        <div class="price-row">
-                            <span style="font-size: 12px; color: var(--ant-text-secondary);">目前票數：<strong style="color:var(--ant-text-primary);" class="vote-count">425</strong> / 500</span>
-                        </div>
-                        <button class="btn btn-primary action-btn-block" onclick="voteUp(this)">投票 +1</button>
+            <div class="card-grid">
+                <div class="tba-card" onclick="showToast('導向藝術家專頁')">
+                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=400&q=80" alt="Artist"></div>
+                    <div class="tba-card-body">
+                        <div class="artist-card-name">陳奕安</div>
+                        <div class="artist-card-desc">專注於色彩心理學與抽象幾何的當代藝術家。</div>
                     </div>
                 </div>
-                <div class="ant-card">
-                    <div class="ant-tag">剛發布</div>
-                    <div class="ant-card-cover"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600" alt="壓克力立牌"></div>
-                    <div class="ant-card-body">
-                        <div class="ant-card-meta-description">發起人: Art_Lover / 原作: 幾何光影</div>
-                        <div class="ant-card-meta-title">AI 概念：光影漸層壓克力立牌</div>
-                        <div class="price-row">
-                            <span style="font-size: 12px; color: var(--ant-text-secondary);">目前票數：<strong style="color:var(--ant-text-primary);" class="vote-count">12</strong> / 100</span>
-                        </div>
-                        <button class="btn btn-primary action-btn-block" onclick="voteUp(this)">投票 +1</button>
+                <div class="tba-card" onclick="showToast('導向藝術家專頁')">
+                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=400&q=80" alt="Artist"></div>
+                    <div class="tba-card-body">
+                        <div class="artist-card-name">林森</div>
+                        <div class="artist-card-desc">以細膩筆觸描繪都市叢林靜謐角落。</div>
+                    </div>
+                </div>
+                <div class="tba-card" onclick="showToast('導向藝術家專頁')">
+                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&w=400&q=80" alt="Artist"></div>
+                    <div class="tba-card-body">
+                        <div class="artist-card-name">Studio K</div>
+                        <div class="artist-card-desc">結合數位媒材與傳統版畫的新銳設計團隊。</div>
+                    </div>
+                </div>
+                <div class="tba-card" onclick="showToast('導向藝術家專頁')">
+                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=400&q=80" alt="Artist"></div>
+                    <div class="tba-card-body">
+                        <div class="artist-card-name">李明</div>
+                        <div class="artist-card-desc">擅長超現實主義與光影魔術的視覺創作者。</div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <section class="section-wrap" style="padding-top: 0;">
+            <div class="section-header">
+                <h2 class="section-title">週邊市集</h2>
+                <a onclick="switchView('view-list')" class="view-more">查看全部商品 →</a>
+            </div>
+            <div class="card-grid">
+                <div class="tba-card" onclick="switchView('view-detail')">
+                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
+                    <div class="tba-card-body">
+                        <div class="prod-card-artist">陳奕安 ╳ 質感製造所</div>
+                        <div class="prod-card-title">「色彩絮語」聯名重磅帆布袋</div>
+                        <div class="prod-card-price">NT$ 890</div>
+                        <button class="btn-add-cart" onclick="addCart(event)"><svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>加入購物車</button>
+                    </div>
+                </div>
+                <div class="tba-card" onclick="switchView('view-detail')">
+                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
+                    <div class="tba-card-body">
+                        <div class="prod-card-artist">林森 ╳ 陶瓷工坊</div>
+                        <div class="prod-card-title">「虛無空間」霧面陶瓷馬克杯</div>
+                        <div class="prod-card-price">NT$ 650</div>
+                        <button class="btn-add-cart" onclick="addCart(event)"><svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>加入購物車</button>
+                    </div>
+                </div>
+                <div class="tba-card" onclick="switchView('view-detail')">
+                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1603313011101-320f26a4f6f6?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
+                    <div class="tba-card-body">
+                        <div class="prod-card-artist">Studio K ╳ 3C配件</div>
+                        <div class="prod-card-title">極簡線條防摔手機殼</div>
+                        <div class="prod-card-price">NT$ 980</div>
+                        <button class="btn-add-cart" onclick="addCart(event)"><svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>加入購物車</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <h2 class="section-title" style="margin-bottom: 16px;">關於我們</h2>
+            <p style="color: var(--card-artist-color); max-width: 600px; margin: 0 auto;">協助藝術家增長能見度，擁抱自己專屬的藝術舞台，推動普羅大眾藝術、商業藝術合作、傳統藝術藝廊。</p>
+            <div class="about-grid">
+                <div class="about-item">
+                    <h3>媒合藝術家</h3>
+                    <p>藝術家可以透過媒合平台展示其作品集和風格介紹。</p>
+                </div>
+                <div class="about-item">
+                    <h3>展覽藝術品</h3>
+                    <p>展覽藝術品是展示創作者思想、技藝和美學的媒介，透過空間與觀眾互動。</p>
+                </div>
+                <div class="about-item">
+                    <h3>媒合空間</h3>
+                    <p>專為策展人、藝術家和場地提供方設計的工具，促進高效連結與合作。</p>
+                </div>
+                <div class="about-item">
+                    <h3>策辦活動</h3>
+                    <p>透過創意策劃與展示，促進互動交流，啟發大眾視野與創造力。</p>
+                </div>
+            </div>
+            <div class="about-item" style="max-width: 600px; margin: 32px auto 0;">
+                <h3>尋找聯名企業</h3>
+                <p>聯名企業媒合平台是一個橋接品牌與藝術家、設計師的渠道。</p>
+            </div>
+        </section>
+
+        <section class="transition-block">
+            <div class="transition-decor"></div>
+            <h2>Empowering Art & Creativity</h2>
+            <p>我們致力於打造一個透明、高效的藝術媒合生態系。<br>讓每一次的點擊與交流，都成為推動創作前進的動力。</p>
+        </section>
     </div>
 
-    <!-- ✨ 創作中心 AI 模組整合 -->
-    <section class="creation-cta" id="creation">
-        <div class="creation-header">
-            <h2>✨ AI 藝術周邊企劃助手</h2>
-            <p>輸入您喜愛的藝術品名稱與載體，我們的 AI 將為您直接繪製高畫質的周邊視覺稿。優質概念可發布至「許願池」測試市場潛力！</p>
+    <!-- =========================================
+         視圖 2: 商品列表頁 (Product List View)
+         ========================================= -->
+    <div id="view-list" class="view-section section-wrap">
+        <div class="breadcrumb">
+            <a onclick="switchView('view-home')">首頁</a> / <span>週邊市集</span>
         </div>
-        
-        <div class="ai-planner-layout">
-            <div class="ai-form-box">
-                <div class="ant-form-item">
-                    <label class="ant-form-item-label" for="ai-theme">選擇藝術品</label>
-                    <input type="text" id="ai-theme" class="ant-input" placeholder="例如：蒙娜麗莎的微笑、星夜..." value="蒙娜麗莎的微笑">
+        <div class="list-layout">
+            <aside class="sidebar">
+                <div class="filter-box">
+                    <div class="filter-title">藝術家類型</div>
+                    <label class="checkbox-label"><input type="checkbox"> 畫家</label>
+                    <label class="checkbox-label"><input type="checkbox"> 攝影師</label>
+                    <label class="checkbox-label"><input type="checkbox"> 雕塑家</label>
+                    <label class="checkbox-label"><input type="checkbox"> 電繪</label>
+                    <label class="checkbox-label"><input type="checkbox"> 插畫</label>
                 </div>
-                <div class="ant-form-item">
-                    <label class="ant-form-item-label" for="ai-item">選擇周邊載體</label>
-                    <select id="ai-item" class="ant-select">
-                        <option value="厚磅帆布袋">厚磅帆布袋</option>
-                        <option value="陶瓷馬克杯">陶瓷馬克杯</option>
-                        <option value="Oversize純棉T恤">Oversize 純棉 T 恤</option>
-                        <option value="壓克力立牌">壓克力立牌</option>
-                        <option value="超大電競滑鼠墊">超大電競滑鼠墊</option>
-                        <option value="藝術裝飾掛畫">藝術裝飾掛畫</option>
+                <div class="filter-box">
+                    <div class="filter-title">商品分類</div>
+                    <label class="checkbox-label"><input type="checkbox"> 服飾</label>
+                    <label class="checkbox-label"><input type="checkbox"> 居家</label>
+                    <label class="checkbox-label"><input type="checkbox"> 配件</label>
+                </div>
+                <div class="filter-box">
+                    <div class="filter-title">價格區間</div>
+                    <input type="range" class="price-range" min="0" max="500000" value="500000" oninput="document.getElementById('prLabel').innerText = 'NT$ ' + Number(this.value).toLocaleString()">
+                    <div class="price-labels">
+                        <span>$0</span>
+                        <span id="prLabel">NT$ 500,000</span>
+                    </div>
+                </div>
+            </aside>
+            <main class="main-content">
+                <div class="list-toolbar">
+                    <span style="font-size: 14px; color: var(--card-artist-color);">共找到 124 件商品</span>
+                    <select class="form-input" style="width: auto;">
+                        <option>最新上架</option>
+                        <option>最舊上架</option>
+                        <option>價格由高至低</option>
                     </select>
                 </div>
-                <button id="generate-btn" class="btn btn-primary btn-lg action-btn-block" onclick="generateAIConcept()">
-                    ✨ 繪製周邊視覺稿
-                </button>
-            </div>
-
-            <div class="ai-result-box" id="result-box">
-                <div class="ai-result-empty" id="result-empty">
-                    <svg viewBox="0 0 24 24" fill="none" width="48" height="48" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-                    <p>等待 AI 靈感碰撞中...</p>
-                </div>
-
-                <div class="ai-result-content" id="result-content">
-                    <h3 class="ai-result-title" id="res-title">商品名稱載入中...</h3>
-                    <div class="ai-result-section" style="text-align: center;">
-                        <img id="res-image" src="" alt="AI 視覺稿" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); max-height: 320px; object-fit: contain; background: var(--ant-bg-layout);">
+                <div class="card-grid">
+                    <!-- 列表卡片 -->
+                    <div class="tba-card" onclick="switchView('view-detail')">
+                        <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
+                        <div class="tba-card-body">
+                            <div class="prod-card-artist">陳奕安</div>
+                            <div class="prod-card-title">「色彩絮語」聯名帆布袋</div>
+                            <div class="prod-card-price">NT$ 890</div>
+                            <button class="btn-add-cart" onclick="addCart(event)">加入購物車</button>
+                        </div>
                     </div>
-                    <div style="margin-top: 24px; display: flex; gap: 12px;">
-                        <button class="btn btn-primary" style="flex: 1;" onclick="publishToWishlist()">發布至許願池</button>
-                        <button class="btn btn-default" style="flex: 1;" onclick="generateAIConcept()">重新生成</button>
+                    <div class="tba-card" onclick="switchView('view-detail')">
+                        <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
+                        <div class="tba-card-body">
+                            <div class="prod-card-artist">林森</div>
+                            <div class="prod-card-title">霧面陶瓷馬克杯</div>
+                            <div class="prod-card-price">NT$ 650</div>
+                            <button class="btn-add-cart" onclick="addCart(event)">加入購物車</button>
+                        </div>
+                    </div>
+                    <div class="tba-card" onclick="switchView('view-detail')">
+                        <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1603313011101-320f26a4f6f6?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
+                        <div class="tba-card-body">
+                            <div class="prod-card-artist">Studio K</div>
+                            <div class="prod-card-title">線條防摔手機殼</div>
+                            <div class="prod-card-price">NT$ 980</div>
+                            <button class="btn-add-cart" onclick="addCart(event)">加入購物車</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="pagination">
+                    <button class="page-btn">←</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">→</button>
+                </div>
+            </main>
         </div>
-    </section>
-
-    <footer>
-        <div class="footer-links">
-            <a href="#" onclick="showMessage('開啟使用者條款')">使用者條款</a>
-            <a href="#" onclick="showMessage('開啟隱私權政策')">隱私權政策</a>
-            <a href="#" onclick="showMessage('開啟常見問題列表')">常見問題</a>
-        </div>
-        <p style="color: var(--ant-text-secondary); font-size: 14px;">TBA Platform &copy; 2026. All rights reserved.</p>
-    </footer>
-
-    <div id="ant-message" class="ant-message">
-        <svg viewBox="0 0 24 24" fill="var(--ant-primary)" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-        <span id="ant-message-text">訊息內容</span>
     </div>
 
-    <script>
-        let messageTimeout;
-        function showMessage(text) {
-            const msgBox = document.getElementById('ant-message');
-            document.getElementById('ant-message-text').innerText = text;
-            msgBox.classList.add('show');
-            clearTimeout(messageTimeout);
-            messageTimeout = setTimeout(() => msgBox.classList.remove('show'), 3000);
-        }
-
-        let cartTotal = 0;
-        function addToCart(btn) {
-            cartTotal++;
-            document.getElementById('cart-count').innerText = cartTotal;
-            const originalText = btn.innerText;
-            btn.innerText = "已加入 ✓";
-            btn.classList.replace('btn-default', 'btn-primary');
-            showMessage("商品已成功加入購物車");
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.replace('btn-primary', 'btn-default');
-            }, 2000);
-        }
-
-        function openCart() {
-            cartTotal > 0 ? showMessage(`購物車內有 ${cartTotal} 件商品，準備導向結帳...`) : showMessage("購物車目前是空的。");
-        }
-
-        function voteUp(btn) {
-            let countSpan = btn.parentElement.querySelector('.vote-count');
-            countSpan.innerText = parseInt(countSpan.innerText) + 1;
-            btn.innerHTML = "已投票 ✓";
-            btn.classList.replace('btn-primary', 'btn-default');
-            btn.disabled = true;
-            showMessage("投票成功！達標後系統將發送信件通知您。");
-        }
-
-        /* =========================================
-           ✨ Imagen API 整合 (視覺稿生成)
-           ========================================= */
-        const apiKey = ""; 
-        
-        async function fetchWithRetry(url, options, maxRetries = 5) {
-            const delays = [1000, 2000, 4000, 8000, 16000];
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (!response.ok) throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
-                    return await response.json();
-                } catch (error) {
-                    if (i === maxRetries - 1) throw error;
-                    await new Promise(resolve => setTimeout(resolve, delays[i]));
-                }
-            }
-        }
-
-        async function generateAIConcept() {
-            const theme = document.getElementById('ai-theme').value.trim();
-            const itemType = document.getElementById('ai-item').value;
-            const btn = document.getElementById('generate-btn');
-            
-            if (!theme) return showMessage('請輸入藝術品名稱！');
-
-            btn.disabled = true;
-            btn.innerHTML = '<span class="ant-spin"></span> 正在繪製視覺稿...';
-            document.getElementById('result-empty').style.display = 'block';
-            document.getElementById('result-content').style.display = 'none';
-            document.querySelector('#result-empty p').innerText = "AI 正在為您生成高畫質視覺稿，請稍候 (約 10-15 秒)...";
-
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
-            
-            const itemMap = {
-                "厚磅帆布袋": "canvas tote bag", "陶瓷馬克杯": "ceramic coffee mug",
-                "Oversize純棉T恤": "oversized white cotton t-shirt", "壓克力立牌": "acrylic standee display",
-                "超大電競滑鼠墊": "large desk mat mouse pad", "藝術裝飾掛畫": "framed art print on a wall"
-            };
-            const promptText = `A high-end, photorealistic product photography mockup of a ${itemMap[itemType] || itemType} featuring the famous artwork "${theme}". Professional studio lighting, clean neutral background, highly detailed, 8k resolution, elegant composition, commercial product shot.`;
-
-            const payload = { instances: [{ prompt: promptText }], parameters: { sampleCount: 1 } };
-
-            try {
-                const result = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                if (!result.predictions?.[0]?.bytesBase64Encoded) throw new Error("無效的圖片回應");
+    <!-- =========================================
+         視圖 3: 商品詳細頁 (Product Detail View)
+         ========================================= -->
+    <div id="view-detail" class="view-section section-wrap">
+        <div class="breadcrumb">
+            <a onclick="switchView('view-home')">首頁</a> / <a onclick="switchView('view-list')">週邊市集</a> / <span>「色彩絮語」聯名重磅帆布袋</span>
+        </div>
+        <div class="detail-layout">
+            <div class="detail-gallery">
+                <div class="main-img-box">
+                    <img id="mainImg" src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=800&q=80" alt="Main">
+                </div>
+                <div class="thumb-list">
+                    <div class="thumb-item active" onclick="swapImg(this, 'https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=800&q=80')"><img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=200&q=80"></div>
+                    <div class="thumb-item" onclick="swapImg(this, 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80')"><img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=200&q=80"></div>
+                </div>
+            </div>
+            <div class="detail-info">
+                <div class="d-title">「色彩絮語」聯名重磅帆布袋</div>
+                <div class="d-price">NT$ 890</div>
                 
-                document.getElementById('res-title').innerText = `「${theme}」${itemType}`;
-                document.getElementById('res-image').src = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                <div class="artist-credit">
+                    <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=200&q=80" alt="Artist">
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:15px; color:var(--card-title-color);">陳奕安</div>
+                        <div style="font-size:13px; color:var(--card-artist-color);">專注於色彩心理學與抽象幾何的當代藝術家。</div>
+                    </div>
+                    <a href="https://tba.tw/artists" target="_blank" class="btn btn-outline" style="height:32px; font-size:12px;">了解更多</a>
+                </div>
 
-                document.getElementById('result-empty').style.display = 'none';
-                document.getElementById('result-content').style.display = 'block';
-                showMessage("✨ AI 視覺稿生成完畢！");
-            } catch (error) {
-                console.error(error);
-                document.querySelector('#result-empty p').innerText = "生成失敗，請稍後再試。";
-                showMessage("連線或生圖失敗，請確認網路狀態。");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '✨ 繪製周邊視覺稿';
+                <div class="spec-box">
+                    <span class="spec-label">顏色</span>
+                    <select class="form-input"><option>原色白</option><option>深邃黑</option></select>
+                </div>
+                <div class="spec-box">
+                    <span class="spec-label">尺寸</span>
+                    <select class="form-input"><option>F (單一尺寸)</option></select>
+                </div>
+                <div class="spec-box" style="margin-bottom: 40px;">
+                    <span class="spec-label">數量</span>
+                    <div class="qty-wrapper">
+                        <button class="qty-btn" onclick="modQty(-1)">-</button>
+                        <input type="number" id="buyQty" class="qty-input" value="1" min="1" readonly>
+                        <button class="qty-btn" onclick="modQty(1)">+</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-lg btn-block" onclick="addCartDetail()">加入購物車 (庫存即時扣除)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+         視圖 4: 購物車頁面 (Cart View)
+         ========================================= -->
+    <div id="view-cart" class="view-section section-wrap">
+        <h2 class="section-title" style="margin-bottom: 32px;">購物車</h2>
+        <div class="cart-layout">
+            <div class="cart-list">
+                <div class="cart-item-row">
+                    <img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=200&q=80" class="cart-item-img">
+                    <div class="cart-item-details">
+                        <div>
+                            <div class="prod-card-title">「色彩絮語」聯名重磅帆布袋</div>
+                            <div class="prod-card-artist">顏色: 原色白 / 尺寸: F</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                            <div class="prod-card-price" style="margin:0;">NT$ 890</div>
+                            <button class="btn btn-danger-text" onclick="showToast('商品已移除')">移除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-summary">
+                <div style="font-weight:700; font-size:16px; margin-bottom:16px;">訂單摘要</div>
+                <div class="summary-line"><span>小計</span><span>NT$ 890</span></div>
+                <div class="summary-line"><span>運費</span><span>NT$ 60</span></div>
+                <div class="summary-total"><span>總計</span><span style="color:var(--tba-blue);">NT$ 950</span></div>
+                <button class="btn btn-primary btn-lg btn-block" style="margin-top:24px;" onclick="showToast('保留庫存15分鐘，導向結帳...')">前往結帳</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+         視圖 5: 搜尋結果 (Search Results)
+         ========================================= -->
+    <div id="view-search" class="view-section section-wrap">
+        <h2 class="section-title" style="font-size:24px; margin-bottom:16px;">搜尋結果：<span id="searchKw" style="color:var(--tba-blue);"></span></h2>
+        <p style="color:var(--card-artist-color); margin-bottom:32px;">共找到 1 件符合的商品</p>
+        <div class="card-grid">
+            <div class="tba-card" onclick="switchView('view-detail')">
+                <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
+                <div class="tba-card-body">
+                    <div class="prod-card-artist">陳奕安</div>
+                    <div class="prod-card-title">「色彩絮語」聯名帆布袋</div>
+                    <div class="prod-card-price">NT$ 890</div>
+                    <button class="btn-add-cart" onclick="addCart(event)">加入購物車</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+         視圖 6: FAQ & 條款 (Static Pages)
+         ========================================= -->
+    <div id="view-faq" class="view-section section-wrap doc-wrap">
+        <h2 class="section-title" style="margin-bottom: 32px; text-align: center;">常見問題 (FAQ)</h2>
+        <div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    [購物常見問題] 支援哪些付款方式？
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div class="faq-a">目前支援信用卡一次付清、ATM 轉帳及超商代碼繳費。</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    [退換貨說明] 如何辦理退換貨？
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div class="faq-a">請保持商品全新且包裝完整，並透過客服信箱與我們聯繫。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 浮動按鈕 FAB -->
+    <div id="fabTop" class="fab-top" onclick="window.scrollTo(0,0)">↑</div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-icons">
+            <a href="https://www.instagram.com/thebridgeart/" target="_blank"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
+            <a href="https://www.facebook.com/tba.art17" target="_blank"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        </div>
+        <div class="footer-links">
+            <a href="https://tba.tw/terms" target="_blank">使用者條款</a>
+            <a href="https://tba.tw/privacy" target="_blank">隱私權政策</a>
+            <a onclick="switchView('view-faq')">常見問題</a>
+            <a href="mailto:service@tba.tw">聯絡我們</a>
+        </div>
+        <p>&copy; 藝橋藝術股份有限公司 &copy; Copyright reserved by TBA 2025</p>
+    </footer>
+
+    <!-- Toast 提示 -->
+    <div id="toastBox" class="toast-msg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span id="toastText"></span></div>
+
+    <script>
+        // --- 視圖切換 ---
+        function switchView(id) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+            document.getElementById('searchBox').classList.remove('active');
+        }
+
+        // --- Toast 提示 ---
+        let tTimer;
+        function showToast(msg) {
+            const box = document.getElementById('toastBox');
+            document.getElementById('toastText').innerText = msg;
+            box.classList.add('show');
+            clearTimeout(tTimer);
+            tTimer = setTimeout(() => box.classList.remove('show'), 2500);
+        }
+
+        // --- 購物車 ---
+        let cCount = 0;
+        function addCart(e) {
+            e.stopPropagation();
+            cCount++;
+            document.getElementById('cartBadge').innerText = cCount;
+            showToast('已加入購物車');
+        }
+        function addCartDetail() {
+            cCount += parseInt(document.getElementById('buyQty').value);
+            document.getElementById('cartBadge').innerText = cCount;
+            showToast('已加入購物車');
+        }
+        function modQty(d) {
+            const inp = document.getElementById('buyQty');
+            let v = parseInt(inp.value) + d;
+            inp.value = v < 1 ? 1 : v;
+        }
+
+        // --- 畫廊 ---
+        function swapImg(el, src) {
+            document.getElementById('mainImg').src = src;
+            document.querySelectorAll('.thumb-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // --- 搜尋 ---
+        function toggleSearch() {
+            const sb = document.getElementById('searchBox');
+            sb.classList.toggle('active');
+            if(sb.classList.contains('active')) document.getElementById('searchInput').focus();
+        }
+        function executeSearch() {
+            const kw = document.getElementById('searchInput').value.trim();
+            if(kw) {
+                document.getElementById('searchKw').innerText = kw;
+                switchView('view-search');
+            } else {
+                showToast('請輸入關鍵字');
             }
         }
 
-        function publishToWishlist() { showMessage("發布成功！此概念已成功提交至「孵化室 ╳ 許願池」。"); }
+        // --- FAB 回到頂部 ---
+        window.addEventListener('scroll', () => {
+            const fab = document.getElementById('fabTop');
+            window.scrollY > 300 ? fab.classList.add('show') : fab.classList.remove('show');
+        });
     </script>
 </body>
 </html>
