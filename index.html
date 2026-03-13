@@ -1,879 +1,1487 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TBA 藝術周邊平台 | 讓藝術走入生活</title>
-    <!-- 引入 Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+import React, { useState, useEffect, useMemo, createContext, useContext } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ShoppingCart, Search, Menu, X, ChevronRight, ChevronLeft, ArrowRight, 
+  Heart, Share2, Filter, ChevronDown, Facebook, Twitter, Instagram, User,
+  Store, Package, ListOrdered, Settings, BarChart3, Plus, Trash2, Clock, 
+  CreditCard, Truck, Image as ImageIcon, Edit3, Save, CheckCircle, AlertCircle,
+  Timer, Upload, Palette
+} from 'lucide-react';
+
+// --- 注入從打包檔提取的專屬 CSS 與字體 ---
+const tbaStyles = `
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
+:root {
+  --color-tba-blue: #123270;
+  --color-tba-blue-light: #1c4a9e;
+  --color-tba-blue-dark: #0a1c3f;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+body { font-family: var(--font-sans); }
+.font-sans { font-family: var(--font-sans); }
+.font-serif { font-family: var(--font-serif); }
+
+.text-tba-blue { color: var(--color-tba-blue); }
+.text-tba-blue-light { color: var(--color-tba-blue-light); }
+.bg-tba-blue { background-color: var(--color-tba-blue); }
+.bg-tba-blue-dark { background-color: var(--color-tba-blue-dark); }
+.border-tba-blue { border-color: var(--color-tba-blue); }
+.border-tba-blue-light { border-color: var(--color-tba-blue-light); }
+.bg-tba-blue\\/5 { background-color: rgba(18, 50, 112, 0.05); }
+.bg-tba-blue\\/10 { background-color: rgba(18, 50, 112, 0.1); }
+.bg-tba-blue\\/20 { background-color: rgba(18, 50, 112, 0.2); }
+
+.hover\\:text-tba-blue:hover { color: var(--color-tba-blue); }
+.hover\\:text-tba-blue-light:hover { color: var(--color-tba-blue-light); }
+.hover\\:bg-tba-blue:hover { background-color: var(--color-tba-blue); }
+.hover\\:bg-tba-blue-dark:hover { background-color: var(--color-tba-blue-dark); }
+.hover\\:border-tba-blue:hover { border-color: var(--color-tba-blue); }
+.hover\\:border-tba-blue-light:hover { border-color: var(--color-tba-blue-light); }
+.focus\\:border-tba-blue:focus { border-color: var(--color-tba-blue); }
+.focus\\:ring-tba-blue:focus { --tw-ring-color: var(--color-tba-blue); }
+
+.selection\\:bg-tba-blue *::selection { background-color: var(--color-tba-blue); color: white; }
+.selection\\:bg-tba-blue::selection { background-color: var(--color-tba-blue); color: white; }
+
+/* 隱藏卷軸 */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+`;
+
+// --- 模擬資料 ---
+const ARTISTS = [
+  { id: 1, name: "陳郁林", enName: "Chen Yu-Lin", style: "插畫 / Illustration", quote: "在每一筆中，尋找生活的微光。", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop", bio: "專注於描繪城市角落的溫暖瞬間，擅長使用溫潤的色調與細膩的筆觸，作品曾多次於國際插畫展中獲獎。", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop", artwork: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=800&auto=format&fit=crop" },
+  { id: 2, name: "林志明", enName: "Lin Chih-Ming", style: "油畫 / Oil Painting", quote: "色彩是我與世界對話的語言。", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop", bio: "將台灣在地風景融入印象派的色彩實驗，每一幅畫作都充滿了對這片土地的熱愛與奔放的情感。", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop", artwork: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=800&auto=format&fit=crop" },
+  { id: 3, name: "王曉梅", enName: "Wang Hsiao-Mei", style: "複合媒材 / Mixed Media", quote: "打破框架，重塑日常的浪漫。", avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=200&auto=format&fit=crop", bio: "打破傳統媒材限制，將幾何圖形與有機材質結合，為現代居家空間創造出獨一無二的視覺焦點。", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop", artwork: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop" },
+  { id: 4, name: "張大千", enName: "Chang Ta-Chien", style: "水墨 / Ink", quote: "墨色深淺，皆是人生風景。", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop", bio: "水墨大師的經典之作，透過授權讓傳統藝術走入現代人的生活之中。", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop", artwork: "https://images.unsplash.com/photo-1580136608260-4ebf15facb61?q=80&w=800&auto=format&fit=crop" },
+];
+
+const PRODUCTS = [
+  { id: 1, name: "星夜馬克杯", enName: "Starry Night Mug", artist: "陳郁林", price: 580, stock: 15, shippingFee: 80, category: "居家生活", image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=800&auto=format&fit=crop", images: ["https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=800&auto=format&fit=crop", "https://images.unsplash.com/photo-1577083165187-57dfdb7dd617?q=80&w=800&auto=format&fit=crop"], variants: [{name: "顏色", values: ["深藍", "星空黑"]}], description: "將星空的浪漫握在手中。這款馬克杯採用高品質陶瓷製作，溫潤的觸感搭配藝術家陳郁林細膩的星空畫作，讓每一次的品茗都成為一場視覺享受。" },
+  { id: 2, name: "春風帆布袋", enName: "Spring Breeze Tote Bag", artist: "林志明", price: 850, stock: 5, shippingFee: 60, category: "服飾配件", image: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop", images: ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop", "https://images.unsplash.com/photo-1597423244037-519742d0a9f0?q=80&w=800&auto=format&fit=crop"], variants: [{name: "顏色", values: ["米白", "大地色"]}, {name: "尺寸", values: ["M", "L"]}], description: "輕巧實用的帆布提袋，印有藝術家林志明經典的春風色彩。採用厚實耐用的純棉帆布，大容量設計能輕鬆裝下您的日常所需，是實用與藝術兼具的最佳選擇。" },
+  { id: 3, name: "幾何抽象抱枕", enName: "Geometric Abstract Cushion", artist: "王曉梅", price: 1200, stock: 0, shippingFee: 100, category: "居家生活", image: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?q=80&w=800&auto=format&fit=crop", images: ["https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?q=80&w=800&auto=format&fit=crop"], variants: [{name: "尺寸", values: ["45x45cm", "50x50cm"]}], description: "為居家空間注入現代藝術氣息。這款幾何抱枕以藝術家王曉梅的畫作為靈感，俐落的線條與大膽的色彩搭配，能為客廳或臥室增添視覺焦點。柔軟舒適，質感極佳。" },
+  { id: 4, name: "山水風景手機殼", enName: "Landscape Phone Case", artist: "張大千", price: 650, stock: 20, shippingFee: 60, category: "3C周邊", image: "https://images.unsplash.com/photo-1601593346740-925612772716?q=80&w=800&auto=format&fit=crop", images: ["https://images.unsplash.com/photo-1601593346740-925612772716?q=80&w=800&auto=format&fit=crop"], variants: [{name: "型號", values: ["iPhone 15 Pro", "iPhone 15", "iPhone 14 Pro", "iPhone 14"]}], description: "將傳統山水畫的意境隨身攜帶。這款手機殼完美呈現張大千大師的水墨風景，防摔材質提供絕佳保護，同時展現出獨特的文化品味。精準開孔，按鍵手感流暢。" },
+];
+
+const ABOUT_INFO = [
+  { id: 1, title: "媒合藝術家", enTitle: "Match Artists", desc: "讓才華遇見伯樂，為藝術家尋找專屬的發光舞台。" },
+  { id: 2, title: "展出藝術品", enTitle: "Exhibit Artworks", desc: "透過空間與藝術的對話，讓藝術品觸動更多靈魂。" },
+  { id: 3, title: "媒合空間", enTitle: "Match Spaces", desc: "尋找最適合的展出角落，讓美好的創作被完美呈現。" },
+  { id: 4, title: "舉辦活動", enTitle: "Organize Events", desc: "以藝術之名聚會，集結熱愛美好生活的人們。" }
+];
+
+const MOCK_MEMBER_INDIVIDUAL = { type: 'individual', name: '王大明', email: 'daming@example.com', phone: '0912-345-678', address: '台北市信義區市民大道五段1號' };
+const MOCK_MEMBER_ENTERPRISE = { type: 'enterprise', name: 'TBA 企業採購', email: 'corp@tba.tw', phone: '02-8765-4321', address: '台北市信義區市民大道五段1號', companyName: '台灣藝術發展有限公司', taxId: '12345678' };
+const MOCK_FAVORITES = [ { ...PRODUCTS[0], savedAt: '2026-03-12 14:30' }, { ...PRODUCTS[2], savedAt: '2026-03-10 09:15' } ];
+
+const MOCK_USER_ORDERS = [
+  { id: 'ORD-20260313-001', date: '2026-03-13', time: '10:30', status: '待付款', amount: 580, items: [PRODUCTS[0]], payment: '信用卡', shipping: '宅配', tracking: '', history: [{ time: '2026-03-13 10:30', status: '訂單成立' }] },
+  { id: 'ORD-20260301-088', date: '2026-03-01', time: '16:45', status: '處理中', amount: 1850, items: [PRODUCTS[1], PRODUCTS[2]], payment: 'ATM轉帳', shipping: '超商取貨', tracking: '', history: [{ time: '2026-03-01 16:45', status: '訂單成立' }, { time: '2026-03-01 18:00', status: '付款完成' }] },
+];
+
+const MOCK_STORE_INFO = { name: 'Chen Yu-Lin 官方賣場', contactName: '陳郁林', phone: '0999-888-777', email: 'chen.art@example.com', address: '台中市西區公益路68號' };
+const MOCK_STORE_ORDERS = [
+  { id: 'ORD-20260313-001', date: '2026-03-13', time: '10:30', status: '待付款', amount: 580, items: [PRODUCTS[0]], buyer: '王大明', payment: '信用卡', shipping: '宅配', tracking: '', history: [{ time: '2026-03-13 10:30', status: '訂單成立' }] },
+];
+const MOCK_STORE_PRODUCTS = [
+  { id: 1, name: "星夜馬克杯", category: "居家生活", status: "上架", price: 580, stock: 15, variants: [{name: "顏色", values: "深藍, 黑色"}] },
+];
+const MOCK_STORE_SALES = [
+  { date: '2026-03-12', items: '星夜馬克杯 x 2', amount: 1160 },
+  { date: '2026-03-10', items: '春風帆布袋 x 1', amount: 850 },
+];
+
+const CREATOR_MOCKUPS = [
+  { id: 'bag', name: '厚磅帆布袋', image: 'https://images.unsplash.com/photo-1597423244037-519742d0a9f0?auto=format&fit=crop&q=80&w=800', mixBlend: 'multiply', overlayClass: 'w-[40%] top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2' },
+  { id: 'mug', name: '經典馬克杯', image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&q=80&w=800', mixBlend: 'multiply', overlayClass: 'w-[30%] top-[55%] left-[45%] -translate-x-1/2 -translate-y-1/2 rounded-lg' },
+  { id: 'thermos', name: '保溫瓶', image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&q=80&w=800', mixBlend: 'multiply', overlayClass: 'w-[20%] top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2' },
+  { id: 'tshirt', name: '純棉短T', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=800', mixBlend: 'multiply', overlayClass: 'w-[30%] top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2' },
+  { id: 'calendar', name: '桌上日曆', image: 'https://images.unsplash.com/photo-1506784951855-6677f5949d03?auto=format&fit=crop&q=80&w=800', mixBlend: 'multiply', overlayClass: 'w-[50%] top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-inner' }
+];
+
+// --- 全域狀態管理 (Context) ---
+
+const AppContext = createContext();
+
+const AppProvider = ({ children }) => {
+  const [cartItems, setCartItems] = useState([]);
+  const [toast, setToast] = useState(null); // { message, type: 'success' | 'error' }
+  const [userOrders, setUserOrders] = useState([...MOCK_USER_ORDERS]);
+
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const addToCart = (product, quantity, selectedVariants) => {
+    const newItem = {
+      cartId: Date.now(),
+      product,
+      quantity,
+      selectedVariants
+    };
+    setCartItems([...cartItems, newItem]);
+    showToast(`已將 ${product.name} 加入購物車`, 'success');
+  };
+
+  const removeFromCart = (cartId) => {
+    setCartItems(cartItems.filter(item => item.cartId !== cartId));
+  };
+
+  const updateCartQuantity = (cartId, newQuantity) => {
+    setCartItems(cartItems.map(item => item.cartId === cartId ? { ...item, quantity: newQuantity } : item));
+  };
+
+  const clearCart = () => setCartItems([]);
+
+  const addOrder = (order) => {
+    setUserOrders([order, ...userOrders]);
+  };
+
+  return (
+    <AppContext.Provider value={{ cartItems, addToCart, removeFromCart, updateCartQuantity, clearCart, toast, showToast, userOrders, addOrder }}>
+      {children}
+      <AnimatePresence>
+        {toast && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50, scale: 0.9 }} 
+            animate={{ opacity: 1, y: 0, scale: 1 }} 
+            exit={{ opacity: 0, scale: 0.9, y: 20 }} 
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 px-6 py-3 rounded-full shadow-lg bg-stone-900 text-white"
+          >
+            {toast.type === 'success' ? <CheckCircle size={18} className="text-green-400" /> : <AlertCircle size={18} className="text-red-400" />}
+            <span className="text-sm tracking-wide">{toast.message}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </AppContext.Provider>
+  );
+};
+
+
+// --- 共用元件 ---
+
+const useNavigation = (initialPage = 'home') => {
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [params, setParams] = useState({});
+  const navigate = (page, newParams = {}) => {
+    setCurrentPage(page);
+    setParams(newParams);
+    window.scrollTo(0, 0);
+  };
+  return { currentPage, params, navigate };
+};
+
+const FadeIn = ({ children, delay = 0, className = "" }) => (
+  <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }} className={className}>
+    {children}
+  </motion.div>
+);
+
+const Logo = ({ className = "" }) => (
+  <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <text x="0" y="32" fontFamily="Georgia, serif" fontSize="36" fontWeight="bold" fill="#123270" letterSpacing="1">TBA</text>
+    <circle cx="95" cy="8" r="4" fill="#123270" />
+    <circle cx="108" cy="18" r="4" fill="#123270" />
+    <circle cx="102" cy="32" r="4" fill="#123270" />
+  </svg>
+);
+
+
+// --- 頁面元件 ---
+
+const Home = ({ navigate }) => {
+  const [artistIndex, setArtistIndex] = useState(0);
+  const visibleArtists = ARTISTS.slice(artistIndex * 4, (artistIndex + 1) * 4);
+  const [productIndex, setProductIndex] = useState(0);
+  const visibleProducts = PRODUCTS.slice(productIndex * 4, (productIndex + 1) * 4);
+
+  return (
+    <>
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2000&auto=format&fit=crop" alt="Background" className="w-full h-full object-cover opacity-40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-stone-50/50 via-transparent to-stone-50" />
+        </div>
+        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto mt-20">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2 }}>
+            <h2 className="text-sm md:text-base tracking-[0.3em] uppercase text-tba-blue mb-6 font-medium">TBA Art Life Market</h2>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium leading-tight mb-6 text-stone-900 md:whitespace-nowrap">
+              每一件商品，<br className="md:hidden" />都是一個藝術家的起點
+              <span className="block text-lg md:text-2xl lg:text-3xl mt-4 text-tba-blue-light font-light italic whitespace-normal">Every Piece Starts with an Artist.</span>
+            </h1>
+            <p className="text-base md:text-lg text-stone-600 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
+              探索 TBA 精選的新銳藝術家創作，將畫布上的靈感轉化為日常生活的物件。
+            </p>
+            <button onClick={() => navigate('shop')} className="px-8 py-4 bg-tba-blue text-white rounded-full text-sm tracking-widest uppercase hover:bg-tba-blue-dark transition-colors shadow-lg">
+              探索商品 / Shop Now
+            </button>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="py-24 px-6 md:px-12 bg-white max-w-7xl mx-auto">
+         <FadeIn className="flex justify-between items-end mb-12">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-serif mb-2 text-tba-blue">藝術生活商品</h2>
+              <p className="text-stone-500 tracking-widest uppercase text-sm">Art Life Market</p>
+            </div>
+            <button onClick={() => navigate('shop')} className="text-sm text-tba-blue border-b border-tba-blue pb-1">查看全部</button>
+         </FadeIn>
+         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {visibleProducts.map((p) => (
+              <div key={p.id} onClick={() => navigate('product', { id: p.id })} className="group bg-stone-50 p-4 rounded-sm cursor-pointer hover:shadow-lg transition-shadow">
+                <div className="relative overflow-hidden aspect-square mb-4 bg-white">
+                  <img src={p.image} alt={p.name} className="w-full h-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-105" />
+                </div>
+                <div className="text-center">
+                  <p className="text-xs text-stone-400 mb-1">{p.artist}</p>
+                  <h4 className="text-sm font-medium mb-1 text-tba-blue">{p.name}</h4>
+                  <p className="text-sm font-medium text-stone-900">NT$ {p.price}</p>
+                </div>
+              </div>
+            ))}
+         </div>
+      </section>
+
+      <section className="py-24 px-6 md:px-12 bg-stone-50 max-w-7xl mx-auto">
+         <FadeIn className="flex justify-between items-end mb-12">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-serif mb-2 text-tba-blue">發現藝術家</h2>
+              <p className="text-stone-500 tracking-widest uppercase text-sm">Meet the Creators</p>
+            </div>
+            <button onClick={() => navigate('artists')} className="text-sm text-tba-blue border-b border-tba-blue pb-1">查看全部</button>
+         </FadeIn>
+         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {visibleArtists.map((artist) => (
+              <div key={artist.id} onClick={() => navigate('artists')} className="group cursor-pointer">
+                <div className="relative overflow-hidden aspect-[3/4] mb-4 rounded-sm">
+                  <img src={artist.image} alt={artist.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-tba-blue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
+                <div className="text-center px-2">
+                  <h4 className="text-base font-medium mb-1 text-tba-blue">{artist.name}</h4>
+                  <p className="text-xs text-stone-500 mb-2">{artist.style}</p>
+                </div>
+              </div>
+            ))}
+         </div>
+      </section>
+    </>
+  );
+};
+
+const Shop = ({ navigate }) => {
+  return (
+    <div className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
+        <h1 className="text-4xl md:text-5xl font-serif mb-4 text-tba-blue">藝術周邊商品</h1>
+        <p className="text-stone-500 tracking-widest uppercase text-sm mb-6">Art Merchandise</p>
+        <div className="w-16 h-px bg-tba-blue mx-auto" />
+      </motion.div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        {PRODUCTS.map((p) => (
+          <div key={p.id} onClick={() => navigate('product', { id: p.id })} className="group bg-stone-50 p-4 rounded-sm cursor-pointer hover:shadow-lg transition-shadow">
+            <div className="relative overflow-hidden aspect-square mb-4 bg-white">
+              <img src={p.image} alt={p.name} className="w-full h-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-105" />
+              {p.stock === 0 && (
+                <div className="absolute inset-0 bg-white/70 flex items-center justify-center backdrop-blur-[2px]">
+                  <span className="bg-stone-900 text-white px-4 py-1 text-xs tracking-widest uppercase rounded-sm">售完 / Sold Out</span>
+                </div>
+              )}
+            </div>
+            <div className="text-center">
+              <p className="text-xs text-stone-400 mb-1">{p.artist}</p>
+              <h4 className="text-sm font-medium mb-1 text-tba-blue">{p.name}</h4>
+              <p className="text-sm font-medium text-stone-900">NT$ {p.price}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ArtistsList = ({ navigate }) => {
+  return (
+    <div className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen">
+      <div className="text-center mb-16">
+        <h1 className="text-4xl md:text-5xl font-serif text-tba-blue mb-4">發現藝術家</h1>
+        <p className="text-stone-500 tracking-widest uppercase text-sm mb-6">Artists</p>
+        <div className="w-16 h-px bg-tba-blue mx-auto" />
+      </div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        {ARTISTS.map((artist) => (
+          <div key={artist.id} className="group cursor-pointer">
+            <div className="relative overflow-hidden aspect-[3/4] mb-4 rounded-sm">
+              <img src={artist.image} alt={artist.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            </div>
+            <div className="text-center px-2">
+              <h4 className="text-base font-medium mb-1 text-tba-blue">{artist.name}</h4>
+              <p className="text-[10px] md:text-xs text-stone-400 tracking-widest uppercase mb-2">{artist.enName}</p>
+              <p className="text-xs text-stone-500 mb-3">{artist.style}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// --- 商品詳細頁 (包含 Gallery、規格選擇、加入購物車) ---
+const ProductDetail = ({ navigate, params }) => {
+  const { addToCart, showToast } = useContext(AppContext);
+  const product = PRODUCTS.find(p => p.id === Number(params.id)) || PRODUCTS[0];
+  const artist = ARTISTS.find(a => a.name === product.artist);
+  
+  const [mainImg, setMainImg] = useState(product.images[0]);
+  const [qty, setQty] = useState(1);
+  const [selectedVariants, setSelectedVariants] = useState({});
+
+  useEffect(() => {
+    // 預設選擇每種規格的第一個選項
+    if (product.variants) {
+      const defaults = {};
+      product.variants.forEach(v => { defaults[v.name] = v.values[0]; });
+      setSelectedVariants(defaults);
+    }
+    setMainImg(product.images[0]);
+    setQty(1);
+  }, [product.id, product.images, product.variants]);
+
+  const handleVariantChange = (name, value) => {
+    setSelectedVariants(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddToCart = () => {
+    addToCart(product, qty, selectedVariants);
+  };
+
+  return (
+    <div className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-xs tracking-widest uppercase text-stone-400 mb-12">
+        <button onClick={() => navigate('home')} className="hover:text-tba-blue transition-colors">首頁</button>
+        <ChevronRight size={12} />
+        <button onClick={() => navigate('shop')} className="hover:text-tba-blue transition-colors">商店</button>
+        <ChevronRight size={12} />
+        <span className="text-tba-blue">{product.name}</span>
+      </motion.div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-24">
+        {/* Gallery */}
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col gap-4">
+          <div className="relative aspect-square bg-stone-50 rounded-sm overflow-hidden p-8 flex items-center justify-center">
+            <AnimatePresence mode="wait">
+              <motion.img key={mainImg} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:0.3}} src={mainImg} alt={product.name} className="w-full h-full object-contain mix-blend-multiply" />
+            </AnimatePresence>
+            {product.stock === 0 && (
+              <div className="absolute inset-0 bg-white/60 flex items-center justify-center backdrop-blur-sm">
+                <span className="bg-stone-900 text-white px-6 py-2 text-sm tracking-widest uppercase rounded-sm shadow-xl">售完 / Sold Out</span>
+              </div>
+            )}
+          </div>
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar py-2">
+            {product.images.map((img, idx) => (
+              <button key={idx} onClick={() => setMainImg(img)} className={`w-20 h-20 flex-shrink-0 bg-stone-50 rounded-sm p-2 border-2 transition-colors ${mainImg === img ? 'border-tba-blue' : 'border-transparent hover:border-stone-300'}`}>
+                <img src={img} className="w-full h-full object-cover mix-blend-multiply" alt=""/>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+        
+        {/* Info & Checkout */}
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col justify-center">
+          <div className="mb-8 border-b border-stone-200 pb-8">
+            <h1 className="text-3xl md:text-4xl font-serif text-tba-blue mb-2">{product.name}</h1>
+            <p className="text-sm text-stone-500 mb-6">{product.enName} | By {product.artist}</p>
+            <p className="text-2xl font-medium text-stone-900">NT$ {product.price}</p>
+          </div>
+
+          <div className="mb-8 space-y-6">
+            {/* 規格選擇 */}
+            {product.variants && product.variants.map(variant => (
+              <div key={variant.name}>
+                <label className="block text-sm tracking-widest uppercase text-stone-500 mb-3">{variant.name}</label>
+                <div className="relative">
+                  <select 
+                    value={selectedVariants[variant.name] || ''} 
+                    onChange={(e) => handleVariantChange(variant.name, e.target.value)}
+                    className="w-full appearance-none border border-stone-300 rounded-sm py-3 px-4 bg-white text-stone-700 focus:outline-none focus:border-tba-blue transition-colors cursor-pointer"
+                  >
+                    {variant.values.map(val => <option key={val} value={val}>{val}</option>)}
+                  </select>
+                  <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" />
+                </div>
+              </div>
+            ))}
+
+            {/* 數量選擇 */}
+            <div>
+              <label className="block text-sm tracking-widest uppercase text-stone-500 mb-3">數量 <span className="text-[10px] lowercase normal-case">(庫存: {product.stock})</span></label>
+              <div className="flex items-center border border-stone-300 rounded-sm overflow-hidden w-32">
+                <button className="px-4 py-3 text-stone-500 hover:bg-stone-100 transition-colors disabled:opacity-50" onClick={() => setQty(Math.max(1, qty - 1))} disabled={product.stock === 0}>-</button>
+                <input type="text" readOnly value={qty} className="w-full text-center text-sm font-medium outline-none bg-transparent" />
+                <button className="px-4 py-3 text-stone-500 hover:bg-stone-100 transition-colors disabled:opacity-50" onClick={() => setQty(Math.min(product.stock, qty + 1))} disabled={qty >= product.stock || product.stock === 0}>+</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-4 mb-8">
+            <button 
+              onClick={handleAddToCart}
+              disabled={product.stock === 0}
+              className="flex-grow bg-tba-blue text-white py-4 rounded-sm text-sm tracking-widest uppercase hover:bg-tba-blue-dark transition-colors flex items-center justify-center gap-2 disabled:bg-stone-300 disabled:cursor-not-allowed"
+            >
+              <ShoppingCart size={18} /> {product.stock === 0 ? '已售完' : '加入購物車'}
+            </button>
+            <button className="p-4 border border-stone-300 rounded-sm text-stone-500 hover:text-red-500 hover:border-red-500 transition-colors flex-shrink-0" onClick={() => showToast('已加入收藏清單')}>
+              <Heart size={20} />
+            </button>
+          </div>
+
+          <p className="text-stone-600 leading-relaxed text-sm mb-8">{product.description}</p>
+        </motion.div>
+      </div>
+
+      {/* 藝術家介紹區塊 */}
+      {artist && (
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{once:true}} className="bg-white border border-stone-200 p-8 md:p-12 rounded-sm flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-24 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-tba-blue/5 rounded-full filter blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden flex-shrink-0 shadow-lg border-4 border-white">
+            <img src={artist.avatar} alt={artist.name} className="w-full h-full object-cover" />
+          </div>
+          <div className="text-center md:text-left z-10">
+            <h3 className="text-xs tracking-widest uppercase text-stone-400 mb-2">授權藝術家 / Licensed Artist</h3>
+            <h2 className="text-2xl md:text-3xl font-serif text-tba-blue mb-2">{artist.name} <span className="text-base font-sans text-stone-500 font-normal ml-2">{artist.enName}</span></h2>
+            <p className="text-stone-600 text-sm leading-relaxed mb-6 max-w-2xl">{artist.bio}</p>
+            <button onClick={() => navigate('artists')} className="text-sm text-tba-blue border-b border-tba-blue pb-0.5 hover:text-tba-blue-light transition-colors flex items-center gap-1 inline-flex">
+              了解更多藝術家資訊 <ArrowRight size={14}/>
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+
+// --- 購物車頁面 (Cart) ---
+const Cart = ({ navigate }) => {
+  const { cartItems, updateCartQuantity, removeFromCart } = useContext(AppContext);
+  
+  const subtotal = cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+  const maxShippingFee = cartItems.length > 0 ? Math.max(...cartItems.map(item => item.product.shippingFee || 0)) : 0;
+  const total = subtotal + maxShippingFee;
+
+  return (
+    <div className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen">
+      <h1 className="text-3xl font-serif text-tba-blue mb-8">購物車</h1>
+      
+      {cartItems.length === 0 ? (
+        <div className="bg-white p-16 text-center border border-stone-200 rounded-sm">
+          <ShoppingCart size={48} className="mx-auto text-stone-300 mb-6" />
+          <h2 className="text-xl text-stone-600 mb-4">您的購物車是空的</h2>
+          <button onClick={() => navigate('shop')} className="bg-tba-blue text-white px-8 py-3 rounded-sm hover:bg-tba-blue-dark transition-colors">去逛逛商品</button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Cart Items */}
+          <div className="lg:col-span-2 space-y-6">
+            {cartItems.map((item) => (
+              <div key={item.cartId} className="flex gap-6 bg-white p-6 border border-stone-200 rounded-sm">
+                <div className="w-24 h-24 bg-stone-50 rounded-sm p-2 flex-shrink-0 cursor-pointer" onClick={() => navigate('product', { id: item.product.id })}>
+                  <img src={item.product.image} className="w-full h-full object-cover mix-blend-multiply" alt={item.product.name}/>
+                </div>
+                <div className="flex-grow flex flex-col justify-between">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-lg font-medium text-tba-blue">{item.product.name}</h3>
+                      <p className="text-xs text-stone-500 mb-2">{item.product.artist}</p>
+                      <div className="text-xs text-stone-600 flex gap-3">
+                        {Object.entries(item.selectedVariants).map(([key, val]) => (
+                          <span key={key} className="bg-stone-100 px-2 py-1 rounded-sm">{key}: {val}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <button onClick={() => removeFromCart(item.cartId)} className="text-stone-400 hover:text-red-500 transition-colors"><Trash2 size={18}/></button>
+                  </div>
+                  <div className="flex justify-between items-end mt-4">
+                    <div className="flex items-center border border-stone-300 rounded-sm overflow-hidden w-28 h-9">
+                      <button className="px-3 text-stone-500 hover:bg-stone-100 h-full" onClick={() => updateCartQuantity(item.cartId, Math.max(1, item.quantity - 1))}>-</button>
+                      <span className="w-full text-center text-sm font-medium">{item.quantity}</span>
+                      <button className="px-3 text-stone-500 hover:bg-stone-100 h-full disabled:opacity-50" onClick={() => updateCartQuantity(item.cartId, Math.min(item.product.stock, item.quantity + 1))} disabled={item.quantity >= item.product.stock}>+</button>
+                    </div>
+                    <p className="font-medium text-stone-900">NT$ {item.product.price * item.quantity}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Order Summary */}
+          <div className="lg:col-span-1">
+            <div className="bg-stone-50 p-8 rounded-sm sticky top-32">
+              <h2 className="text-lg font-serif text-tba-blue mb-6 border-b border-stone-200 pb-4">訂單摘要</h2>
+              <div className="space-y-4 text-sm text-stone-600 mb-6">
+                <div className="flex justify-between"><span>商品小計</span><span>NT$ {subtotal}</span></div>
+                <div className="flex justify-between">
+                  <span className="flex items-center gap-1">運費 <span className="text-[10px] bg-white px-1 border border-stone-200 rounded">最高單件運費</span></span>
+                  <span>NT$ {maxShippingFee}</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center text-lg font-medium text-tba-blue mb-8 border-t border-stone-200 pt-6">
+                <span>總計</span><span>NT$ {total}</span>
+              </div>
+              <button onClick={() => navigate('checkout')} className="w-full bg-tba-blue text-white py-4 rounded-sm text-sm tracking-widest uppercase hover:bg-tba-blue-dark transition-colors flex items-center justify-center gap-2">
+                前往結帳 <ArrowRight size={16}/>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+// --- 結帳頁面 (Checkout) ---
+const Checkout = ({ navigate, role }) => {
+  const { cartItems, clearCart, showToast, addOrder } = useContext(AppContext);
+  const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
+
+  useEffect(() => {
+    if (cartItems.length === 0) navigate('shop');
     
-    <style>
-        /* =========================================
-           🎨 全站共用 UI 設計規範 (Ant Design V5)
-           ========================================= */
-        :root {
-            /* Ant Design Colors */
-            --ant-primary: #1677ff; 
-            --ant-primary-hover: #4096ff;
-            --ant-primary-active: #0958d9;
-            --ant-primary-bg: #e6f4ff;
-            --ant-text: rgba(0, 0, 0, 0.88);
-            --ant-text-secondary: rgba(0, 0, 0, 0.65);
-            --ant-text-tertiary: rgba(0, 0, 0, 0.45);
-            --ant-border: #d9d9d9; 
-            --ant-border-secondary: #f0f0f0;
-            --ant-bg-container: #ffffff;
-            --ant-bg-layout: #f5f5f5;
-            
-            --ant-error: #ff4d4f; 
-            --ant-error-bg: #fff2f0;
-            --ant-success: #52c41a;
-
-            /* 字體規範 */
-            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans TC', sans-serif;
-            
-            /* 互動規範 */
-            --transition-base: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-            --shadow-md: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-            --border-radius: 8px;
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          clearCart();
+          showToast('付款超時，訂單已取消並釋出庫存', 'error');
+          navigate('shop');
+          return 0;
         }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cartItems.length, clearCart, navigate, showToast]);
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: var(--font-family);
-        }
+  const subtotal = cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+  const maxShippingFee = cartItems.length > 0 ? Math.max(...cartItems.map(item => item.product.shippingFee || 0)) : 0;
+  const total = subtotal + maxShippingFee;
 
-        body {
-            background-color: var(--ant-bg-layout);
-            color: var(--ant-text);
-            line-height: 1.5715;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+  const handleCheckoutSubmit = (e) => {
+    e.preventDefault();
+    // Simulate order creation
+    const newOrder = {
+      id: `ORD-${new Date().toISOString().slice(0,10).replace(/-/g,'')}-${Math.floor(Math.random()*1000)}`,
+      date: new Date().toISOString().slice(0,10),
+      time: new Date().toTimeString().slice(0,5),
+      status: '處理中',
+      amount: total,
+      items: cartItems.map(i => i.product), // Simplified
+      payment: '線上刷卡',
+      shipping: '宅配',
+      tracking: '',
+      history: [{ time: new Date().toLocaleString(), status: '訂單成立，付款成功' }]
+    };
+    addOrder(newOrder);
+    clearCart();
+    showToast('訂單建立成功！感謝您的購買。', 'success');
+    navigate('member-center'); // Navigate to orders
+  };
 
-        /* --- SPA 視圖切換 --- */
-        .view-section {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            padding-top: 100px; /* 閃避 fixed header */
-            min-height: 80vh;
-        }
-        .view-section.active {
-            display: block;
-            opacity: 1;
-        }
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
 
-        /* --- 共用按鈕樣式 (Ant Design Button) --- */
-        .btn {
-            height: 32px; padding: 4px 15px; font-size: 14px; font-weight: 400;
-            border-radius: 6px; cursor: pointer; transition: var(--transition-base);
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid transparent; outline: none;
-        }
-        .btn-lg { height: 40px; padding: 6.4px 15px; font-size: 16px; border-radius: var(--border-radius); }
-        .btn-block { width: 100%; }
-        
-        .btn-primary { background-color: var(--ant-primary); color: #fff; box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1); }
-        .btn-primary:hover { background-color: var(--ant-primary-hover); }
-        .btn-primary:active { background-color: var(--ant-primary-active); }
-        
-        .btn-default { background-color: #fff; color: var(--ant-text); border-color: var(--ant-border); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02); }
-        .btn-default:hover { color: var(--ant-primary-hover); border-color: var(--ant-primary-hover); }
-        .btn-default:active { color: var(--ant-primary-active); border-color: var(--ant-primary-active); }
-        
-        .btn-text { background: transparent; color: var(--ant-text); border-color: transparent; }
-        .btn-text:hover { background: rgba(0, 0, 0, 0.04); }
+  return (
+    <div className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen">
+      <div className="flex flex-col items-center mb-12">
+        <h1 className="text-3xl font-serif text-tba-blue mb-4">結帳資訊</h1>
+        <div className="bg-orange-50 border border-orange-200 text-orange-700 px-6 py-3 rounded-full flex items-center gap-3 text-sm font-medium shadow-sm">
+          <Timer size={18} className="animate-pulse" />
+          <span>為確保商品庫存，請在 <span className="font-bold text-lg mx-1">{formatTime(timeLeft)}</span> 內完成付款，逾時將自動取消。</span>
+        </div>
+      </div>
 
-        .btn-danger-text { color: var(--ant-error); background: transparent; border-color: transparent; }
-        .btn-danger-text:hover { color: #ff7875; background: var(--ant-error-bg); }
+      <form onSubmit={handleCheckoutSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="lg:col-span-2 space-y-8">
+          {/* 收件人資訊 */}
+          <div className="bg-white p-8 border border-stone-200 rounded-sm">
+            <h2 className="text-lg font-serif text-tba-blue mb-6 border-b border-stone-100 pb-4">1. 收件人資訊</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm text-stone-600 mb-2">姓名</label>
+                <input required type="text" defaultValue={role === 'enterprise' ? MOCK_MEMBER_ENTERPRISE.name : MOCK_MEMBER_INDIVIDUAL.name} className="w-full border border-stone-300 rounded-sm py-2.5 px-3 focus:border-tba-blue outline-none" />
+              </div>
+              <div>
+                <label className="block text-sm text-stone-600 mb-2">聯絡電話</label>
+                <input required type="tel" defaultValue={role === 'enterprise' ? MOCK_MEMBER_ENTERPRISE.phone : MOCK_MEMBER_INDIVIDUAL.phone} className="w-full border border-stone-300 rounded-sm py-2.5 px-3 focus:border-tba-blue outline-none" />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm text-stone-600 mb-2">配送地址</label>
+                <input required type="text" defaultValue={role === 'enterprise' ? MOCK_MEMBER_ENTERPRISE.address : MOCK_MEMBER_INDIVIDUAL.address} className="w-full border border-stone-300 rounded-sm py-2.5 px-3 focus:border-tba-blue outline-none" />
+              </div>
+            </div>
+          </div>
 
-        /* --- 共用表單元件 (Ant Design Input) --- */
-        .form-input {
-            width: 100%; padding: 4px 11px; font-size: 14px; border: 1px solid var(--ant-border); 
-            border-radius: 6px; transition: var(--transition-base); background: #fff; outline: none; line-height: 1.5715; height: 32px;
-        }
-        .form-input:focus, .form-input:hover { border-color: var(--ant-primary); }
-        .form-input:focus { box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1); }
+          {/* 付款與發票 */}
+          <div className="bg-white p-8 border border-stone-200 rounded-sm">
+            <h2 className="text-lg font-serif text-tba-blue mb-6 border-b border-stone-100 pb-4">2. 付款與發票</h2>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm text-stone-600 mb-3">付款方式</label>
+                <div className="flex gap-4">
+                  <label className="flex-1 border border-tba-blue bg-tba-blue/5 p-4 rounded-sm cursor-pointer flex items-center gap-2">
+                    <input type="radio" name="payment" defaultChecked className="accent-tba-blue" /> 線上刷卡
+                  </label>
+                  <label className="flex-1 border border-stone-200 p-4 rounded-sm cursor-pointer flex items-center gap-2 opacity-50">
+                    <input type="radio" name="payment" disabled /> ATM轉帳 (暫不開放)
+                  </label>
+                </div>
+              </div>
+              {role === 'enterprise' && (
+                <div className="p-4 bg-stone-50 rounded-sm border border-stone-200">
+                  <p className="text-sm font-medium text-tba-blue mb-3">開立統編發票 (企業會員自動帶入)</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <input type="text" value={MOCK_MEMBER_ENTERPRISE.companyName} readOnly className="w-full border border-stone-300 rounded-sm py-2 px-3 text-sm bg-white" />
+                    <input type="text" value={MOCK_MEMBER_ENTERPRISE.taxId} readOnly className="w-full border border-stone-300 rounded-sm py-2 px-3 text-sm bg-white" />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
-        /* =========================================
-           1. 首頁模組 (Home Page) & 全域 Header
-           ========================================= */
-        /* Top Bar */
-        .top-bar {
-            position: fixed; top: 0; width: 100%; background-color: #fafafa;
-            padding: 4px 5%; display: flex; justify-content: flex-end; align-items: center; 
-            z-index: 1001; font-size: 12px; border-bottom: 1px solid var(--ant-border-secondary);
-        }
-        .top-bar a { color: var(--ant-text-secondary); text-decoration: none; transition: var(--transition-base); }
-        .top-bar a:hover { color: var(--ant-primary); }
-
-        /* Header */
-        header {
-            position: fixed; top: 30px; width: 100%; height: 64px; padding: 0 5%; 
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 1000; border-bottom: 1px solid var(--ant-border-secondary);
-        }
-        .logo { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: var(--ant-text); cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; }
-        
-        .nav-links { display: flex; height: 100%; }
-        .nav-links a {
-            color: var(--ant-text); font-size: 14px; padding: 0 20px; 
-            display: flex; align-items: center; cursor: pointer; transition: var(--transition-base); position: relative;
-        }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 20px; right: 20px; height: 2px; background-color: transparent; transition: var(--transition-base); }
-        .nav-links a:hover { color: var(--ant-primary); }
-        .nav-links a:hover::after { background-color: var(--ant-primary); }
-
-        .header-actions { display: flex; gap: 12px; align-items: center; position: relative; }
-
-        .cart-badge { background: var(--ant-error); color: #fff; border-radius: 10px; padding: 0 6px; font-size: 12px; line-height: 18px; font-weight: bold; margin-left: 4px; border: 1px solid #fff; }
-
-        /* 搜尋框展開 */
-        .search-dropdown {
-            display: none; position: absolute; top: 100%; right: 0; margin-top: 12px;
-            background: #fff; padding: 16px; border: 1px solid var(--ant-border-secondary);
-            border-radius: var(--border-radius); box-shadow: var(--shadow-md); width: 320px;
-        }
-        .search-dropdown.active { display: block; }
-        .search-dropdown-inner { display: flex; gap: 8px; }
-
-        /* Hero Section (Carousel) */
-        .hero {
-            position: relative; 
-            height: 100vh; 
-            min-height: 700px; 
-            display: flex; align-items: center; justify-content: center;
-            background-color: var(--ant-bg-container); padding-top: 0;
-            margin-top: -100px;
-            overflow: hidden;
-        }
-        .hero-carousel {
-            position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
-            display: flex; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .hero-slide {
-            min-width: 100%; height: 100%; background-size: cover; background-position: center;
-        }
-        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%); z-index: 1; }
-        
-        .hero-content { position: relative; z-index: 2; text-align: left; color: #fff; max-width: 1200px; width: 100%; padding: 0 5%; }
-        .hero-content h1 { font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 16px; letter-spacing: 1px; color: #ffffff; }
-        .hero-content p { font-size: 16px; color: rgba(255,255,255,0.85); margin-bottom: 32px; max-width: 550px; line-height: 1.6; }
-
-        /* Carousel Navigation */
-        .carousel-btn {
-            position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
-            background: rgba(255, 255, 255, 0.15); color: white; border: none; padding: 16px; cursor: pointer;
-            border-radius: 50%; transition: background 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-        .carousel-btn:hover { background: rgba(255, 255, 255, 0.3); }
-        .carousel-btn.prev { left: 30px; }
-        .carousel-btn.next { right: 30px; }
-        
-        .carousel-dots {
-            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 3;
-            display: flex; gap: 12px;
-        }
-        .dot {
-            width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.4);
-            cursor: pointer; transition: all 0.3s;
-        }
-        .dot.active { background: white; transform: scale(1.3); }
-
-        /* 區塊共用佈局 */
-        .section-wrap { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; border-bottom: 1px solid var(--ant-border-secondary); padding-bottom: 16px; }
-        .section-title { font-size: 24px; font-weight: 600; color: var(--ant-text); }
-        .view-more { color: var(--ant-primary); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; transition: var(--transition-base); }
-        .view-more:hover { color: var(--ant-primary-hover); }
-
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; }
-
-        /* =========================================
-           共通卡片樣式 (Ant Design Card)
-           ========================================= */
-        .tba-card {
-            background: #fff; border: 1px solid var(--ant-border-secondary); border-radius: var(--border-radius);
-            transition: var(--transition-base); cursor: pointer;
-            display: flex; flex-direction: column; overflow: hidden;
-        }
-        .tba-card:hover { border-color: transparent; box-shadow: var(--shadow-md); transform: translateY(-2px); }
-        
-        .tba-card-cover { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: var(--ant-bg-layout); position: relative; }
-        .tba-card-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-        .tba-card:hover .tba-card-cover img { transform: scale(1.05); }
-
-        .tba-card-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
-        
-        /* 藝術家卡片文字 */
-        .artist-card-name { font-size: 16px; font-weight: 500; color: var(--ant-text); margin-bottom: 8px; }
-        .artist-card-desc { font-size: 14px; color: var(--ant-text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
-        /* 商品卡片文字 */
-        .prod-card-artist { font-size: 12px; color: var(--ant-text-secondary); margin-bottom: 4px; }
-        .prod-card-title { font-size: 16px; color: var(--ant-text); margin-bottom: 16px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .prod-card-price { font-size: 18px; font-weight: 600; color: var(--ant-text); margin-top: auto; margin-bottom: 24px; }
-
-        /* 關於我們區塊 */
-        .about-section { background: #fff; padding: 60px 5%; text-align: center; }
-        .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1200px; margin: 40px auto 0; }
-        .about-item { background: var(--ant-bg-layout); padding: 32px 24px; border-radius: var(--border-radius); transition: var(--transition-base); border: 1px solid transparent; }
-        .about-item:hover { border-color: var(--ant-border-secondary); background: #fff; box-shadow: var(--shadow-sm); }
-        .about-item h3 { font-size: 16px; font-weight: 600; color: var(--ant-text); margin-bottom: 12px; }
-        .about-item p { font-size: 14px; color: var(--ant-text-secondary); }
-
-        /* =========================================
-           2-1. 商品列表頁 (Product List)
-           ========================================= */
-        .list-layout { display: flex; gap: 32px; align-items: flex-start; }
-        .sidebar { width: 250px; flex-shrink: 0; background: #fff; padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); }
-        .main-content { flex: 1; }
-        
-        .filter-box { margin-bottom: 24px; }
-        .filter-box:last-child { margin-bottom: 0; }
-        .filter-title { font-size: 14px; font-weight: 500; color: var(--ant-text); margin-bottom: 12px; }
-        .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ant-text-secondary); margin-bottom: 8px; cursor: pointer; transition: color 0.2s; }
-        .checkbox-label:hover { color: var(--ant-primary); }
-        .checkbox-label input { accent-color: var(--ant-primary); cursor: pointer; }
-        
-        .price-range { width: 100%; accent-color: var(--ant-primary); margin-bottom: 8px; }
-        .price-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--ant-text-tertiary); }
-
-        .list-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        
-        /* Pagination (Ant Design) */
-        .pagination { display: flex; justify-content: flex-end; gap: 8px; margin-top: 32px; }
-        .page-btn { min-width: 32px; height: 32px; padding: 0 8px; border: 1px solid var(--ant-border); background: #fff; border-radius: 6px; cursor: pointer; color: var(--ant-text); transition: var(--transition-base); display: flex; align-items: center; justify-content: center; font-size: 14px; }
-        .page-btn:hover { border-color: var(--ant-primary); color: var(--ant-primary); }
-        .page-btn.active { border-color: var(--ant-primary); color: var(--ant-primary); font-weight: 600; }
-
-        /* =========================================
-           2-2. 商品詳細頁 (Product Detail)
-           ========================================= */
-        .detail-layout { display: flex; gap: 48px; background: #fff; padding: 32px; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); }
-        .detail-gallery { width: 40%; }
-        .main-img-box { width: 100%; aspect-ratio: 1/1; background: var(--ant-bg-layout); border-radius: var(--border-radius); overflow: hidden; margin-bottom: 16px; border: 1px solid var(--ant-border-secondary); }
-        .main-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .thumb-list { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
-        .thumb-item { width: 64px; height: 64px; border-radius: 6px; border: 2px solid transparent; cursor: pointer; opacity: 0.6; transition: var(--transition-base); }
-        .thumb-item.active, .thumb-item:hover { opacity: 1; border-color: var(--ant-primary); }
-        .thumb-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
-
-        .detail-info { width: 60%; }
-        .breadcrumb { font-size: 14px; color: var(--ant-text-tertiary); margin-bottom: 16px; }
-        .breadcrumb a { color: var(--ant-text-secondary); text-decoration: none; cursor: pointer; transition: color 0.2s; }
-        .breadcrumb a:hover { color: var(--ant-primary); }
-        
-        .d-title { font-size: 24px; font-weight: 600; color: var(--ant-text); margin-bottom: 12px; line-height: 1.3; }
-        .d-price { font-size: 24px; font-weight: 600; color: var(--ant-text); margin-bottom: 24px; }
-
-        .artist-credit { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #fafafa; border-radius: var(--border-radius); margin-bottom: 24px; border: 1px solid var(--ant-border-secondary); }
-        .artist-credit img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
-        
-        .spec-box { margin-bottom: 20px; }
-        .spec-label { font-size: 14px; color: var(--ant-text); margin-bottom: 8px; display: block; }
-        
-        .qty-wrapper { display: flex; align-items: center; }
-        .qty-btn { width: 32px; height: 32px; background: #fff; border: 1px solid var(--ant-border); cursor: pointer; transition: var(--transition-base); display: flex; align-items: center; justify-content: center; }
-        .qty-btn:first-child { border-radius: 6px 0 0 6px; }
-        .qty-btn:last-child { border-radius: 0 6px 6px 0; }
-        .qty-btn:hover { color: var(--ant-primary); border-color: var(--ant-primary); z-index: 1; }
-        .qty-input { width: 48px; height: 32px; text-align: center; border-top: 1px solid var(--ant-border); border-bottom: 1px solid var(--ant-border); border-left: none; border-right: none; outline: none; transition: var(--transition-base); }
-        .qty-input:focus { border-color: var(--ant-primary); z-index: 1; box-shadow: 0 0 0 2px rgba(5,145,255,0.1); }
-
-        /* =========================================
-           6. 購物車模組 (Cart)
-           ========================================= */
-        .cart-layout { display: flex; gap: 24px; align-items: flex-start; }
-        .cart-list { flex: 1; background: #fff; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); padding: 24px; }
-        .cart-item-row { display: flex; gap: 16px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--ant-border-secondary); }
-        .cart-item-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-        .cart-item-img { width: 80px; height: 80px; border-radius: 6px; border: 1px solid var(--ant-border-secondary); object-fit: cover; }
-        .cart-item-details { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        
-        .cart-summary { width: 300px; background: #fff; padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); flex-shrink: 0; }
-        .summary-line { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: var(--ant-text-secondary); }
-        .summary-total { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--ant-border-secondary); font-size: 16px; font-weight: 600; color: var(--ant-text); }
-
-        /* =========================================
-           FAQ & 條款模組 (Static Pages)
-           ========================================= */
-        .doc-wrap { max-width: 800px; margin: 0 auto; background: #fff; padding: 40px; border-radius: var(--border-radius); border: 1px solid var(--ant-border-secondary); }
-        .faq-item { border-bottom: 1px solid var(--ant-border-secondary); }
-        .faq-q { padding: 16px 0; font-size: 15px; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; color: var(--ant-text); align-items: center; transition: color 0.3s; }
-        .faq-q:hover { color: var(--ant-primary); }
-        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.645, 0.045, 0.355, 1); color: var(--ant-text-secondary); font-size: 14px; line-height: 1.6; }
-        .faq-item.open .faq-a { max-height: 300px; padding-bottom: 16px; }
-        .faq-icon { transition: transform 0.3s ease; color: var(--ant-text-tertiary); }
-        .faq-item.open .faq-icon { transform: rotate(180deg); }
-
-        .terms-content h2 { font-size: 18px; margin: 24px 0 12px; border-bottom: 1px solid var(--ant-border-secondary); padding-bottom: 8px; font-weight: 500; }
-        .terms-content p, .terms-content li { font-size: 14px; color: var(--ant-text-secondary); margin-bottom: 12px; }
-        .terms-content ul { padding-left: 20px; }
-
-        /* =========================================
-           全域元件 (Footer, Toast, FAB)
-           ========================================= */
-        footer { background: var(--ant-bg-container); border-top: 1px solid var(--ant-border-secondary); padding: 48px 5% 24px; text-align: center; margin-top: 48px; }
-        .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
-        .footer-links a { color: var(--ant-text-secondary); text-decoration: none; font-size: 14px; transition: var(--transition-base); cursor: pointer; }
-        .footer-links a:hover { color: var(--ant-primary); }
-        .social-icons { margin-bottom: 24px; display: flex; justify-content: center; gap: 16px; }
-        .social-icons a { color: var(--ant-text-tertiary); transition: var(--transition-base); }
-        .social-icons a:hover { color: var(--ant-primary); }
-
-        .toast-msg {
-            position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-100px);
-            background: #fff; color: var(--ant-text); padding: 10px 16px; border-radius: 8px;
-            box-shadow: var(--shadow-md); z-index: 9999; opacity: 0; transition: var(--transition-base);
-            font-size: 14px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--ant-border-secondary);
-        }
-        .toast-msg.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        .toast-icon { color: var(--ant-success); }
-
-        .fab-top {
-            position: fixed; bottom: 32px; right: 32px; width: 40px; height: 40px;
-            background: #fff; color: var(--ant-text-secondary); border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; cursor: pointer;
-            box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transition: var(--transition-base); z-index: 990; border: 1px solid var(--ant-border-secondary);
-        }
-        .fab-top.show { opacity: 1; visibility: visible; }
-        .fab-top:hover { color: var(--ant-primary); border-color: var(--ant-primary); }
-
-        @media (max-width: 768px) {
-            header { padding: 0 16px; height: 56px; top: 28px; }
-            .nav-links { display: none; }
-            .hero-content h1 { font-size: 2rem; }
-            .list-layout, .detail-layout, .cart-layout { flex-direction: column; gap: 24px; }
-            .sidebar, .detail-gallery, .detail-info, .cart-summary { width: 100%; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <a href="#" onclick="showToast('導向廠商登入頁面')">
-            供應端登入 (廠商/藝術家)
-        </a>
-    </div>
-
-    <!-- Header -->
-    <header>
-        <a onclick="switchView('view-home')" class="logo">
-            <!-- 使用 Ant Design 藍色強調 TBA -->
-            <span style="color: var(--ant-primary);">TBA</span> 周邊市集
-        </a>
-        <nav class="nav-links">
-            <a onclick="switchView('view-home')">首頁</a>
-            <a onclick="switchView('view-home'); setTimeout(()=>document.getElementById('sec-artists').scrollIntoView(), 100);">合作藝術家</a>
-            <a onclick="switchView('view-list')">商品市集</a>
-        </nav>
-        <div class="header-actions">
-            <!-- 搜尋功能 -->
-            <button class="btn btn-text" onclick="toggleSearch()" style="padding: 0 8px;">
-                <svg viewBox="0 0 24 24" fill="none" width="18" height="18" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        {/* 訂單確認區 */}
+        <div className="lg:col-span-1">
+          <div className="bg-stone-50 p-8 rounded-sm sticky top-32 border border-stone-200">
+            <h2 className="text-lg font-serif text-tba-blue mb-6 border-b border-stone-200 pb-4">購物清單 ({cartItems.length})</h2>
+            <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
+              {cartItems.map((item) => (
+                <div key={item.cartId} className="flex gap-3 text-sm">
+                  <img src={item.product.image} className="w-12 h-12 object-cover rounded-sm mix-blend-multiply bg-white" alt="" />
+                  <div className="flex-grow">
+                    <p className="font-medium text-stone-900 truncate">{item.product.name}</p>
+                    <p className="text-xs text-stone-500">Qty: {item.quantity}</p>
+                  </div>
+                  <p className="font-medium">NT$ {item.product.price * item.quantity}</p>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-3 text-sm text-stone-600 border-t border-stone-200 pt-6 mb-6">
+              <div className="flex justify-between"><span>小計</span><span>NT$ {subtotal}</span></div>
+              <div className="flex justify-between"><span>運費</span><span>NT$ {maxShippingFee}</span></div>
+            </div>
+            <div className="flex justify-between items-center text-xl font-medium text-tba-blue mb-8 border-t border-stone-200 pt-6">
+              <span>總金額</span><span>NT$ {total}</span>
+            </div>
+            <button type="submit" className="w-full bg-tba-blue text-white py-4 rounded-sm text-sm tracking-widest uppercase hover:bg-tba-blue-dark transition-colors shadow-lg">
+              確認付款
             </button>
-            <div id="searchBox" class="search-dropdown">
-                <div class="search-dropdown-inner">
-                    <input type="text" id="searchInput" class="form-input" placeholder="搜尋商品或藝術家" onkeypress="if(event.key==='Enter') executeSearch()">
-                    <button class="btn btn-primary" onclick="executeSearch()">搜尋</button>
-                </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+
+// --- 會員中心 (MemberCenter) ---
+const MemberCenter = ({ navigate, role }) => {
+  const { userOrders } = useContext(AppContext);
+  const [activeTab, setActiveTab] = useState('orders'); // 預設看訂單
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const user = role === 'enterprise' ? MOCK_MEMBER_ENTERPRISE : MOCK_MEMBER_INDIVIDUAL;
+
+  const renderProfile = () => (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+      <h2 className="text-xl font-serif text-tba-blue mb-6">基本資料</h2>
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div><label className="block text-xs text-stone-500 uppercase tracking-widest mb-1">姓名 / Name</label><p className="text-stone-900 font-medium">{user.name}</p></div>
+          <div><label className="block text-xs text-stone-500 uppercase tracking-widest mb-1">帳號類型 / Account Type</label><p className="text-stone-900 font-medium">{user.type === 'enterprise' ? '企業會員' : '一般會員'}</p></div>
+          <div><label className="block text-xs text-stone-500 uppercase tracking-widest mb-1">電子郵件 / Email</label><p className="text-stone-900 font-medium">{user.email}</p></div>
+          <div><label className="block text-xs text-stone-500 uppercase tracking-widest mb-1">聯絡電話 / Phone</label><p className="text-stone-900 font-medium">{user.phone}</p></div>
+        </div>
+        {user.type === 'enterprise' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-stone-100">
+            <div><label className="block text-xs text-stone-500 uppercase tracking-widest mb-1">發票抬頭</label><p className="text-stone-900 font-medium">{user.companyName}</p></div>
+            <div><label className="block text-xs text-stone-500 uppercase tracking-widest mb-1">統一編號</label><p className="text-stone-900 font-medium">{user.taxId}</p></div>
+          </div>
+        )}
+      </div>
+      <p className="text-xs text-stone-400 mt-8 pt-4 border-t border-stone-100">* 基本資料同步自 TBA 平台，如需修改請至主平台設定。</p>
+    </motion.div>
+  );
+
+  const renderFavorites = () => (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+      <h2 className="text-xl font-serif text-tba-blue mb-6">我的收藏</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {MOCK_FAVORITES.map((item) => (
+          <div key={item.id} className="group relative border border-stone-200 rounded-sm overflow-hidden flex flex-col">
+            <div className="aspect-square bg-stone-50 p-4 relative cursor-pointer flex-shrink-0" onClick={() => navigate('product', { id: item.id })}>
+              <img src={item.image} alt={item.name} className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform" />
             </div>
-            
-            <a href="https://tba.tw/login" target="_blank" class="btn btn-default">會員登入</a>
-            <button class="btn btn-default" onclick="switchView('view-cart')" style="border-color: transparent;">
-                <svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                <span class="cart-badge" id="cartBadge">0</span>
+            <div className="p-4 bg-white flex flex-col flex-grow">
+              <p className="text-xs text-stone-400 mb-1">{item.artist}</p>
+              <h4 className="text-sm font-medium text-tba-blue truncate">{item.name}</h4>
+              <p className="text-sm text-stone-900 mt-2 flex-grow">NT$ {item.price}</p>
+              <div className="flex justify-between items-center mt-4 pt-4 border-t border-stone-100">
+                <span className="text-[10px] text-stone-400">收藏於 {item.savedAt}</span>
+                <button onClick={() => navigate('product', { id: item.id })} className="text-xs bg-tba-blue text-white px-3 py-1 rounded-sm hover:bg-tba-blue-dark">前往購買</button>
+              </div>
+            </div>
+            <button className="absolute top-2 right-2 p-2 bg-white/80 hover:bg-white text-red-500 rounded-full shadow-sm backdrop-blur-sm transition-colors">
+              <Heart size={16} fill="currentColor" />
             </button>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+
+  const renderOrders = () => {
+    if (selectedOrder) return renderOrderDetail(selectedOrder);
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+        <h2 className="text-xl font-serif text-tba-blue mb-6">訂單列表</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm whitespace-nowrap">
+            <thead className="bg-stone-50 text-stone-500 uppercase tracking-widest text-xs">
+              <tr>
+                <th className="px-4 py-3 font-medium">訂單日期</th>
+                <th className="px-4 py-3 font-medium">訂單編號</th>
+                <th className="px-4 py-3 font-medium">狀態</th>
+                <th className="px-4 py-3 font-medium">金額</th>
+                <th className="px-4 py-3 font-medium text-right">操作</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-stone-100">
+              {userOrders.map((order) => (
+                <tr key={order.id} className="hover:bg-stone-50/50 transition-colors">
+                  <td className="px-4 py-4 text-stone-600">{order.date} <span className="text-stone-400 text-xs">{order.time}</span></td>
+                  <td className="px-4 py-4 font-medium text-stone-900">{order.id}</td>
+                  <td className="px-4 py-4">
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      order.status === '待付款' ? 'bg-orange-100 text-orange-700' :
+                      order.status === '處理中' ? 'bg-blue-100 text-blue-700' :
+                      order.status === '已出貨' ? 'bg-tba-blue/10 text-tba-blue' :
+                      order.status === '已完成' ? 'bg-green-100 text-green-700' : 'bg-stone-100 text-stone-600'
+                    }`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4 text-stone-900 font-medium">NT$ {order.amount}</td>
+                  <td className="px-4 py-4 text-right">
+                    <button onClick={() => setSelectedOrder(order)} className="text-tba-blue hover:text-tba-blue-light border-b border-tba-blue pb-0.5 transition-colors">查看明細</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-    </header>
+      </motion.div>
+    );
+  };
 
-    <!-- =========================================
-         視圖 1: 首頁 (Home View)
-         ========================================= -->
-    <div id="view-home" class="view-section active" style="padding-top: 0;">
-        <section class="hero">
-            <div class="hero-carousel" id="heroCarousel">
-                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1920&q=80');"></div>
-                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1920&q=80');"></div>
-                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1536924940846-227afb31e2a5?auto=format&fit=crop&w=1920&q=80');"></div>
-            </div>
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h1 style="color: #fff;">Art Connects All.<br>讓無價靈感走入日常</h1>
-                <p style="color: #fff;">嚴選 TBA 站內潛力藝術家授權，結合頂尖製造商工藝。從空間版畫、居家好物到質感配件，提供您一站式的藝術周邊體驗。</p>
-                <div style="display: flex; gap: 16px;">
-                    <button class="btn btn-primary btn-lg" onclick="switchView('view-list')">探索周邊市集</button>
-                    <!-- 保留認識合作藝術家，以備不時之需，若不需要可隱藏 -->
-                    <button class="btn btn-default btn-lg" style="background: transparent; color: #fff; border-color: #fff;" onclick="document.getElementById('sec-artists').scrollIntoView()">認識合作藝術家</button>
-                </div>
-            </div>
-            <!-- 輪播控制按鈕 -->
-            <button class="carousel-btn prev" onclick="moveSlide(-1)">
-                <svg viewBox="0 0 24 24" fill="none" width="24" height="24" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
-            </button>
-            <button class="carousel-btn next" onclick="moveSlide(1)">
-                <svg viewBox="0 0 24 24" fill="none" width="24" height="24" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
-            <!-- 輪播指示點 -->
-            <div class="carousel-dots">
-                <span class="dot active" onclick="currentSlide(0)"></span>
-                <span class="dot" onclick="currentSlide(1)"></span>
-                <span class="dot" onclick="currentSlide(2)"></span>
-            </div>
-        </section>
-
-        <section id="sec-artists" class="section-wrap">
-            <div class="section-header">
-                <h2 class="section-title">合作藝術家</h2>
-                <a href="https://tba.tw/artists" target="_blank" class="view-more">探索所有創作者 →</a>
-            </div>
-            <div class="card-grid">
-                <div class="tba-card" onclick="showToast('導向藝術家專頁')">
-                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=400&q=80" alt="Artist"></div>
-                    <div class="tba-card-body">
-                        <div class="artist-card-name">陳奕安</div>
-                        <div class="artist-card-desc">專注於色彩心理學與抽象幾何的當代藝術家。</div>
-                    </div>
-                </div>
-                <div class="tba-card" onclick="showToast('導向藝術家專頁')">
-                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=400&q=80" alt="Artist"></div>
-                    <div class="tba-card-body">
-                        <div class="artist-card-name">林森</div>
-                        <div class="artist-card-desc">以細膩筆觸描繪都市叢林靜謐角落。</div>
-                    </div>
-                </div>
-                <div class="tba-card" onclick="showToast('導向藝術家專頁')">
-                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&w=400&q=80" alt="Artist"></div>
-                    <div class="tba-card-body">
-                        <div class="artist-card-name">Studio K</div>
-                        <div class="artist-card-desc">結合數位媒材與傳統版畫的新銳設計團隊。</div>
-                    </div>
-                </div>
-                <div class="tba-card" onclick="showToast('導向藝術家專頁')">
-                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=400&q=80" alt="Artist"></div>
-                    <div class="tba-card-body">
-                        <div class="artist-card-name">李明</div>
-                        <div class="artist-card-desc">擅長超現實主義與光影魔術的視覺創作者。</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section-wrap" style="padding-top: 0;">
-            <div class="section-header">
-                <h2 class="section-title">週邊市集</h2>
-                <a onclick="switchView('view-list')" class="view-more">查看全部商品 →</a>
-            </div>
-            <div class="card-grid">
-                <div class="tba-card" onclick="switchView('view-detail')">
-                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
-                    <div class="tba-card-body">
-                        <div class="prod-card-artist">陳奕安 ╳ 質感製造所</div>
-                        <div class="prod-card-title">「色彩絮語」聯名重磅帆布袋</div>
-                        <div class="prod-card-price">NT$ 890</div>
-                        <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
-                    </div>
-                </div>
-                <div class="tba-card" onclick="switchView('view-detail')">
-                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
-                    <div class="tba-card-body">
-                        <div class="prod-card-artist">林森 ╳ 陶瓷工坊</div>
-                        <div class="prod-card-title">「虛無空間」霧面陶瓷馬克杯</div>
-                        <div class="prod-card-price">NT$ 650</div>
-                        <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
-                    </div>
-                </div>
-                <div class="tba-card" onclick="switchView('view-detail')">
-                    <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1603313011101-320f26a4f6f6?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
-                    <div class="tba-card-body">
-                        <div class="prod-card-artist">Studio K ╳ 3C配件</div>
-                        <div class="prod-card-title">極簡線條防摔手機殼</div>
-                        <div class="prod-card-price">NT$ 980</div>
-                        <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="about-section">
-            <h2 class="section-title" style="margin-bottom: 16px;">關於我們</h2>
-            <p style="color: var(--ant-text-secondary); max-width: 600px; margin: 0 auto;">協助藝術家增長能見度，擁抱自己專屬的藝術舞台，推動普羅大眾藝術、商業藝術合作、傳統藝術藝廊。</p>
-            <div class="about-grid">
-                <div class="about-item">
-                    <h3>媒合藝術家</h3>
-                    <p>藝術家可以透過媒合平台展示其作品集和風格介紹。</p>
-                </div>
-                <div class="about-item">
-                    <h3>展覽藝術品</h3>
-                    <p>展覽藝術品是展示創作者思想、技藝和美學的媒介，透過空間與觀眾互動。</p>
-                </div>
-                <div class="about-item">
-                    <h3>媒合空間</h3>
-                    <p>專為策展人、藝術家和場地提供方設計的工具，促進高效連結與合作。</p>
-                </div>
-                <div class="about-item">
-                    <h3>策辦活動</h3>
-                    <p>透過創意策劃與展示，促進互動交流，啟發大眾視野與創造力。</p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- =========================================
-         視圖 2: 商品列表頁 (Product List View)
-         ========================================= -->
-    <div id="view-list" class="view-section section-wrap">
-        <div class="breadcrumb">
-            <a onclick="switchView('view-home')">首頁</a> / <span>商品市集</span>
-        </div>
-        <div class="list-layout">
-            <aside class="sidebar">
-                <div class="filter-box">
-                    <div class="filter-title">藝術家類型</div>
-                    <label class="checkbox-label"><input type="checkbox"> 畫家</label>
-                    <label class="checkbox-label"><input type="checkbox"> 攝影師</label>
-                    <label class="checkbox-label"><input type="checkbox"> 雕塑家</label>
-                    <label class="checkbox-label"><input type="checkbox"> 電繪</label>
-                    <label class="checkbox-label"><input type="checkbox"> 插畫</label>
-                </div>
-                <div class="filter-box">
-                    <div class="filter-title">商品分類</div>
-                    <label class="checkbox-label"><input type="checkbox"> 服飾</label>
-                    <label class="checkbox-label"><input type="checkbox"> 居家</label>
-                    <label class="checkbox-label"><input type="checkbox"> 配件</label>
-                </div>
-                <div class="filter-box">
-                    <div class="filter-title">價格區間</div>
-                    <input type="range" class="price-range" min="0" max="50000" value="50000" oninput="document.getElementById('prLabel').innerText = 'NT$ ' + Number(this.value).toLocaleString()">
-                    <div class="price-labels">
-                        <span>$0</span>
-                        <span id="prLabel">NT$ 50,000</span>
-                    </div>
-                </div>
-            </aside>
-            <main class="main-content">
-                <div class="list-toolbar">
-                    <span style="font-size: 14px; color: var(--ant-text-secondary);">共找到 124 件商品</span>
-                    <select class="form-input" style="width: 140px; height: 32px;">
-                        <option>最新上架</option>
-                        <option>最舊上架</option>
-                        <option>價格由高至低</option>
-                    </select>
-                </div>
-                <div class="card-grid">
-                    <!-- 列表卡片 -->
-                    <div class="tba-card" onclick="switchView('view-detail')">
-                        <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
-                        <div class="tba-card-body">
-                            <div class="prod-card-artist">陳奕安</div>
-                            <div class="prod-card-title">「色彩絮語」聯名帆布袋</div>
-                            <div class="prod-card-price">NT$ 890</div>
-                            <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
-                        </div>
-                    </div>
-                    <div class="tba-card" onclick="switchView('view-detail')">
-                        <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
-                        <div class="tba-card-body">
-                            <div class="prod-card-artist">林森</div>
-                            <div class="prod-card-title">霧面陶瓷馬克杯</div>
-                            <div class="prod-card-price">NT$ 650</div>
-                            <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
-                        </div>
-                    </div>
-                    <div class="tba-card" onclick="switchView('view-detail')">
-                        <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1603313011101-320f26a4f6f6?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
-                        <div class="tba-card-body">
-                            <div class="prod-card-artist">Studio K</div>
-                            <div class="prod-card-title">線條防摔手機殼</div>
-                            <div class="prod-card-price">NT$ 980</div>
-                            <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="pagination">
-                    <button class="page-btn">←</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">2</button>
-                    <button class="page-btn">3</button>
-                    <button class="page-btn">→</button>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <!-- =========================================
-         視圖 3: 商品詳細頁 (Product Detail View)
-         ========================================= -->
-    <div id="view-detail" class="view-section section-wrap">
-        <div class="breadcrumb">
-            <a onclick="switchView('view-home')">首頁</a> / <a onclick="switchView('view-list')">商品市集</a> / <span>「色彩絮語」聯名重磅帆布袋</span>
-        </div>
-        <div class="detail-layout">
-            <div class="detail-gallery">
-                <div class="main-img-box">
-                    <img id="mainImg" src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=800&q=80" alt="Main">
-                </div>
-                <div class="thumb-list">
-                    <div class="thumb-item active" onclick="swapImg(this, 'https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=800&q=80')"><img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=200&q=80"></div>
-                    <div class="thumb-item" onclick="swapImg(this, 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80')"><img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=200&q=80"></div>
-                </div>
-            </div>
-            <div class="detail-info">
-                <div class="d-title">「色彩絮語」聯名重磅帆布袋</div>
-                <div class="d-price">NT$ 890</div>
-                
-                <div class="artist-credit">
-                    <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=200&q=80" alt="Artist">
-                    <div style="flex:1;">
-                        <div style="font-weight:500; font-size:14px; color:var(--ant-text);">陳奕安</div>
-                        <div style="font-size:13px; color:var(--ant-text-secondary);">專注於色彩心理學與抽象幾何的當代藝術家。</div>
-                    </div>
-                    <a href="https://tba.tw/artists" target="_blank" class="btn btn-default" style="height:28px; font-size:12px; padding: 0 10px;">了解更多</a>
-                </div>
-
-                <div class="spec-box">
-                    <span class="spec-label">顏色</span>
-                    <select class="form-input" style="width: 200px;"><option>原色白</option><option>深邃黑</option></select>
-                </div>
-                <div class="spec-box">
-                    <span class="spec-label">尺寸</span>
-                    <select class="form-input" style="width: 200px;"><option>F (單一尺寸)</option></select>
-                </div>
-                <div class="spec-box" style="margin-bottom: 32px;">
-                    <span class="spec-label">數量</span>
-                    <div class="qty-wrapper">
-                        <button class="qty-btn" onclick="modQty(-1)">-</button>
-                        <input type="number" id="buyQty" class="qty-input" value="1" min="1" readonly>
-                        <button class="qty-btn" onclick="modQty(1)">+</button>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary btn-lg btn-block" onclick="addCartDetail()">加入購物車</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========================================
-         視圖 4: 購物車頁面 (Cart View)
-         ========================================= -->
-    <div id="view-cart" class="view-section section-wrap">
-        <h2 class="section-title" style="margin-bottom: 24px;">購物車</h2>
-        <div class="cart-layout">
-            <div class="cart-list">
-                <div class="cart-item-row">
-                    <img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=200&q=80" class="cart-item-img">
-                    <div class="cart-item-details">
-                        <div>
-                            <div class="prod-card-title" style="margin-bottom: 4px;">「色彩絮語」聯名重磅帆布袋</div>
-                            <div class="prod-card-artist">顏色: 原色白 / 尺寸: F</div>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-                            <div class="prod-card-price" style="margin:0;">NT$ 890</div>
-                            <div style="display: flex; gap: 12px; align-items: center;">
-                                <div class="qty-wrapper">
-                                    <button class="qty-btn" style="width: 28px; height: 28px;">-</button>
-                                    <input type="number" class="qty-input" value="1" readonly style="width: 40px; height: 28px;">
-                                    <button class="qty-btn" style="width: 28px; height: 28px;">+</button>
-                                </div>
-                                <button class="btn btn-danger-text" style="padding: 0;" onclick="showToast('商品已移除')">移除</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="cart-summary">
-                <div style="font-weight:600; font-size:16px; margin-bottom:16px; color: var(--ant-text);">訂單摘要</div>
-                <div class="summary-line"><span>小計</span><span>NT$ 890</span></div>
-                <div class="summary-line"><span>運費</span><span>NT$ 60</span></div>
-                <div class="summary-total"><span>總計</span><span style="color:var(--ant-primary);">NT$ 950</span></div>
-                <button class="btn btn-primary btn-lg btn-block" style="margin-top:24px;" onclick="showToast('導向結帳...')">前往結帳</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========================================
-         視圖 5: 搜尋結果 (Search Results)
-         ========================================= -->
-    <div id="view-search" class="view-section section-wrap">
-        <h2 class="section-title" style="font-size:20px; margin-bottom:8px;">搜尋結果：<span id="searchKw" style="color:var(--ant-primary);"></span></h2>
-        <p style="color:var(--ant-text-secondary); margin-bottom:24px; font-size: 14px;">共找到 1 件符合的商品</p>
-        <div class="card-grid">
-            <div class="tba-card" onclick="switchView('view-detail')">
-                <div class="tba-card-cover"><img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=600&q=80" alt="Product"></div>
-                <div class="tba-card-body">
-                    <div class="prod-card-artist">陳奕安</div>
-                    <div class="prod-card-title">「色彩絮語」聯名帆布袋</div>
-                    <div class="prod-card-price">NT$ 890</div>
-                    <button class="btn btn-primary btn-block" onclick="addCart(event)">加入購物車</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========================================
-         視圖 6: FAQ & 條款 (Static Pages)
-         ========================================= -->
-    <div id="view-faq" class="view-section section-wrap doc-wrap">
-        <h2 class="section-title" style="margin-bottom: 24px;">常見問題 (FAQ)</h2>
+  const renderOrderDetail = (order) => (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+      <button onClick={() => setSelectedOrder(null)} className="flex items-center gap-1 text-sm text-stone-500 hover:text-tba-blue mb-6 transition-colors">
+        <ChevronLeft size={16} /> 返回訂單列表
+      </button>
+      <div className="flex justify-between items-start mb-8 border-b border-stone-100 pb-6">
         <div>
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                    [購物常見問題] 支援哪些付款方式？
-                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                </div>
-                <div class="faq-a">目前支援信用卡一次付清、ATM 轉帳及超商代碼繳費。</div>
+          <h2 className="text-2xl font-serif text-tba-blue mb-2">訂單明細</h2>
+          <p className="text-sm text-stone-500">訂單編號：{order.id}</p>
+        </div>
+        <span className="px-3 py-1.5 rounded-full text-sm bg-stone-100 text-stone-700 font-medium">{order.status}</span>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div className="bg-stone-50 p-6 rounded-sm border border-stone-200">
+          <h3 className="text-sm font-medium uppercase tracking-widest text-tba-blue mb-4 flex items-center gap-2"><CreditCard size={16}/> 付款資訊</h3>
+          <p className="text-sm text-stone-600 mb-2">付款方式：{order.payment}</p>
+          <p className="text-sm text-stone-600 mb-2">訂單金額：<span className="text-stone-900 font-medium">NT$ {order.amount}</span></p>
+          <p className="text-sm text-stone-600">下單時間：{order.date} {order.time}</p>
+        </div>
+        <div className="bg-stone-50 p-6 rounded-sm border border-stone-200">
+          <h3 className="text-sm font-medium uppercase tracking-widest text-tba-blue mb-4 flex items-center gap-2"><Truck size={16}/> 配送資訊</h3>
+          <p className="text-sm text-stone-600 mb-2">配送方式：{order.shipping}</p>
+          <p className="text-sm text-stone-600 mb-2">收件地址：{user.address}</p>
+          {order.tracking && <p className="text-sm text-tba-blue font-medium mt-3 pt-3 border-t border-stone-200">物流單號：{order.tracking}</p>}
+        </div>
+      </div>
+
+      <h3 className="text-sm font-medium uppercase tracking-widest text-tba-blue mb-4">訂單內容</h3>
+      <div className="divide-y divide-stone-100 border-t border-b border-stone-200 mb-8">
+        {order.items.map((item, idx) => (
+          <div key={idx} className="py-4 flex items-center gap-4">
+            <div className="w-16 h-16 bg-stone-50 rounded-sm p-2 flex-shrink-0 cursor-pointer" onClick={() => navigate('product', { id: item.id })}>
+              <img src={item.image} className="w-full h-full object-cover mix-blend-multiply" alt={item.name} />
             </div>
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                    [退換貨說明] 如何辦理退換貨？
-                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                </div>
-                <div class="faq-a">請保持商品全新且包裝完整，並透過客服信箱與我們聯繫。</div>
+            <div className="flex-grow">
+              <p className="text-sm font-medium text-stone-900">{item.name}</p>
+              <p className="text-xs text-stone-500">{item.artist}</p>
             </div>
+            <div className="text-right">
+              <p className="text-sm text-stone-900">NT$ {item.price}</p>
+              <p className="text-xs text-stone-500">x 1</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h3 className="text-sm font-medium uppercase tracking-widest text-tba-blue mb-4 flex items-center gap-2"><Clock size={16}/> 狀態歷程</h3>
+      <div className="space-y-4 bg-stone-50 p-6 rounded-sm border border-stone-200">
+        {order.history.map((h, idx) => (
+          <div key={idx} className="flex gap-4 text-sm">
+            <div className="w-32 text-stone-500 flex-shrink-0">{h.time}</div>
+            <div className="text-stone-800 relative pl-4 border-l-2 border-tba-blue/30 font-medium">
+              <span className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-tba-blue"></span>
+              {h.status}
+            </div>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+
+  return (
+    <div className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen flex flex-col md:flex-row gap-8">
+      <div className="w-full md:w-64 flex-shrink-0">
+        <div className="bg-white border border-stone-200 rounded-sm p-6 sticky top-32 shadow-sm">
+          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-stone-100">
+            <div className="w-12 h-12 bg-tba-blue/10 rounded-full flex items-center justify-center text-tba-blue">
+              <User size={24} />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-stone-900">{user.name}</p>
+              <p className="text-[10px] text-stone-500 uppercase tracking-widest">{user.type === 'enterprise' ? 'Enterprise' : 'Member'}</p>
+            </div>
+          </div>
+          <nav className="space-y-2">
+            {[
+              { id: 'orders', label: '訂單列表', icon: ListOrdered },
+              { id: 'favorites', label: '我的收藏', icon: Heart },
+              { id: 'profile', label: '基本資料', icon: User },
+            ].map(item => (
+              <button
+                key={item.id}
+                onClick={() => { setActiveTab(item.id); setSelectedOrder(null); }}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm text-sm transition-colors ${
+                  activeTab === item.id ? 'bg-tba-blue text-white shadow-md' : 'text-stone-600 hover:bg-stone-50 hover:text-tba-blue'
+                }`}
+              >
+                <item.icon size={18} /> {item.label}
+              </button>
+            ))}
+          </nav>
         </div>
+      </div>
+      <div className="flex-grow">
+        {activeTab === 'profile' && renderProfile()}
+        {activeTab === 'favorites' && renderFavorites()}
+        {activeTab === 'orders' && renderOrders()}
+      </div>
     </div>
+  );
+};
 
-    <!-- 浮動按鈕 FAB -->
-    <div id="fabTop" class="fab-top" onclick="window.scrollTo(0,0)">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="social-icons">
-            <a href="https://www.instagram.com/thebridgeart/" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
-            <a href="https://www.facebook.com/tba.art17" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+// --- 創作中心 (獨立組件以符合 Hooks 規則) ---
+const CreatorCenter = ({ setActiveTab }) => {
+  const { showToast } = useContext(AppContext);
+  const [selectedMockup, setSelectedMockup] = useState(CREATOR_MOCKUPS[0]);
+  const [selectedArtwork, setSelectedArtwork] = useState(ARTISTS[0].artwork);
+  const [step, setStep] = useState(1);
+
+  const handlePublish = () => {
+    showToast('周邊商品建立成功！已保存至草稿。', 'success');
+    setActiveTab('products');
+  };
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white border border-stone-200 rounded-sm shadow-sm flex flex-col min-h-[600px]">
+      <div className="p-8 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
+        <div>
+          <h2 className="text-2xl font-serif text-tba-blue mb-1 flex items-center gap-2"><Palette size={24}/> 創作中心：免庫存快速上架</h2>
+          <p className="text-sm text-stone-500">選擇載體版型，套用您的授權畫作，即可一鍵生成周邊商品販售。</p>
         </div>
-        <div class="footer-links">
-            <a href="https://tba.tw/terms" target="_blank">使用者條款</a>
-            <a href="https://tba.tw/privacy" target="_blank">隱私權政策</a>
-            <a onclick="switchView('view-faq')">常見問題</a>
-            <a href="mailto:service@tba.tw">聯絡我們</a>
+        <div className="hidden md:flex gap-2">
+          {[1, 2, 3].map(s => (
+            <div key={s} className={`w-8 h-2 rounded-full ${step >= s ? 'bg-tba-blue' : 'bg-stone-200'}`} />
+          ))}
         </div>
-        <p style="font-size: 13px;">&copy; 藝橋藝術股份有限公司 &copy; Copyright reserved by TBA 2025</p>
-    </footer>
+      </div>
 
-    <!-- Toast 提示 (Ant Message 風格) -->
-    <div id="toastBox" class="toast-msg">
-        <svg class="toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-        <span id="toastText"></span>
-    </div>
+      <div className="flex flex-col md:flex-row flex-grow">
+        {/* 左側視覺化預覽區 (Visualizer) */}
+        <div className="w-full md:w-1/2 p-8 border-b md:border-b-0 md:border-r border-stone-100 flex flex-col items-center justify-center bg-stone-50/30">
+          <div className="relative w-full max-w-sm aspect-square bg-white rounded-md shadow-inner overflow-hidden border border-stone-200">
+            <img src={selectedMockup.image} className="w-full h-full object-cover" alt="Mockup Base" />
+            {selectedArtwork && step >= 2 && (
+              <div className={`absolute ${selectedMockup.overlayClass} pointer-events-none`} style={{ mixBlendMode: selectedMockup.mixBlend }}>
+                <img src={selectedArtwork} className="w-full h-auto shadow-sm" alt="Artwork Overlay" />
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-stone-400 mt-6 tracking-widest uppercase">商品預覽合成圖 (Preview)</p>
+        </div>
 
-    <script>
-        // --- 視圖切換 ---
-        function switchView(id) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
-            document.getElementById('searchBox').classList.remove('active');
-        }
+        {/* 右側操作區 */}
+        <div className="w-full md:w-1/2 p-8 flex flex-col">
+          {step === 1 && (
+            <motion.div initial={{opacity:0, x:20}} animate={{opacity:1, x:0}} className="flex-grow">
+              <h3 className="text-lg font-medium text-tba-blue mb-6">步驟 1：選擇商品載體</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {CREATOR_MOCKUPS.map(mockup => (
+                  <button 
+                    key={mockup.id} 
+                    onClick={() => setSelectedMockup(mockup)}
+                    className={`p-3 border rounded-sm flex flex-col items-center gap-3 transition-all ${selectedMockup.id === mockup.id ? 'border-tba-blue bg-tba-blue/5 shadow-sm' : 'border-stone-200 hover:border-stone-300'}`}
+                  >
+                    <div className="w-full aspect-square bg-stone-100 rounded-sm overflow-hidden mb-2">
+                      <img src={mockup.image} className="w-full h-full object-cover mix-blend-multiply" alt=""/>
+                    </div>
+                    <span className="text-sm font-medium text-stone-700">{mockup.name}</span>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-        // --- Toast 提示 (模擬 Ant Message) ---
-        let tTimer;
-        function showToast(msg) {
-            const box = document.getElementById('toastBox');
-            document.getElementById('toastText').innerText = msg;
-            box.classList.add('show');
-            clearTimeout(tTimer);
-            tTimer = setTimeout(() => box.classList.remove('show'), 2500);
-        }
+          {step === 2 && (
+            <motion.div initial={{opacity:0, x:20}} animate={{opacity:1, x:0}} className="flex-grow">
+              <h3 className="text-lg font-medium text-tba-blue mb-6">步驟 2：選擇或上傳藝術圖檔</h3>
+              <div className="mb-6 border-2 border-dashed border-stone-300 rounded-sm p-8 flex flex-col items-center justify-center text-stone-500 hover:bg-stone-50 hover:border-tba-blue hover:text-tba-blue transition-colors cursor-pointer">
+                <Upload size={32} className="mb-3" />
+                <span className="text-sm font-medium">從電腦上傳新圖檔</span>
+                <span className="text-xs mt-1">支援 JPG, PNG (建議解析度 300dpi)</span>
+              </div>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="h-px bg-stone-200 flex-grow"></div>
+                <span className="text-xs text-stone-400 uppercase tracking-widest">或選擇已授權圖庫</span>
+                <div className="h-px bg-stone-200 flex-grow"></div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {ARTISTS.map(a => (
+                  <button 
+                    key={a.id} 
+                    onClick={() => setSelectedArtwork(a.artwork)}
+                    className={`relative aspect-square rounded-sm overflow-hidden border-2 transition-all ${selectedArtwork === a.artwork ? 'border-tba-blue shadow-md' : 'border-transparent'}`}
+                  >
+                    <img src={a.artwork} className="w-full h-full object-cover" alt=""/>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-        // --- Hero Carousel 輪播圖邏輯 ---
-        let currentSlideIndex = 0;
-        const slides = document.querySelectorAll('.hero-slide');
-        const dots = document.querySelectorAll('.dot');
-        const carousel = document.getElementById('heroCarousel');
-        let slideInterval;
+          {step === 3 && (
+            <motion.div initial={{opacity:0, x:20}} animate={{opacity:1, x:0}} className="flex-grow space-y-6">
+              <h3 className="text-lg font-medium text-tba-blue mb-6">步驟 3：設定商品資訊</h3>
+              <div>
+                <label className="block text-sm text-stone-600 mb-2">商品名稱</label>
+                <input type="text" defaultValue={`[藝術聯名] ${selectedMockup.name}`} className="w-full border border-stone-300 rounded-sm py-2 px-3 focus:outline-none focus:border-tba-blue" />
+              </div>
+              <div>
+                <label className="block text-sm text-stone-600 mb-2">售價設定 (NT$)</label>
+                <input type="number" defaultValue={850} className="w-full border border-stone-300 rounded-sm py-2 px-3 focus:outline-none focus:border-tba-blue" />
+                <p className="text-xs text-stone-400 mt-2">扣除生產成本 NT$350，預計利潤 NT$500</p>
+              </div>
+              <div>
+                <label className="block text-sm text-stone-600 mb-2">商品描述</label>
+                <textarea rows={3} defaultValue={`這是由 TBA 認證藝術家授權圖檔製作的專屬${selectedMockup.name}。`} className="w-full border border-stone-300 rounded-sm py-2 px-3 focus:outline-none focus:border-tba-blue resize-none"></textarea>
+              </div>
+            </motion.div>
+          )}
 
-        function showSlide(index) {
-            if (index >= slides.length) currentSlideIndex = 0;
-            if (index < 0) currentSlideIndex = slides.length - 1;
+          <div className="mt-auto pt-8 border-t border-stone-100 flex justify-between">
+            {step > 1 ? (
+              <button onClick={() => setStep(s => s - 1)} className="px-6 py-2 text-sm text-stone-500 hover:text-tba-blue transition-colors">上一步</button>
+            ) : <div></div>}
             
-            // 由於設定了 transform transition，可以直接移動 X 軸
-            carousel.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+            {step < 3 ? (
+              <button onClick={() => setStep(s => s + 1)} className="px-8 py-2 bg-tba-blue text-white rounded-sm text-sm hover:bg-tba-blue-dark transition-colors shadow-md">下一步</button>
+            ) : (
+              <button onClick={handlePublish} className="px-8 py-2 bg-green-600 text-white rounded-sm text-sm hover:bg-green-700 transition-colors shadow-md flex items-center gap-2">
+                <CheckCircle size={16}/> 儲存至草稿庫
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+
+// --- 我的賣場 (MyStore) ---
+const MyStore = ({ role }) => {
+  const [activeTab, setActiveTab] = useState('creator');
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null); 
+  const [trackingNumber, setTrackingNumber] = useState("");
+
+  const { showToast } = useContext(AppContext);
+  const displayRole = role === 'artist' ? '藝術家' : role === 'manufacturer' ? '製造商' : '供應商';
+
+  const renderDashboard = () => (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white p-6 border border-stone-200 rounded-sm border-l-4 border-l-tba-blue shadow-sm">
+          <p className="text-sm text-stone-500 uppercase tracking-widest mb-2">本月營業額</p>
+          <p className="text-3xl font-serif text-stone-900">NT$ 38,500</p>
+        </div>
+        <div className="bg-white p-6 border border-stone-200 rounded-sm border-l-4 border-l-orange-400 shadow-sm">
+          <p className="text-sm text-stone-500 uppercase tracking-widest mb-2">待處理訂單</p>
+          <p className="text-3xl font-serif text-stone-900">12 <span className="text-base font-sans text-stone-400">筆</span></p>
+        </div>
+        <div className="bg-white p-6 border border-stone-200 rounded-sm border-l-4 border-l-green-500 shadow-sm">
+          <p className="text-sm text-stone-500 uppercase tracking-widest mb-2">上架商品數</p>
+          <p className="text-3xl font-serif text-stone-900">45 <span className="text-base font-sans text-stone-400">件</span></p>
+        </div>
+      </div>
+
+      <div className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+        <h2 className="text-xl font-serif text-tba-blue mb-6 flex items-center gap-2"><BarChart3 size={20}/> 銷售明細表</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm whitespace-nowrap">
+            <thead className="bg-stone-50 text-stone-500 uppercase tracking-widest text-xs">
+              <tr><th className="px-4 py-3 font-medium">訂單日期</th><th className="px-4 py-3 font-medium">銷售商品</th><th className="px-4 py-3 font-medium text-right">銷售額</th></tr>
+            </thead>
+            <tbody className="divide-y divide-stone-100">
+              {MOCK_STORE_SALES.map((sale, idx) => (
+                <tr key={idx} className="hover:bg-stone-50/50">
+                  <td className="px-4 py-4 text-stone-600">{sale.date}</td>
+                  <td className="px-4 py-4 font-medium text-stone-900">{sale.items}</td>
+                  <td className="px-4 py-4 text-right text-tba-blue font-medium">NT$ {sale.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  const renderProfile = () => (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+      <div className="flex justify-between items-center mb-6 border-b border-stone-100 pb-4">
+        <h2 className="text-xl font-serif text-tba-blue">供應端基本資料 ({displayRole})</h2>
+        <button className="text-sm flex items-center gap-2 text-white bg-tba-blue px-4 py-2 rounded-sm hover:bg-tba-blue-dark transition-colors shadow-sm">
+          <Save size={16} /> 儲存變更
+        </button>
+      </div>
+      <div className="space-y-6 max-w-2xl">
+        <div><label className="block text-sm text-stone-700 font-medium mb-2">賣場名稱 / 品牌名稱</label><input type="text" defaultValue={MOCK_STORE_INFO.name} className="w-full border border-stone-300 rounded-sm py-2.5 px-4 focus:outline-none focus:border-tba-blue bg-stone-50/50" /></div>
+        <div className="grid grid-cols-2 gap-6">
+          <div><label className="block text-sm text-stone-700 font-medium mb-2">聯絡人</label><input type="text" defaultValue={MOCK_STORE_INFO.contactName} className="w-full border border-stone-300 rounded-sm py-2.5 px-4 focus:outline-none focus:border-tba-blue bg-stone-50/50" /></div>
+          <div><label className="block text-sm text-stone-700 font-medium mb-2">聯絡電話</label><input type="text" defaultValue={MOCK_STORE_INFO.phone} className="w-full border border-stone-300 rounded-sm py-2.5 px-4 focus:outline-none focus:border-tba-blue bg-stone-50/50" /></div>
+        </div>
+        <div><label className="block text-sm text-stone-700 font-medium mb-2">電子郵件</label><input type="email" defaultValue={MOCK_STORE_INFO.email} className="w-full border border-stone-300 rounded-sm py-2.5 px-4 focus:outline-none focus:border-tba-blue bg-stone-50/50" /></div>
+        <div><label className="block text-sm text-stone-700 font-medium mb-2">營業地址 / 出貨地址</label><input type="text" defaultValue={MOCK_STORE_INFO.address} className="w-full border border-stone-300 rounded-sm py-2.5 px-4 focus:outline-none focus:border-tba-blue bg-stone-50/50" /></div>
+      </div>
+    </motion.div>
+  );
+
+  const renderOrders = () => {
+    if (selectedOrder) {
+      return (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+          <button onClick={() => setSelectedOrder(null)} className="flex items-center gap-1 text-sm text-stone-500 hover:text-tba-blue mb-6 transition-colors">
+            <ChevronLeft size={16} /> 返回訂單列表
+          </button>
+          <div className="flex justify-between items-start mb-8 pb-6 border-b border-stone-100">
+            <div><h2 className="text-2xl font-serif text-tba-blue mb-2">訂單明細處理</h2><p className="text-sm text-stone-500">訂單編號：{selectedOrder.id} | 買家：{selectedOrder.buyer}</p></div>
+            <span className="px-3 py-1.5 rounded-full text-sm bg-orange-100 text-orange-700 font-medium">{selectedOrder.status}</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div className="bg-stone-50 p-6 rounded-sm border border-stone-200 shadow-sm">
+              <h3 className="text-sm font-medium uppercase tracking-widest text-stone-900 mb-4 flex items-center gap-2 text-tba-blue"><Truck size={16}/> 回填物流資訊</h3>
+              <p className="text-sm text-stone-600 mb-4">買家選擇：{selectedOrder.shipping}</p>
+              <div className="flex gap-2">
+                <input type="text" placeholder="請輸入物流單號..." value={trackingNumber} onChange={(e) => setTrackingNumber(e.target.value)} className="flex-grow border border-stone-300 rounded-sm py-2 px-3 text-sm focus:outline-none focus:border-tba-blue" />
+                <button onClick={() => {showToast('物流資訊已更新', 'success'); setSelectedOrder(null);}} className="bg-tba-blue text-white px-4 py-2 rounded-sm text-sm hover:bg-tba-blue-dark transition-colors whitespace-nowrap shadow-sm">更新出貨</button>
+              </div>
+            </div>
+            <div className="bg-stone-50 p-6 rounded-sm border border-stone-200 shadow-sm">
+              <h3 className="text-sm font-medium uppercase tracking-widest text-stone-900 mb-4 text-tba-blue">訂單摘要</h3>
+              <div className="space-y-3 text-sm text-stone-600">
+                <p className="flex justify-between border-b border-stone-200 pb-2"><span>商品總額</span><span className="font-medium text-stone-900">NT$ {selectedOrder.amount}</span></p>
+                <p className="flex justify-between"><span>付款方式</span><span>{selectedOrder.payment}</span></p>
+                <p className="flex justify-between"><span>下單時間</span><span>{selectedOrder.date} {selectedOrder.time}</span></p>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-sm font-medium uppercase tracking-widest text-tba-blue mb-4">訂單內容</h3>
+          <div className="divide-y divide-stone-100 border-t border-b border-stone-200">
+            {selectedOrder.items.map((item, idx) => (
+              <div key={idx} className="py-4 flex items-center gap-4">
+                <div className="w-16 h-16 bg-stone-50 rounded-sm p-2"><img src={item.image} className="w-full h-full object-cover mix-blend-multiply" alt=""/></div>
+                <div className="flex-grow"><p className="text-sm font-medium text-stone-900">{item.name}</p></div>
+                <div className="text-right"><p className="text-sm text-stone-900">NT$ {item.price} x 1</p></div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      );
+    }
+
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+        <h2 className="text-xl font-serif text-tba-blue mb-6 flex items-center gap-2"><ListOrdered size={20}/> 相關訂單管理</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm whitespace-nowrap">
+            <thead className="bg-stone-50 text-stone-500 uppercase tracking-widest text-xs">
+              <tr><th className="px-4 py-3 font-medium">訂單編號/日期</th><th className="px-4 py-3 font-medium">買家</th><th className="px-4 py-3 font-medium">狀態</th><th className="px-4 py-3 font-medium">金額</th><th className="px-4 py-3 font-medium text-right">操作</th></tr>
+            </thead>
+            <tbody className="divide-y divide-stone-100">
+              {MOCK_STORE_ORDERS.map((order) => (
+                <tr key={order.id} className="hover:bg-stone-50/50">
+                  <td className="px-4 py-4"><span className="text-stone-900 font-medium block">{order.id}</span><span className="text-stone-400 text-xs">{order.date}</span></td>
+                  <td className="px-4 py-4 text-stone-600">{order.buyer}</td>
+                  <td className="px-4 py-4"><span className="px-2 py-1 rounded-full text-xs bg-orange-100 text-orange-700">{order.status}</span></td>
+                  <td className="px-4 py-4 text-stone-900 font-medium">NT$ {order.amount}</td>
+                  <td className="px-4 py-4 text-right">
+                    <button onClick={() => { setSelectedOrder(order); setTrackingNumber(""); }} className="text-tba-blue hover:text-white border border-tba-blue hover:bg-tba-blue px-3 py-1.5 rounded-sm transition-colors text-xs shadow-sm">出貨處理</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </motion.div>
+    );
+  };
+
+  const renderProducts = () => {
+    if (editingProduct) return <ProductEditForm product={editingProduct} onBack={() => setEditingProduct(null)} />;
+
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 pb-4 border-b border-stone-100">
+          <h2 className="text-xl font-serif text-tba-blue flex items-center gap-2"><Package size={20}/> 商品管理</h2>
+          <div className="flex items-center gap-4 w-full sm:w-auto">
+            <div className="relative flex-grow sm:flex-grow-0">
+              <input type="text" placeholder="搜尋商品..." className="w-full border border-stone-300 rounded-sm py-2 pl-3 pr-10 text-sm focus:outline-none focus:border-tba-blue" />
+              <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400" />
+            </div>
+            <button onClick={() => setEditingProduct({ isNew: true, variants: [], stock: 0, price: 0 })} className="bg-tba-blue text-white px-4 py-2 rounded-sm text-sm hover:bg-tba-blue-dark transition-colors flex items-center gap-2 whitespace-nowrap shadow-sm">
+              <Plus size={16}/> 新增商品
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm whitespace-nowrap">
+            <thead className="bg-stone-50 text-stone-500 uppercase tracking-widest text-xs">
+              <tr><th className="px-4 py-3 font-medium">商品名稱</th><th className="px-4 py-3 font-medium">分類</th><th className="px-4 py-3 font-medium">價格</th><th className="px-4 py-3 font-medium">庫存</th><th className="px-4 py-3 font-medium">狀態</th><th className="px-4 py-3 font-medium text-right">操作</th></tr>
+            </thead>
+            <tbody className="divide-y divide-stone-100">
+              {MOCK_STORE_PRODUCTS.map((prod) => (
+                <tr key={prod.id} className="hover:bg-stone-50/50">
+                  <td className="px-4 py-4 font-medium text-stone-900">{prod.name}</td>
+                  <td className="px-4 py-4 text-stone-600">{prod.category}</td>
+                  <td className="px-4 py-4 text-stone-900">NT$ {prod.price}</td>
+                  <td className="px-4 py-4 text-stone-600">{prod.stock}</td>
+                  <td className="px-4 py-4"><span className={`px-2 py-1 rounded-full text-xs ${prod.status === '上架' ? 'bg-green-100 text-green-700' : 'bg-stone-200 text-stone-700'}`}>{prod.status}</span></td>
+                  <td className="px-4 py-4 text-right">
+                    <button onClick={() => setEditingProduct(prod)} className="text-stone-500 hover:text-tba-blue p-1 transition-colors bg-stone-100 rounded hover:bg-tba-blue/10"><Edit3 size={16} /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </motion.div>
+    );
+  };
+
+  return (
+    <div className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen flex flex-col md:flex-row gap-8">
+      {/* Sidebar */}
+      <div className="w-full md:w-64 flex-shrink-0">
+        <div className="bg-[#0a1c3f] text-white rounded-sm p-6 sticky top-32 shadow-xl">
+          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-white/10">
+            <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+              <Store size={24} />
+            </div>
+            <div>
+              <p className="text-sm font-medium">{displayRole}後台</p>
+              <p className="text-[10px] tracking-widest uppercase text-stone-400 mt-1">Vendor Portal</p>
+            </div>
+          </div>
+          <nav className="space-y-2">
+            {[
+              { id: 'creator', label: '創作中心 (上架)', icon: Palette },
+              { id: 'dashboard', label: '銷售數據總覽', icon: BarChart3 },
+              { id: 'orders', label: '訂單管理', icon: ListOrdered },
+              { id: 'products', label: '商品管理', icon: Package },
+              { id: 'profile', label: '賣場基本資料', icon: Settings },
+            ].map(item => (
+              <button
+                key={item.id}
+                onClick={() => { setActiveTab(item.id); setSelectedOrder(null); setEditingProduct(null); }}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm text-sm transition-all ${
+                  activeTab === item.id ? 'bg-tba-blue-light text-white shadow-md' : 'text-stone-400 hover:bg-white/5 hover:text-white'
+                }`}
+              >
+                <item.icon size={18} /> {item.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-grow">
+        {activeTab === 'creator' && <CreatorCenter setActiveTab={setActiveTab} />}
+        {activeTab === 'dashboard' && renderDashboard()}
+        {activeTab === 'profile' && renderProfile()}
+        {activeTab === 'orders' && renderOrders()}
+        {activeTab === 'products' && renderProducts()}
+      </div>
+    </div>
+  );
+};
+
+// 商品編輯表單 (於 MyStore 的商品管理使用)
+const ProductEditForm = ({ product, onBack }) => {
+  const { showToast } = useContext(AppContext);
+  const [variants, setVariants] = useState(product.variants || []);
+  const [status, setStatus] = useState(product.status || '草稿');
+
+  const addVariant = () => setVariants([...variants, { name: '', values: '' }]);
+  const updateVariant = (index, field, value) => {
+    const newV = [...variants];
+    newV[index][field] = value;
+    setVariants(newV);
+  };
+  const removeVariant = (index) => setVariants(variants.filter((_, i) => i !== index));
+
+  const handleSave = () => {
+    showToast('商品設定已儲存', 'success');
+    onBack();
+  }
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 border border-stone-200 rounded-sm shadow-sm">
+      <div className="flex justify-between items-center mb-8 border-b border-stone-200 pb-6">
+        <div className="flex items-center gap-4">
+          <button onClick={onBack} className="p-2 text-stone-400 hover:text-tba-blue transition-colors bg-stone-50 rounded-full"><ChevronLeft size={20}/></button>
+          <h2 className="text-2xl font-serif text-tba-blue">{product.isNew ? '新增商品' : '編輯商品'}</h2>
+        </div>
+        <div className="flex gap-3">
+          <select value={status} onChange={(e) => setStatus(e.target.value)} className="border border-stone-300 rounded-sm px-3 py-2 text-sm focus:outline-none focus:border-tba-blue bg-stone-50">
+            <option value="草稿">草稿 (隱藏)</option>
+            <option value="上架">上架 (公開)</option>
+            <option value="下架">下架 (停售)</option>
+          </select>
+          <button onClick={handleSave} className="bg-tba-blue text-white px-6 py-2 rounded-sm text-sm hover:bg-tba-blue-dark transition-colors shadow-sm">儲存設定</button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="lg:col-span-2 space-y-6">
+          <div><label className="block text-sm text-stone-700 font-medium mb-2">商品名稱</label><input type="text" defaultValue={product.name} placeholder="輸入商品名稱" className="w-full border border-stone-300 rounded-sm py-2.5 px-4 focus:outline-none focus:border-tba-blue" /></div>
+          <div className="grid grid-cols-3 gap-6">
+            <div><label className="block text-sm text-stone-700 font-medium mb-2">售價 (NT$)</label><input type="number" defaultValue={product.price} className="w-full border border-stone-300 rounded-sm py-2.5 px-4 focus:outline-none focus:border-tba-blue" /></div>
+            <div><label className="block text-sm text-stone-700 font-medium mb-2">庫存數量</label><input type="number" defaultValue={product.stock} className="w-full border border-stone-300 rounded-sm py-2.5 px-4 focus:outline-none focus:border-tba-blue" /></div>
+            <div><label className="block text-sm text-stone-700 font-medium mb-2">運費 (NT$)</label><input type="number" defaultValue={product.shippingFee || 60} className="w-full border border-stone-300 rounded-sm py-2.5 px-4 focus:outline-none focus:border-tba-blue" /></div>
+          </div>
+          
+          {/* 動態屬性設定 */}
+          <div className="pt-6 border-t border-stone-200">
+            <div className="flex justify-between items-center mb-4">
+              <label className="block text-sm text-stone-700 font-medium">商品規格/屬性設定</label>
+              <button onClick={addVariant} className="text-xs text-tba-blue flex items-center gap-1 hover:underline font-medium"><Plus size={14}/> 新增屬性 (如: 尺寸、顏色)</button>
+            </div>
+            {variants.length === 0 ? (
+              <div className="bg-stone-50 p-6 text-center text-sm text-stone-500 rounded-sm border border-stone-200 border-dashed">此商品目前無特殊規格（單一規格）</div>
+            ) : (
+              <div className="space-y-4">
+                {variants.map((v, i) => (
+                  <div key={i} className="flex gap-4 items-start bg-stone-50 p-4 rounded-sm border border-stone-200">
+                    <div className="w-1/3"><input type="text" placeholder="屬性名稱 (例: 顏色)" value={v.name} onChange={(e) => updateVariant(i, 'name', e.target.value)} className="w-full border border-stone-300 rounded-sm py-2 px-3 text-sm focus:outline-none focus:border-tba-blue" /></div>
+                    <div className="flex-grow"><input type="text" placeholder="選項值 (請用逗號分隔，例: 紅色, 藍色)" value={v.values} onChange={(e) => updateVariant(i, 'values', e.target.value)} className="w-full border border-stone-300 rounded-sm py-2 px-3 text-sm focus:outline-none focus:border-tba-blue" /></div>
+                    <button onClick={() => removeVariant(i)} className="p-2 text-stone-400 hover:text-red-500 transition-colors mt-0.5"><Trash2 size={18}/></button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm text-stone-700 font-medium mb-2">商品主圖 (Gallery)</label>
+          <div className="border-2 border-dashed border-stone-300 rounded-sm aspect-square flex flex-col items-center justify-center text-stone-400 hover:bg-stone-50 hover:border-tba-blue transition-colors cursor-pointer mb-4 bg-stone-50">
+            <ImageIcon size={48} className="mb-4 opacity-50" />
+            <span className="text-sm">點擊上傳圖片</span>
+            <span className="text-xs mt-1">(最多支援 7 張)</span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+
+// --- 主程式與路由 (App) ---
+export default function App() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [simulatedRole, setSimulatedRole] = useState('consumer'); 
+  const { currentPage, params, navigate } = useNavigation('home');
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const isHome = currentPage === 'home';
+  const showStoreIcon = ['artist', 'manufacturer', 'supplier'].includes(simulatedRole);
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home': return <Home navigate={navigate} />;
+      case 'shop': return <Shop navigate={navigate} />;
+      case 'product': return <ProductDetail navigate={navigate} params={params} />;
+      case 'artists': return <ArtistsList navigate={navigate} />;
+      case 'cart': return <Cart navigate={navigate} />;
+      case 'checkout': return <Checkout navigate={navigate} role={simulatedRole} />;
+      case 'member-center': return <MemberCenter navigate={navigate} role={simulatedRole} />;
+      case 'my-store': return <MyStore navigate={navigate} role={simulatedRole} />;
+      default: return <Home navigate={navigate} />;
+    }
+  };
+
+  return (
+    <AppProvider>
+      <div className="min-h-screen bg-stone-50 text-stone-900 font-sans selection:bg-tba-blue selection:text-white flex flex-col relative pb-16 md:pb-0">
+        <style dangerouslySetInnerHTML={{ __html: tbaStyles }} />
+
+        {/* 導覽列 */}
+        <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled || !isHome ? "bg-white/95 backdrop-blur-md py-4 shadow-sm" : "bg-transparent py-6"}`}>
+          <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+            <div className="flex items-center gap-8">
+              <button onClick={() => navigate('home')} className="flex items-center gap-2">
+                <Logo className="h-8 md:h-10 w-auto" />
+              </button>
+              <div className="hidden md:flex gap-6 text-sm tracking-widest uppercase text-stone-500">
+                <button onClick={() => navigate('home')} className="hover:text-tba-blue transition-colors">首頁</button>
+                <button onClick={() => navigate('artists')} className="hover:text-tba-blue transition-colors">藝術家</button>
+                <button onClick={() => navigate('shop')} className="hover:text-tba-blue transition-colors">商店</button>
+              </div>
+            </div>
             
-            dots.forEach(dot => dot.classList.remove('active'));
-            if(dots.length > 0) dots[currentSlideIndex].classList.add('active');
-        }
+            <div className="hidden md:flex items-center gap-6">
+              <button className="hover:text-tba-blue transition-colors"><Search size={20} strokeWidth={1.5} /></button>
+              
+              {showStoreIcon && (
+                <button onClick={() => navigate('my-store')} className="hover:text-tba-blue transition-colors" title="創作中心 / 我的賣場">
+                  <Store size={20} strokeWidth={1.5} />
+                </button>
+              )}
 
-        function moveSlide(n) {
-            currentSlideIndex += n;
-            showSlide(currentSlideIndex);
-            resetInterval();
-        }
+              <button onClick={() => navigate('member-center')} className="hover:text-tba-blue transition-colors" title="會員中心">
+                <User size={20} strokeWidth={1.5} />
+              </button>
 
-        function currentSlide(n) {
-            currentSlideIndex = n;
-            showSlide(currentSlideIndex);
-            resetInterval();
-        }
+              <CartIconWithCount navigate={navigate} />
+            </div>
+            
+            <div className="md:hidden flex items-center gap-4 text-tba-blue">
+              <CartIconWithCount navigate={navigate} />
+              <button onClick={() => setIsMobileMenuOpen(true)}>
+                <Menu size={24} strokeWidth={1.5} />
+              </button>
+            </div>
+          </div>
+        </nav>
 
-        function resetInterval() {
-            clearInterval(slideInterval);
-            slideInterval = setInterval(() => { moveSlide(1); }, 5000);
-        }
-        
-        // 初始化輪播
-        if(slides.length > 0) {
-            showSlide(0);
-            resetInterval();
-        }
+        {/* 手機版選單 */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center">
+              <button className="absolute top-6 right-6 p-2 text-tba-blue" onClick={() => setIsMobileMenuOpen(false)}>
+                <X size={32} strokeWidth={1.5} />
+              </button>
+              <div className="flex flex-col items-center gap-8 text-xl font-serif tracking-widest text-tba-blue">
+                <button onClick={() => { navigate('home'); setIsMobileMenuOpen(false); }}>首頁 / Home</button>
+                <button onClick={() => { navigate('artists'); setIsMobileMenuOpen(false); }}>發現藝術家 / Artists</button>
+                <button onClick={() => { navigate('shop'); setIsMobileMenuOpen(false); }}>藝術生活商品 / Shop</button>
+                <div className="w-12 h-px bg-stone-300 my-4" />
+                {showStoreIcon && <button onClick={() => { navigate('my-store'); setIsMobileMenuOpen(false); }} className="text-sm uppercase text-stone-500 hover:text-tba-blue">我的賣場 / My Store</button>}
+                <button onClick={() => { navigate('member-center'); setIsMobileMenuOpen(false); }} className="text-sm uppercase text-stone-500 hover:text-tba-blue">會員中心 / Member</button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        // --- 購物車 ---
-        let cCount = 0;
-        function addCart(e) {
-            e.stopPropagation();
-            cCount++;
-            document.getElementById('cartBadge').innerText = cCount;
-            showToast('已加入購物車');
-        }
-        function addCartDetail() {
-            cCount += parseInt(document.getElementById('buyQty').value);
-            document.getElementById('cartBadge').innerText = cCount;
-            showToast('已加入購物車');
-        }
-        function modQty(d) {
-            const inp = document.getElementById('buyQty');
-            let v = parseInt(inp.value) + d;
-            inp.value = v < 1 ? 1 : v;
-        }
+        {/* 頁面內容切換 */}
+        <main className="flex-grow">
+          {renderPage()}
+        </main>
 
-        // --- 畫廊 ---
-        function swapImg(el, src) {
-            document.getElementById('mainImg').src = src;
-            document.querySelectorAll('.thumb-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-        }
+        {/* 頁尾 */}
+        <footer className="bg-tba-blue-dark text-stone-400 py-20 px-6 md:px-12 mt-auto border-t-[16px] border-tba-blue-light">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center gap-2 mb-6 text-white"><span className="text-3xl font-serif font-bold tracking-wider">TBA</span></div>
+              <p className="text-sm leading-relaxed max-w-md text-stone-300">將藝術融入生活，讓靈感觸手可及。<br />Bringing art into life, making inspiration within reach.</p>
+            </div>
+            <div>
+              <h4 className="text-white text-sm tracking-widest uppercase mb-6">探索 / Explore</h4>
+              <ul className="space-y-4 text-sm">
+                <li><button onClick={() => navigate('home')} className="hover:text-white transition-colors">首頁 / Home</button></li>
+                <li><button onClick={() => navigate('shop')} className="hover:text-white transition-colors">精選商品 / Shop</button></li>
+              </ul>
+            </div>
+          </div>
+        </footer>
 
-        // --- 搜尋 ---
-        function toggleSearch() {
-            const sb = document.getElementById('searchBox');
-            sb.classList.toggle('active');
-            if(sb.classList.contains('active')) document.getElementById('searchInput').focus();
-        }
-        function executeSearch() {
-            const kw = document.getElementById('searchInput').value.trim();
-            if(kw) {
-                document.getElementById('searchKw').innerText = kw;
-                switchView('view-search');
-            } else {
-                showToast('請輸入關鍵字');
-            }
-        }
+        {/* 開發測試用：角色切換器 */}
+        <div className="fixed bottom-0 right-0 m-4 z-[100] bg-white border border-stone-300 shadow-2xl rounded-sm p-3 text-xs flex flex-col gap-2">
+          <p className="font-bold text-tba-blue pb-1 border-b border-stone-200">🛠 測試角色切換</p>
+          <select value={simulatedRole} onChange={(e) => setSimulatedRole(e.target.value)} className="border border-stone-300 rounded p-1 focus:outline-none focus:border-tba-blue bg-stone-50 cursor-pointer">
+            <option value="guest">訪客 (無特定權限)</option>
+            <option value="consumer">一般消費者 (看會員中心)</option>
+            <option value="enterprise">企業會員 (看統編/發票)</option>
+            <option value="artist">藝術家 (看賣場+會員)</option>
+            <option value="supplier">供應商 (看賣場)</option>
+            <option value="manufacturer">製造商 (看賣場)</option>
+          </select>
+        </div>
+      </div>
+    </AppProvider>
+  );
+}
 
-        // --- FAB 回到頂部 ---
-        window.addEventListener('scroll', () => {
-            const fab = document.getElementById('fabTop');
-            window.scrollY > 300 ? fab.classList.add('show') : fab.classList.remove('show');
-        });
-    </script>
-</body>
-</html>
+// 將 CartIcon 獨立出來以吃 Context
+const CartIconWithCount = ({ navigate }) => {
+  const { cartItems } = useContext(AppContext);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  return (
+    <button onClick={() => navigate('cart')} className="hover:text-tba-blue transition-colors relative">
+      <ShoppingCart size={20} strokeWidth={1.5} />
+      {totalItems > 0 && (
+        <span className="absolute -top-2 -right-2 bg-tba-blue text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-medium shadow-sm animate-pulse">
+          {totalItems}
+        </span>
+      )}
+    </button>
+  );
+};
